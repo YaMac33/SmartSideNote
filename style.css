@@ -77,49 +77,6 @@ header p {
     transform: translateY(0);
 }
 
-/* --- ここから修正箇所 --- */
-
-/* トップページに戻るボタンのスタイル (PCなど通常時) */
-.back-to-home {
-    position: fixed; /* 画面の左上に固定 */
-    top: 20px;
-    left: 20px;
-    z-index: 1000; /* 他の要素より手前に表示 */
-    
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    
-    width: 50px; /* ボタンの幅 */
-    height: 50px; /* ボタンの高さ */
-    background-color: rgba(255, 255, 255, 0.9); /* 少し透明な白 */
-    border-radius: 50%; /* 円形にする */
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    transition: all 0.3s ease;
-}
-
-/* ボタンの中のSVGアイコンのスタイル */
-.back-to-home svg {
-    width: 28px;
-    height: 28px;
-    fill: #333; /* アイコンの色 */
-    transition: fill 0.3s ease;
-}
-
-/* マウスを乗せたときのスタイル */
-.back-to-home:hover {
-    background-color: #ffffff;
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
-    transform: scale(1.05); /* 少し大きくする */
-}
-
-.back-to-home:hover svg {
-    fill: #007BFF; /* アイコンの色を青に */
-}
-
-/* --- ここまで修正箇所 --- */
-
-
 /* フッター */
 footer {
     margin-top: auto;
@@ -142,18 +99,34 @@ footer {
         width: 100%;
     }
 
-    /* --- ここから修正箇所 --- */
+}
+/* 左上のホームに戻るロゴのスタイル */
+.home-logo {
+    position: fixed; /* 画面の左上に固定 */
+    top: 20px;
+    left: 25px;
+    z-index: 1000; /* 他の要素より手前に表示 */
+    
+    color: #4a5568; /* 少し落ち着いたテキストの色 */
+    font-size: 22px;
+    font-weight: 700; /* 太字 */
+    text-decoration: none; /* 下線を消す */
+    letter-spacing: 0.5px; /* 文字間を少しだけ広げる */
+    
+    transition: all 0.3s ease-in-out;
+}
 
-    /* トップページに戻るボタンのスマホ用スタイル */
-    .back-to-home {
-        width: 45px;
-        height: 45px;
+/* ロゴにマウスを乗せたときのスタイル */
+.home-logo:hover {
+    color: #2980b9; /* 色を鮮やかに */
+    transform: scale(1.05); /* 少しだけ拡大 */
+}
+
+/* スマートフォン向けの調整 */
+@media (max-width: 768px) {
+    .home-logo {
         top: 15px;
-        left: 15px;
+        left: 20px;
+        font-size: 20px;
     }
-    .back-to-home svg {
-        width: 24px;
-        height: 24px;
-    }
-    /* --- ここまで修正箇所 --- */
 }
