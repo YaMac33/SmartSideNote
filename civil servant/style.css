@@ -1,1 +1,31 @@
-
+body {
+    font-family: 'Noto Sans JP', sans-serif;
+    background-color: #FDFBF8;
+    color: #383838;
+}
+.nav-link {
+    position: relative;
+    transition: color 0.3s ease;
+}
+.nav-link::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: -4px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #007A7A;
+    transition: width 0.3s ease;
+}
+.nav-link:hover::after, .nav-link.active::after {
+    width: 100%;
+}
+.accordion-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease-in-out;
+}
+.table-row-hover:hover {
+    background-color: #f3f4f6;
+}
