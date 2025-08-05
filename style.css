@@ -77,30 +77,9 @@ header p {
     transform: translateY(0);
 }
 
+/* --- ここから修正箇所 --- */
 
-/* フッター */
-footer {
-    margin-top: auto;
-    padding-top: 40px;
-    color: #777;
-    font-size: 0.9em;
-}
-
-/* スマートフォン向けの調整 */
-@media (max-width: 768px) {
-    body {
-        padding: 15px;
-    }
-    
-    header h1 {
-        font-size: 2em;
-    }
-
-    .project-card {
-        width: 100%;
-    }
-
-    /* トップページに戻るボタンのスタイル */
+/* トップページに戻るボタンのスタイル (PCなど通常時) */
 .back-to-home {
     position: fixed; /* 画面の左上に固定 */
     top: 20px;
@@ -138,8 +117,34 @@ footer {
     fill: #007BFF; /* アイコンの色を青に */
 }
 
-/* スマートフォン向けの調整 */
+/* --- ここまで修正箇所 --- */
+
+
+/* フッター */
+footer {
+    margin-top: auto;
+    padding-top: 40px;
+    color: #777;
+    font-size: 0.9em;
+}
+
+/* スマートフォン向けの調整 (横幅768px以下) */
 @media (max-width: 768px) {
+    body {
+        padding: 15px;
+    }
+    
+    header h1 {
+        font-size: 2em;
+    }
+
+    .project-card {
+        width: 100%;
+    }
+
+    /* --- ここから修正箇所 --- */
+
+    /* トップページに戻るボタンのスマホ用スタイル */
     .back-to-home {
         width: 45px;
         height: 45px;
@@ -150,6 +155,5 @@ footer {
         width: 24px;
         height: 24px;
     }
+    /* --- ここまで修正箇所 --- */
 }
-}
-
