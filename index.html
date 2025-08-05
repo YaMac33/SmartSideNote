@@ -3,22 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Comparison Test Site - Project List (Refined Ver.)</title>
+    <title>AI Comparison Test Site - Project List (White BG Ver.)</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
-        /* --- デザイン変更のポイント ---
-         * 1. アイコンの刷新: 絵文字を廃止し、専門的で統一感のあるSVGアイコンに変更。
-         * 2. インタラクションの強化: ホバー時に拡大効果を追加し、よりダイナミックなフィードバックを実装。
-         * 3. 背景デザインの洗練: 微妙な放射状グラデーションを背景に追加し、ページの奥行きと質感を向上。
-         * 4. タイポグラフィの強調: メインタイトルにアクセントカラーのグラデーションを適用し、視覚的な階層を強化。
-         * 5. 全体的な微調整: カラーパレット、シャドウ、余白を維持しつつ、細部を調整し全体の完成度を向上。
-         */
-
         :root {
             /* ライトモードのカラーパレット */
-            --bg-primary: #f0f4f8;
             --bg-secondary: #ffffff;
             --text-primary: #1a202c;
             --text-secondary: #4a5568;
@@ -27,8 +18,9 @@
             --accent-color-light: #ebf8ff;
             --accent-gradient: linear-gradient(45deg, var(--accent-color), #2b6cb0);
             
-            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.07);
-            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+            /* カードの影を微調整 */
+            --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 20px rgba(0, 0, 0, 0.08);
             --border-radius: 16px;
             --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
@@ -53,18 +45,17 @@
 
         body {
             font-family: 'Inter', 'Noto Sans JP', sans-serif;
-            background-color: var(--bg-primary);
-            /* 背景に subtle なグラデーションを追加 */
-            background-image: radial-gradient(circle at top, rgba(255,255,255,0.05), transparent 40%);
+            /* 背景を白に設定 */
+            background-color: #ffffff; 
             color: var(--text-primary);
             min-height: 100vh;
             overflow-x: hidden;
-            transition: background-color 0.3s ease;
         }
 
+        /* ダークモード時は背景色を元に戻す */
         @media (prefers-color-scheme: dark) {
             body {
-                background-image: radial-gradient(circle at top, rgba(255,255,255,0.03), transparent 40%);
+                background-color: var(--bg-primary);
             }
         }
 
@@ -84,7 +75,6 @@
             font-size: clamp(2.5rem, 5vw, 3.5rem);
             font-weight: 700;
             margin-bottom: 1rem;
-            /* タイトルにグラデーションを適用 */
             background: var(--accent-gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -111,6 +101,7 @@
         }
 
         .project-card {
+            /* カードの背景は白のまま */
             background-color: var(--bg-secondary);
             border: 1px solid var(--border-color);
             border-radius: var(--border-radius);
@@ -176,7 +167,7 @@
             line-height: 1.6;
             color: var(--text-secondary);
             margin-bottom: 1.5rem;
-            flex-grow: 1; /* カードの高さを揃える */
+            flex-grow: 1; 
         }
 
         .card-footer {
