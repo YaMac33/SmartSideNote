@@ -4,53 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>インタラクティブ・レポート：公務員の新しい働き方</title>
+    
     <script src="https://cdn.tailwindcss.com"></script>
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
-    <!-- Chosen Palette: Calm Harmony -->
-    <!-- Application Structure Plan: A narrative-driven, single-page application that guides the user from the foundational concepts to future possibilities. The structure begins with the 'Why' (social background), moves to the 'How' (case studies of Ikoma and Kobe), explores the 'What's Next' (community contribution models), addresses the 'Challenges' (implementation issues), and concludes with the 'Big Picture' (benefits and the concept of cross-boundary learning). This thematic flow was chosen to make a complex policy topic digestible and engaging for policymakers, civil servants, and the public. -->
-    <!-- Visualization & Content Choices: 
-        - Social Background: Report Info -> Drivers for change (complex issues, motivation, etc.) -> Goal: Inform -> Viz: Icon-based cards -> Interaction: Simple hover effects -> Justification: Breaks down dense text into easily scannable, visually distinct points.
-        - Ikoma vs. Kobe Models: Report Info -> Comparison of the two pioneering systems -> Goal: Compare -> Viz: Interactive HTML Table -> Interaction: Hover to highlight rows -> Justification: Provides a clear, structured, side-by-side comparison of the key features of each model.
-        - Community Contribution Models: Report Info -> Specific examples of external side jobs -> Goal: Organize/Inform -> Viz: Grid of styled cards -> Interaction: Static display -> Justification: Showcases the concrete possibilities of the expanded model in a visually appealing format.
-        - Challenges & Solutions: Report Info -> Key implementation hurdles -> Goal: Organize -> Viz: Accordion component (HTML/CSS/JS) -> Interaction: Click to expand -> Justification: Presents problem-solution pairs in a compact, user-initiated way, preventing information overload.
-        - Benefits (Individual vs. Organization): Report Info -> Dual benefits of the new system -> Goal: Compare -> Viz: Two-column layout -> Interaction: Static display -> Justification: Clearly contrasts the positive impacts on the two main stakeholders.
-    -->
-    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
-    <style>
-        body {
-            font-family: 'Noto Sans JP', sans-serif;
-            background-color: #FDFBF8;
-            color: #383838;
-        }
-        .nav-link {
-            position: relative;
-            transition: color 0.3s ease;
-        }
-        .nav-link::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 2px;
-            bottom: -4px;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: #007A7A;
-            transition: width 0.3s ease;
-        }
-        .nav-link:hover::after, .nav-link.active::after {
-            width: 100%;
-        }
-        .accordion-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.5s ease-in-out;
-        }
-        .table-row-hover:hover {
-            background-color: #f3f4f6;
-        }
-    </style>
+    
+    <link rel="stylesheet" href="style.css">
 </head>
 <body class="antialiased">
 
@@ -171,8 +132,7 @@
             <div class="mt-16 max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-xl">
                 <h3 class="text-2xl font-bold text-center mb-6">制度実現への3つの鍵</h3>
                 <div id="accordion-container" class="space-y-4">
-                    <!-- Accordion items will be dynamically generated here -->
-                </div>
+                    </div>
             </div>
         </section>
 
@@ -187,23 +147,23 @@
                 <div class="bg-white p-8 rounded-lg shadow-lg">
                     <h3 class="text-2xl font-bold mb-4">個人（職員）の成長</h3>
                     <ul class="space-y-3 text-gray-700">
-                        <li class="flex items-start"><span class="text-[#007A7A] mr-3 font-bold">✓</span><span>**キャリア自律性の確立：** 受け身ではない、主体的なキャリア形成が可能に。</span></li>
-                        <li class="flex items-start"><span class="text-[#007A7A] mr-3 font-bold">✓</span><span>**市場価値の可視化：** 外部での経験が、自身のスキルを客観視させ、学習意欲を向上。</span></li>
-                        <li class="flex items-start"><span class="text-[#007A7A] mr-3 font-bold">✓</span><span>**セカンドキャリアへの準備：** 定年後も見据えた地域との繋がりを構築。</span></li>
+                        <li class="flex items-start"><span class="text-[#007A7A] mr-3 font-bold">✓</span><span><strong>キャリア自律性の確立：</strong> 受け身ではない、主体的なキャリア形成が可能に。</span></li>
+                        <li class="flex items-start"><span class="text-[#007A7A] mr-3 font-bold">✓</span><span><strong>市場価値の可視化：</strong> 外部での経験が、自身のスキルを客観視させ、学習意欲を向上。</span></li>
+                        <li class="flex items-start"><span class="text-[#007A7A] mr-3 font-bold">✓</span><span><strong>セカンドキャリアへの準備：</strong> 定年後も見据えた地域との繋がりを構築。</span></li>
                     </ul>
                 </div>
                 <div class="bg-white p-8 rounded-lg shadow-lg">
                     <h3 class="text-2xl font-bold mb-4">組織（自治体）の進化</h3>
                     <ul class="space-y-3 text-gray-700">
-                        <li class="flex items-start"><span class="text-[#007A7A] mr-3 font-bold">✓</span><span>**「学習する組織」へ：** 職員が持ち帰る外部の知見が、組織全体の進化を促進。</span></li>
-                        <li class="flex items-start"><span class="text-[#007A7A] mr-3 font-bold">✓</span><span>**人材獲得・定着戦略：** 柔軟な働き方は、優秀な人材にとって大きな魅力に。</span></li>
-                        <li class="flex items-start"><span class="text-[#007A7A] mr-3 font-bold">✓</span><span>**官民連携の深化：** 個人レベルの繋がりが、血の通った協働プロジェクトを生む土壌に。</span></li>
+                        <li class="flex items-start"><span class="text-[#007A7A] mr-3 font-bold">✓</span><span><strong>「学習する組織」へ：</strong> 職員が持ち帰る外部の知見が、組織全体の進化を促進。</span></li>
+                        <li class="flex items-start"><span class="text-[#007A7A] mr-3 font-bold">✓</span><span><strong>人材獲得・定着戦略：</strong> 柔軟な働き方は、優秀な人材にとって大きな魅力に。</span></li>
+                        <li class="flex items-start"><span class="text-[#007A7A] mr-3 font-bold">✓</span><span><strong>官民連携の深化：</strong> 個人レベルの繋がりが、血の通った協働プロジェクトを生む土壌に。</span></li>
                     </ul>
                 </div>
             </div>
             <div class="mt-12 text-center bg-teal-50 text-teal-800 p-8 rounded-lg max-w-4xl mx-auto">
-                 <h3 class="text-2xl font-bold mb-2">越境学習としての『複業』</h3>
-                 <p>行政とは異なる価値観やスピード感に触れる「越境学習」は、職員の固定観念を打ち破り、創造性を飛躍的に高めます。この経験こそが、行政サービスを内側から変革する強力な原動力となるのです。</p>
+               <h3 class="text-2xl font-bold mb-2">越境学習としての『複業』</h3>
+               <p>行政とは異なる価値観やスピード感に触れる「越境学習」は、職員の固定観念を打ち破り、創造性を飛躍的に高めます。この経験こそが、行政サービスを内側から変革する強力な原動力となるのです。</p>
             </div>
         </section>
 
@@ -213,71 +173,7 @@
         <p>&copy; 2025 Public Sector Innovation Report. All Rights Reserved.</p>
     </footer>
 
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-    // Accordion Logic
-    const accordionData = [
-        { title: '利害関係の排除', content: '許認可権限を持つ職員が関連企業で複業する等の利益相反を防ぐため、第三者を含む審査委員会を設置し、申請内容を客観的に審査する仕組みが不可欠です。' },
-        { title: '労働時間の管理', content: '本業に支障が出ないよう、週8時間・月30時間などの明確な上限を設定し、上長の許可と定期的な活動報告を義務付けることで、適切な労務管理を行います。' },
-        { title: '情報管理の徹底', content: '職務上知り得た秘密情報を漏洩させないため、複業開始前に守秘義務に関する誓約書の提出を義務付け、違反時の罰則を明確化します。' }
-    ];
-
-    const accordionContainer = document.getElementById('accordion-container');
-    accordionData.forEach((item, index) => {
-        const accordionItem = document.createElement('div');
-        accordionItem.className = 'border rounded-lg';
-        accordionItem.innerHTML = `
-            <button class="accordion-header w-full text-left p-4 font-bold flex justify-between items-center">
-                <span>${item.title}</span>
-                <span class="transform transition-transform duration-300">▼</span>
-            </button>
-            <div class="accordion-content px-4 pb-4 text-gray-600">
-                ${item.content}
-            </div>
-        `;
-        accordionContainer.appendChild(accordionItem);
-    });
-
-    accordionContainer.addEventListener('click', (event) => {
-        const header = event.target.closest('.accordion-header');
-        if (!header) return;
-
-        const content = header.nextElementSibling;
-        const icon = header.querySelector('span:last-child');
-        
-        if (content.style.maxHeight) {
-            content.style.maxHeight = null;
-            icon.style.transform = 'rotate(0deg)';
-        } else {
-            document.querySelectorAll('.accordion-content').forEach(el => el.style.maxHeight = null);
-            document.querySelectorAll('.accordion-header span:last-child').forEach(el => el.style.transform = 'rotate(0deg)');
-            content.style.maxHeight = content.scrollHeight + "px";
-            icon.style.transform = 'rotate(180deg)';
-        }
-    });
-
-    // Nav Link Active State on Scroll
-    const navLinks = document.querySelectorAll('.nav-link');
-    const sections = document.querySelectorAll('section[id]');
-
-    window.addEventListener('scroll', () => {
-        let current = '';
-        sections.forEach(section => {
-            const sectionTop = section.offsetTop;
-            if (pageYOffset >= sectionTop - 80) { // 80px offset for header height
-                current = section.getAttribute('id');
-            }
-        });
-
-        navLinks.forEach(link => {
-            link.classList.remove('active');
-            if (link.getAttribute('href').includes(current)) {
-                link.classList.add('active');
-            }
-        });
-    });
-});
-</script>
+    <script src="script.js" defer></script>
 
 </body>
 </html>
