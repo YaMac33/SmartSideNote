@@ -1,1 +1,352 @@
+<!DOCTYPE html>
+<html lang="ja" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>事業性評価：次世代乗り捨て型カーシェアリング</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="antialiased">
 
+    <header class="bg-white/80 backdrop-blur-lg sticky top-0 z-50 shadow-sm">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="text-2xl font-bold text-gray-800">
+                <span class="text-[#008080]">Mobi</span><span class="text-gray-600">Next</span>
+            </div>
+            <div class="hidden md:flex space-x-8">
+                <a href="#opportunity" class="nav-link text-gray-600 hover:text-gray-900 font-medium">市場機会</a>
+                <a href="#competition" class="nav-link text-gray-600 hover:text-gray-900 font-medium">競合分析</a>
+                <a href="#business-model" class="nav-link text-gray-600 hover:text-gray-900 font-medium">事業モデル</a>
+                <a href="#technology" class="nav-link text-gray-600 hover:text-gray-900 font-medium">必須技術</a>
+                <a href="#strategy" class="nav-link text-gray-600 hover:text-gray-900 font-medium">成功戦略</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container mx-auto px-6 py-12">
+
+        <section id="hero" class="text-center py-16">
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
+                乗り捨て<span class="text-[#008080]">×</span>スマート駐車場
+            </h1>
+            <p class="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto mb-8">
+                次世代モビリティ事業の事業性評価。テクノロジーで「片道移動」の未開拓市場を切り拓き、都市の移動を再定義する。
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <p class="text-3xl font-bold text-[#008080]">4,555億円</p>
+                    <p class="text-gray-500 mt-2">2030年国内市場予測</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <p class="text-3xl font-bold text-[#008080]">+23.1%</p>
+                    <p class="text-gray-500 mt-2">国内車両台数の年間成長率</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <p class="text-3xl font-bold text-[#008080]">99%超</p>
+                    <p class="text-gray-500 mt-2">ナンバープレート認証率</p>
+                </div>
+            </div>
+        </section>
+
+        <div class="border-t border-gray-200 my-16"></div>
+
+        <section id="opportunity" class="py-16">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-800">未開拓の巨大市場：なぜ「今」なのか？</h2>
+                <p class="text-lg text-gray-600 mt-4 max-w-2xl mx-auto">カーシェア市場は急成長していますが、利用者の真のニーズである「片道移動」は未だ満たされていません。ここに巨大な事業機会が眠っています。</p>
+            </div>
+            
+            <div class="bg-white rounded-lg shadow-lg p-6 md:p-8 mb-16">
+                <h3 class="text-xl font-bold text-center mb-4">国内カーシェアリング市場の急成長</h3>
+                <div class="chart-container">
+                    <canvas id="marketGrowthChart"></canvas>
+                </div>
+                <p class="text-sm text-gray-500 mt-4 text-center">出典：交通エコロジー・モビリティ財団、富士総研等のデータを基に作成</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8 text-center">
+                <div class="kpi-card p-6 rounded-lg shadow-md">
+                    <div class="text-4xl mb-4">🚗</div>
+                    <h3 class="text-xl font-bold mb-2">ラウンドトリップの限界</h3>
+                    <p class="text-gray-600">既存サービスは出発点への返却が必須。終電後の帰宅や出張先での移動など、片道ニーズに応えられていない。</p>
+                </div>
+                <div class="kpi-card p-6 rounded-lg shadow-md">
+                    <div class="text-4xl mb-4">🅿️</div>
+                    <h3 class="text-xl font-bold mb-2">都市部の駐車場問題</h3>
+                    <p class="text-gray-600">慢性的な駐車場不足と高額な駐車料金が、自家用車所有の障壁に。これがカーシェア需要を加速させる。</p>
+                </div>
+                <div class="kpi-card p-6 rounded-lg shadow-md">
+                    <div class="text-4xl mb-4">💡</div>
+                    <h3 class="text-xl font-bold mb-2">過去の失敗からの教訓</h3>
+                    <p class="text-gray-600">過去の乗り捨て事業は再配置コストで頓挫。テクノロジーでこの課題を克服することが成功の鍵となる。</p>
+                </div>
+            </div>
+
+            <div class="mt-16 bg-white rounded-lg shadow-lg p-6 md:p-8">
+                <h3 class="text-xl font-bold text-center mb-8">誰が、どんな時に「乗り捨て」を求めるのか？</h3>
+                <div id="customer-segments" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <button data-segment="personal" class="segment-btn p-4 rounded-lg border-2 border-transparent text-center cursor-pointer transition-all duration-300 bg-gray-100 hover:bg-gray-200">
+                        <span class="text-3xl">👤</span>
+                        <p class="font-bold mt-2">個人利用</p>
+                    </button>
+                    <button data-segment="corporate" class="segment-btn p-4 rounded-lg border-2 border-transparent text-center cursor-pointer transition-all duration-300 bg-gray-100 hover:bg-gray-200">
+                        <span class="text-3xl">🏢</span>
+                        <p class="font-bold mt-2">法人利用</p>
+                    </button>
+                    <button data-segment="tourist" class="segment-btn p-4 rounded-lg border-2 border-transparent text-center cursor-pointer transition-all duration-300 bg-gray-100 hover:bg-gray-200">
+                        <span class="text-3xl">✈️</span>
+                        <p class="font-bold mt-2">観光利用</p>
+                    </button>
+                </div>
+                <div id="segment-details" class="mt-6 p-6 bg-gray-50 rounded-lg min-h-[150px] flex items-center justify-center">
+                    <p class="text-gray-500">上のボタンをタップして、詳細な利用シーンをご覧ください。</p>
+                </div>
+            </div>
+        </section>
+
+        <div class="border-t border-gray-200 my-16"></div>
+
+        <section id="competition" class="py-16">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-800">競合の壁と、その先の好機</h2>
+                <p class="text-lg text-gray-600 mt-4 max-w-2xl mx-auto">大手事業者はなぜ本格参入しないのか？彼らの「ジレンマ」こそが、新規参入者にとって最大のチャンスです。</p>
+            </div>
+            
+            <div class="bg-white rounded-lg shadow-lg p-6 md:p-8">
+                <h3 class="text-xl font-bold text-center mb-8">主要カーシェア事業者 サービス比較</h3>
+                <div class="overflow-x-auto">
+                    <table id="competition-table" class="w-full text-left border-collapse">
+                        <thead>
+                            <tr>
+                                <th class="p-4 bg-gray-100 font-bold">項目</th>
+                                <th class="p-4 bg-gray-100 font-bold text-center">タイムズカー</th>
+                                <th class="p-4 bg-gray-100 font-bold text-center">カレコ</th>
+                                <th class="p-4 bg-gray-100 font-bold text-center">dカーシェア</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="competitor-row" data-competitor="times">
+                                <td class="p-4 border-t">運営モデル</td>
+                                <td class="p-4 border-t text-center">自社保有型</td>
+                                <td class="p-4 border-t text-center">自社保有型</td>
+                                <td class="p-4 border-t text-center">アグリゲーター型</td>
+                            </tr>
+                            <tr class="competitor-row" data-competitor="times">
+                                <td class="p-4 border-t">ステーション数</td>
+                                <td class="p-4 border-t text-center font-bold">約20,676箇所</td>
+                                <td class="p-4 border-t text-center">非公開</td>
+                                <td class="p-4 border-t text-center">約4,500箇所</td>
+                            </tr>
+                             <tr class="competitor-row" data-competitor="times">
+                                <td class="p-4 border-t">乗り捨てサービス</td>
+                                <td class="p-4 border-t text-center bg-red-50 text-red-700">限定的（有料）</td>
+                                <td class="p-4 border-t text-center bg-red-50 text-red-700">なし</td>
+                                <td class="p-4 border-t text-center bg-red-50 text-red-700">ほぼ不可</td>
+                            </tr>
+                             <tr class="competitor-row" data-competitor="times">
+                                <td class="p-4 border-t">弱み</td>
+                                <td class="p-4 border-t">顧客満足度の低さ、<br><span class="font-bold">乗り捨てが限定的</span></td>
+                                <td class="p-4 border-t">ステーション網で劣る</td>
+                                <td class="p-4 border-t">公式サイトより割高な場合がある</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p class="text-sm text-gray-500 mt-4 text-center">タップして各事業者の特徴をハイライト</p>
+            </div>
+
+            <div class="mt-16 grid md:grid-cols-2 gap-8 items-center">
+                <div class="bg-white rounded-lg shadow-lg p-8">
+                    <h3 class="text-xl font-bold mb-4">イノベーションのジレンマ</h3>
+                    <p class="text-gray-600 mb-4">大手事業者は、既存の「ラウンドトリップ型＋自社駐車場」という成功モデルに最適化されています。乗り捨て型への本格移行は、この成功モデルを自己否定しかねない破壊的な変革を意味するため、経営判断が極めて困難なのです。</p>
+                    <ul class="space-y-2 text-gray-700">
+                        <li class="flex items-start"><span class="text-[#008080] mr-2">✓</span><span>新たな巨大コスト（再配置）の発生</span></li>
+                        <li class="flex items-start"><span class="text-[#008080] mr-2">✓</span><span>既存の駐車場ビジネスとの競合</span></li>
+                        <li class="flex items-start"><span class="text-[#008080] mr-2">✓</span><span>大規模な投資と組織改編の必要性</span></li>
+                    </ul>
+                </div>
+                <div class="flex justify-center items-center p-4">
+                    <div class="text-center">
+                        <div class="bg-gray-200 p-4 rounded-lg inline-block shadow">大手事業者</div>
+                        <div class="h-12 border-l-2 border-dashed border-gray-400 mx-auto w-0"></div>
+                        <div class="bg-red-100 p-3 rounded-full inline-block text-red-700 shadow-inner">ジレンマの壁</div>
+                        <div class="h-12 border-l-2 border-dashed border-gray-400 mx-auto w-0"></div>
+                        <div class="bg-teal-100 p-4 rounded-lg inline-block text-teal-800 shadow">
+                            <p>乗り捨て型市場</p>
+                            <p class="font-bold">(ホワイトスペース)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="border-t border-gray-200 my-16"></div>
+
+        <section id="business-model" class="py-16">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-800">持続可能な事業モデルの設計</h2>
+                <p class="text-lg text-gray-600 mt-4 max-w-2xl mx-auto">収益を最大化し、コストを最小化する。テクノロジーを駆使した収益モデルと運用モデルが、事業の生命線です。</p>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-lg p-6 md:p-8">
+                <div class="flex justify-center mb-8">
+                    <div class="bg-gray-200 rounded-full p-1 flex">
+                        <button id="revenue-tab" class="tab-button active px-6 py-2 rounded-full text-sm font-bold">収益モデル</button>
+                        <button id="ops-tab" class="tab-button px-6 py-2 rounded-full text-sm font-bold">運用モデル</button>
+                    </div>
+                </div>
+
+                <div id="revenue-content">
+                    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <div class="border p-4 rounded-lg">
+                            <h4 class="font-bold">従量課金</h4>
+                            <p class="text-sm text-gray-600 mt-1">利用した分だけ支払うモデル。ライトユーザーや新規顧客の獲得に有効。</p>
+                        </div>
+                        <div class="border p-4 rounded-lg">
+                            <h4 class="font-bold">サブスクリプション</h4>
+                            <p class="text-sm text-gray-600 mt-1">月額課金で安定収益を確保。ヘビーユーザーを囲い込む。</p>
+                        </div>
+                        <div class="border p-4 rounded-lg">
+                            <h4 class="font-bold">法人契約</h4>
+                            <p class="text-sm text-gray-600 mt-1">平日の稼働率を向上させる大口契約。企業のコスト削減に貢献。</p>
+                        </div>
+                        <div class="border p-4 rounded-lg">
+                            <h4 class="font-bold">ダイナミックプライシング</h4>
+                            <p class="text-sm text-gray-600 mt-1">需給バランスで料金を変動。収益最大化と車両偏在の抑制を両立。</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="ops-content" class="hidden">
+                    <h3 class="text-xl font-bold text-center mb-6">核心課題：車両再配置コストの最小化</h3>
+                    <div class="grid md:grid-cols-3 gap-4 items-center text-center">
+                        <div class="bg-blue-50 p-4 rounded-lg">
+                            <h4 class="font-bold text-blue-800">需要予測アルゴリズム</h4>
+                            <p class="text-sm text-blue-700 mt-2">過去データ、天候、イベント情報から車両需要をAIが予測。</p>
+                        </div>
+                        <div class="text-2xl font-bold text-gray-400">→</div>
+                        <div class="bg-green-50 p-4 rounded-lg col-span-1 md:col-span-2">
+                            <h4 class="font-bold text-green-800">ハイブリッド型再配置</h4>
+                            <div class="flex flex-col md:flex-row justify-around mt-2 space-y-2 md:space-y-0 md:space-x-2">
+                                <div class="flex-1 border border-green-200 p-2 rounded">
+                                    <p class="text-sm font-semibold">インセンティブ</p>
+                                    <p class="text-xs text-green-700">利用者に割引を提供し、自発的な車両移動を促す。</p>
+                                </div>
+                                <div class="flex-1 border border-green-200 p-2 rounded">
+                                    <p class="text-sm font-semibold">オペレーター</p>
+                                    <p class="text-xs text-green-700">専門スタッフが計画的に大規模な車両移動を実施。</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="border-t border-gray-200 my-16"></div>
+
+        <section id="technology" class="py-16">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-800">事業を支える必須テクノロジー</h2>
+                <p class="text-lg text-gray-600 mt-4 max-w-2xl mx-auto">車両と駐車場をインテリジェントに繋ぐ。シームレスな顧客体験と効率的な運用は、これらの技術によって実現されます。</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="bg-white rounded-lg shadow-lg p-8">
+                    <h3 class="text-2xl font-bold mb-6 text-center">🚗 車両側：コネクテッド技術</h3>
+                    <div class="space-y-4">
+                        <div class="p-4 bg-gray-50 rounded-lg">
+                            <h4 class="font-bold">遠隔車両制御</h4>
+                            <p class="text-sm text-gray-600">スマホアプリでドアの解錠・施錠、エンジン始動。物理キーは不要。</p>
+                        </div>
+                        <div class="p-4 bg-gray-50 rounded-lg">
+                            <h4 class="font-bold">車両データ取得 (GPS/CAN)</h4>
+                            <p class="text-sm text-gray-600">リアルタイムの位置情報、燃料残量、走行距離を遠隔で把握。</p>
+                        </div>
+                        <div class="p-4 bg-gray-50 rounded-lg">
+                            <h4 class="font-bold">安全支援機能</h4>
+                            <p class="text-sm text-gray-600">ドライブレコーダーと衝撃検知で、事故時の状況把握と安全運転を促進。</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg shadow-lg p-8">
+                    <h3 class="text-2xl font-bold mb-6 text-center">🅿️ 駐車場側：スマートパーキング技術</h3>
+                    <div class="space-y-4">
+                        <div class="p-4 bg-gray-50 rounded-lg">
+                            <h4 class="font-bold">ナンバープレート認証 (LPR)</h4>
+                            <p class="text-sm text-gray-600">カメラが車両を自動認識。駐車券や精算機操作が一切不要に。</p>
+                        </div>
+                        <div class="p-4 bg-gray-50 rounded-lg">
+                            <h4 class="font-bold">ゲートレス・フラップレス化</h4>
+                            <p class="text-sm text-gray-600">物理的なゲートをなくし、スムーズな入出庫とストレスフリーな体験を実現。</p>
+                        </div>
+                        <div class="p-4 bg-gray-50 rounded-lg">
+                            <h4 class="font-bold">予約・決済システム連携</h4>
+                            <p class="text-sm text-gray-600">カーシェア予約と駐車場の在庫管理、決済をAPIでリアルタイムに完全連携。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="border-t border-gray-200 my-16"></div>
+
+        <section id="strategy" class="py-16">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-800">成功へのロードマップ</h2>
+                <p class="text-lg text-gray-600 mt-4 max-w-2xl mx-auto">段階的かつ集中的なアプローチで市場を攻略し、将来の都市交通インフラとしての地位を確立します。</p>
+            </div>
+            
+            <div class="relative pl-8 border-l-2 border-gray-300">
+                <div class="timeline-item mb-12">
+                    <h3 class="text-xl font-bold text-[#008080]">フェーズ1：モデル実証（〜1年目）</h3>
+                    <p class="text-gray-600 mt-2">都心部の特定エリアに限定してサービスを開始。高密度なステーション網を構築し、運用モデルの有効性を実証します。</p>
+                    <div class="mt-4 grid grid-cols-2 md:grid-cols-4 gap-2 text-sm">
+                        <span class="bg-gray-100 p-2 rounded">KPI: 車両稼働率</span>
+                        <span class="bg-gray-100 p-2 rounded">KPI: 再配置コスト比率</span>
+                        <span class="bg-gray-100 p-2 rounded">KPI: 顧客満足度(NPS)</span>
+                        <span class="bg-gray-100 p-2 rounded">KPI: 黒字化</span>
+                    </div>
+                </div>
+                <div class="timeline-item mb-12">
+                    <h3 class="text-xl font-bold text-[#008080]">フェーズ2：首都圏への拡大（2〜3年目）</h3>
+                    <p class="text-gray-600 mt-2">確立したモデルを主要ターミナル駅周辺へ横展開。法人契約を本格化させ、安定した収益基盤を確立します。</p>
+                     <div class="mt-4 grid grid-cols-2 md:grid-cols-4 gap-2 text-sm">
+                        <span class="bg-gray-100 p-2 rounded">KPI: 会員数</span>
+                        <span class="bg-gray-100 p-2 rounded">KPI: 利用回数</span>
+                        <span class="bg-gray-100 p-2 rounded">KPI: エリアカバレッジ</span>
+                        <span class="bg-gray-100 p-2 rounded">KPI: 法人契約数</span>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <h3 class="text-xl font-bold text-[#008080]">フェーズ3：面的展開と多角化（4年目〜）</h3>
+                    <p class="text-gray-600 mt-2">首都圏全域をカバーし、他大都市圏へ進出。MaaS連携、EVフリート導入、多様なモビリティ提供で事業を多角化します。</p>
+                    <div class="mt-4 grid grid-cols-2 md:grid-cols-3 gap-2 text-sm">
+                        <span class="bg-teal-50 text-teal-800 p-2 rounded">将来像: MaaS連携</span>
+                        <span class="bg-teal-50 text-teal-800 p-2 rounded">将来像: EVフリート導入</span>
+                        <span class="bg-teal-50 text-teal-800 p-2 rounded">将来像: 自動運転車デポ</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-gray-800 text-white mt-24">
+        <div class="container mx-auto px-6 py-8 text-center">
+            <p>&copy; 2025 MobiNext Inc. All Rights Reserved.</p>
+            <p class="text-sm text-gray-400 mt-2">このページは、提供された調査レポートに基づき生成された事業性評価のインタラクティブな要約です。</p>
+        </div>
+    </footer>
+
+    <script src="script.js" defer></script>
+</body>
+</html>
