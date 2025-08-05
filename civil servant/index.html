@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="ja" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>インタラクティブ・レポート：公務員の新しい働き方</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Calm Harmony -->
+    <!-- Application Structure Plan: A narrative-driven, single-page application that guides the user from the foundational concepts to future possibilities. The structure begins with the 'Why' (social background), moves to the 'How' (case studies of Ikoma and Kobe), explores the 'What's Next' (community contribution models), addresses the 'Challenges' (implementation issues), and concludes with the 'Big Picture' (benefits and the concept of cross-boundary learning). This thematic flow was chosen to make a complex policy topic digestible and engaging for policymakers, civil servants, and the public. -->
+    <!-- Visualization & Content Choices: 
+        - Social Background: Report Info -> Drivers for change (complex issues, motivation, etc.) -> Goal: Inform -> Viz: Icon-based cards -> Interaction: Simple hover effects -> Justification: Breaks down dense text into easily scannable, visually distinct points.
+        - Ikoma vs. Kobe Models: Report Info -> Comparison of the two pioneering systems -> Goal: Compare -> Viz: Interactive HTML Table -> Interaction: Hover to highlight rows -> Justification: Provides a clear, structured, side-by-side comparison of the key features of each model.
+        - Community Contribution Models: Report Info -> Specific examples of external side jobs -> Goal: Organize/Inform -> Viz: Grid of styled cards -> Interaction: Static display -> Justification: Showcases the concrete possibilities of the expanded model in a visually appealing format.
+        - Challenges & Solutions: Report Info -> Key implementation hurdles -> Goal: Organize -> Viz: Accordion component (HTML/CSS/JS) -> Interaction: Click to expand -> Justification: Presents problem-solution pairs in a compact, user-initiated way, preventing information overload.
+        - Benefits (Individual vs. Organization): Report Info -> Dual benefits of the new system -> Goal: Compare -> Viz: Two-column layout -> Interaction: Static display -> Justification: Clearly contrasts the positive impacts on the two main stakeholders.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background-color: #FDFBF8;
+            color: #383838;
+        }
+        .nav-link {
+            position: relative;
+            transition: color 0.3s ease;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #007A7A;
+            transition: width 0.3s ease;
+        }
+        .nav-link:hover::after, .nav-link.active::after {
+            width: 100%;
+        }
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out;
+        }
+        .table-row-hover:hover {
+            background-color: #f3f4f6;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="bg-white/90 backdrop-blur-lg sticky top-0 z-50 shadow-sm">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="text-xl font-bold text-gray-800">
+                公務員の新しい働き方
+            </div>
+            <div class="hidden md:flex space-x-8">
+                <a href="#background" class="nav-link text-gray-600 hover:text-gray-900 font-medium">背景</a>
+                <a href="#cases" class="nav-link text-gray-600 hover:text-gray-900 font-medium">先進事例</a>
+                <a href="#future" class="nav-link text-gray-600 hover:text-gray-900 font-medium">未来のカタチ</a>
+                <a href="#vision" class="nav-link text-gray-600 hover:text-gray-900 font-medium">ビジョン</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container mx-auto px-6 py-12">
+
+        <section class="text-center py-16">
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
+                「副業」から、地域を支える<span class="text-[#007A7A]">『複業』</span>へ。
+            </h1>
+            <p class="text-lg text-gray-600 max-w-3xl mx-auto">
+                公務員の働き方が変わる。庁内から地域へ、行政サービスの実行者から課題解決のカタリストへ。その変革の全貌と未来像を解き明かす。
+            </p>
+        </section>
+
+        <section id="background" class="py-16">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-800">なぜ今、公務員の「副業」なのか？</h2>
+                <p class="text-lg text-gray-600 mt-4 max-w-2xl mx-auto">社会が複雑化し、前例のない課題に直面する今、行政組織と職員に新たな挑戦が求められています。</p>
+            </div>
+            <div class="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+                <div class="bg-white p-6 rounded-lg shadow-md text-center transition-transform hover:scale-105">
+                    <div class="text-4xl mb-4">🧩</div>
+                    <h3 class="text-xl font-bold mb-2">複雑化する社会課題</h3>
+                    <p class="text-gray-600">人口減少やデジタル化など、縦割り行政では対応困難な課題が増加。職員には企画力や専門性など、多様なスキルが求められています。</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md text-center transition-transform hover:scale-105">
+                    <div class="text-4xl mb-4">💡</div>
+                    <h3 class="text-xl font-bold mb-2">働き方と意欲の変化</h3>
+                    <p class="text-gray-600">自己実現やスキルアップへの意欲が高い職員のモチベーションを維持し、優秀な人材の流出を防ぐ新たなインセンティブが必要です。</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md text-center transition-transform hover:scale-105">
+                    <div class="text-4xl mb-4">💰</div>
+                    <h3 class="text-xl font-bold mb-2">内なる資源の活用</h3>
+                    <p class="text-gray-600">厳しい財政状況の中、外部委託に頼るのではなく、職員が持つ潜在能力を最大限に活用して課題を解決する機運が高まっています。</p>
+                </div>
+            </div>
+        </section>
+
+        <div class="border-t border-gray-200 my-16"></div>
+
+        <section id="cases" class="py-16">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-800">先進事例に学ぶ：二つのモデル</h2>
+                <p class="text-lg text-gray-600 mt-4 max-w-2xl mx-auto">全国に先駆けて制度を導入した奈良県生駒市と兵庫県神戸市。そのアプローチの違いが、制度の進化を示しています。</p>
+            </div>
+            <div class="bg-white rounded-lg shadow-xl overflow-hidden max-w-6xl mx-auto">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead class="bg-gray-100">
+                            <tr>
+                                <th class="p-4 font-bold">制度比較</th>
+                                <th class="p-4 font-bold">奈良県生駒市「庁内副業」</th>
+                                <th class="p-4 font-bold">兵庫県神戸市「地域貢献応援制度」</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-t table-row-hover">
+                                <td class="p-4 font-semibold">開始時期</td>
+                                <td class="p-4">2017年</td>
+                                <td class="p-4">2020年</td>
+                            </tr>
+                            <tr class="border-t table-row-hover">
+                                <td class="p-4 font-semibold">目的</td>
+                                <td class="p-4">職員の能力向上、行政サービスの質向上</td>
+                                <td class="p-4">職員のスキルアップと<span class="font-bold text-[#007A7A]">地域貢献活動</span>への参加促進</td>
+                            </tr>
+                            <tr class="border-t table-row-hover">
+                                <td class="p-4 font-semibold">対象業務</td>
+                                <td class="p-4">専門知識を要する<span class="font-bold">庁内業務</span>（施設運営、イベント企画等）</td>
+                                <td class="p-4"><span class="font-bold text-[#007A7A]">公益性の高い外部団体</span>（NPO、地域団体等）での活動</td>
+                            </tr>
+                            <tr class="border-t table-row-hover">
+                                <td class="p-4 font-semibold">特徴</td>
+                                <td class="p-4">日本初の制度。<span class="font-bold">「庁内」に閉じたモデル。</span></td>
+                                <td class="p-4">活動範囲を<span class="font-bold text-[#007A7A]">「地域」に拡大。</span>副業から『複業』への橋渡し。</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <div class="border-t border-gray-200 my-16"></div>
+
+        <section id="future" class="py-16">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-800">未来のカタチ：地域貢献型『複業』</h2>
+                <p class="text-lg text-gray-600 mt-4 max-w-3xl mx-auto">公務員のスキルは、庁内だけでなく地域でこそ活かされる。人手不足に悩む地域団体や企業と公務員を繋ぐ、新しい課題解決のモデルです。</p>
+            </div>
+            <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                <div class="bg-white p-8 rounded-lg shadow-lg">
+                    <h3 class="text-xl font-bold mb-3">1. NPO・地域団体支援</h3>
+                    <p class="text-gray-600">理事や監事、広報担当として団体運営に参画。行政実務で培った会計・法務知識やファシリテーション能力で、団体の基盤強化に貢献します。</p>
+                </div>
+                <div class="bg-white p-8 rounded-lg shadow-lg">
+                    <h3 class="text-xl font-bold mb-3">2. 中小企業・スタートアップ支援</h3>
+                    <p class="text-gray-600">経営顧問やアドバイザーとして、補助金申請や行政手続きをサポート。官民連携のノウハウを活かし、地域経済の活性化を後押しします。</p>
+                </div>
+                <div class="bg-white p-8 rounded-lg shadow-lg">
+                    <h3 class="text-xl font-bold mb-3">3. 専門知識の地域還元</h3>
+                    <p class="text-gray-600">職員が個人的に持つIT、語学、デザインなどの専門スキルを活かし、地域の公民館などで講師として活動。地域の学びの場を豊かにします。</p>
+                </div>
+            </div>
+            <div class="mt-16 max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-xl">
+                <h3 class="text-2xl font-bold text-center mb-6">制度実現への3つの鍵</h3>
+                <div id="accordion-container" class="space-y-4">
+                    <!-- Accordion items will be dynamically generated here -->
+                </div>
+            </div>
+        </section>
+
+        <div class="border-t border-gray-200 my-16"></div>
+
+        <section id="vision" class="py-16">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-800">新しい公務員像と「学習する組織」の実現</h2>
+                <p class="text-lg text-gray-600 mt-4 max-w-3xl mx-auto">『複業』は、個人と組織に成長の好循環をもたらす、戦略的な人材・組織開発投資です。</p>
+            </div>
+            <div class="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+                <div class="bg-white p-8 rounded-lg shadow-lg">
+                    <h3 class="text-2xl font-bold mb-4">個人（職員）の成長</h3>
+                    <ul class="space-y-3 text-gray-700">
+                        <li class="flex items-start"><span class="text-[#007A7A] mr-3 font-bold">✓</span><span>**キャリア自律性の確立：** 受け身ではない、主体的なキャリア形成が可能に。</span></li>
+                        <li class="flex items-start"><span class="text-[#007A7A] mr-3 font-bold">✓</span><span>**市場価値の可視化：** 外部での経験が、自身のスキルを客観視させ、学習意欲を向上。</span></li>
+                        <li class="flex items-start"><span class="text-[#007A7A] mr-3 font-bold">✓</span><span>**セカンドキャリアへの準備：** 定年後も見据えた地域との繋がりを構築。</span></li>
+                    </ul>
+                </div>
+                <div class="bg-white p-8 rounded-lg shadow-lg">
+                    <h3 class="text-2xl font-bold mb-4">組織（自治体）の進化</h3>
+                    <ul class="space-y-3 text-gray-700">
+                        <li class="flex items-start"><span class="text-[#007A7A] mr-3 font-bold">✓</span><span>**「学習する組織」へ：** 職員が持ち帰る外部の知見が、組織全体の進化を促進。</span></li>
+                        <li class="flex items-start"><span class="text-[#007A7A] mr-3 font-bold">✓</span><span>**人材獲得・定着戦略：** 柔軟な働き方は、優秀な人材にとって大きな魅力に。</span></li>
+                        <li class="flex items-start"><span class="text-[#007A7A] mr-3 font-bold">✓</span><span>**官民連携の深化：** 個人レベルの繋がりが、血の通った協働プロジェクトを生む土壌に。</span></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="mt-12 text-center bg-teal-50 text-teal-800 p-8 rounded-lg max-w-4xl mx-auto">
+                 <h3 class="text-2xl font-bold mb-2">越境学習としての『複業』</h3>
+                 <p>行政とは異なる価値観やスピード感に触れる「越境学習」は、職員の固定観念を打ち破り、創造性を飛躍的に高めます。この経験こそが、行政サービスを内側から変革する強力な原動力となるのです。</p>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="text-center p-8 mt-12 text-gray-500 text-sm">
+        <p>&copy; 2025 Public Sector Innovation Report. All Rights Reserved.</p>
+    </footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    // Accordion Logic
+    const accordionData = [
+        { title: '利害関係の排除', content: '許認可権限を持つ職員が関連企業で複業する等の利益相反を防ぐため、第三者を含む審査委員会を設置し、申請内容を客観的に審査する仕組みが不可欠です。' },
+        { title: '労働時間の管理', content: '本業に支障が出ないよう、週8時間・月30時間などの明確な上限を設定し、上長の許可と定期的な活動報告を義務付けることで、適切な労務管理を行います。' },
+        { title: '情報管理の徹底', content: '職務上知り得た秘密情報を漏洩させないため、複業開始前に守秘義務に関する誓約書の提出を義務付け、違反時の罰則を明確化します。' }
+    ];
+
+    const accordionContainer = document.getElementById('accordion-container');
+    accordionData.forEach((item, index) => {
+        const accordionItem = document.createElement('div');
+        accordionItem.className = 'border rounded-lg';
+        accordionItem.innerHTML = `
+            <button class="accordion-header w-full text-left p-4 font-bold flex justify-between items-center">
+                <span>${item.title}</span>
+                <span class="transform transition-transform duration-300">▼</span>
+            </button>
+            <div class="accordion-content px-4 pb-4 text-gray-600">
+                ${item.content}
+            </div>
+        `;
+        accordionContainer.appendChild(accordionItem);
+    });
+
+    accordionContainer.addEventListener('click', (event) => {
+        const header = event.target.closest('.accordion-header');
+        if (!header) return;
+
+        const content = header.nextElementSibling;
+        const icon = header.querySelector('span:last-child');
+        
+        if (content.style.maxHeight) {
+            content.style.maxHeight = null;
+            icon.style.transform = 'rotate(0deg)';
+        } else {
+            document.querySelectorAll('.accordion-content').forEach(el => el.style.maxHeight = null);
+            document.querySelectorAll('.accordion-header span:last-child').forEach(el => el.style.transform = 'rotate(0deg)');
+            content.style.maxHeight = content.scrollHeight + "px";
+            icon.style.transform = 'rotate(180deg)';
+        }
+    });
+
+    // Nav Link Active State on Scroll
+    const navLinks = document.querySelectorAll('.nav-link');
+    const sections = document.querySelectorAll('section[id]');
+
+    window.addEventListener('scroll', () => {
+        let current = '';
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop;
+            if (pageYOffset >= sectionTop - 80) { // 80px offset for header height
+                current = section.getAttribute('id');
+            }
+        });
+
+        navLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href').includes(current)) {
+                link.classList.add('active');
+            }
+        });
+    });
+});
+</script>
+
+</body>
+</html>
