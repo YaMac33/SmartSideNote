@@ -1,1 +1,43 @@
-
+body {
+    font-family: 'Noto Sans JP', sans-serif;
+    background-color: #F5F5F4; /* stone-100 */
+    color: #44403C; /* stone-700 */
+}
+.chart-container {
+    position: relative;
+    width: 100%;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+    height: 300px;
+    max-height: 350px;
+}
+@media (min-width: 768px) {
+    .chart-container {
+        height: 400px;
+        max-height: 450px;
+    }
+}
+.nav-link {
+    transition: all 0.3s ease;
+    border-bottom: 2px solid transparent;
+}
+.nav-link:hover, .nav-link.active {
+    color: #3B82F6; /* blue-500 */
+    border-bottom-color: #3B82F6;
+}
+.challenge-node {
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+.challenge-node:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+.modal {
+    transition: opacity 0.3s ease;
+}
+.filter-btn.active {
+    background-color: #3B82F6;
+    color: white;
+}
