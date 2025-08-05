@@ -100,33 +100,4 @@ footer {
     }
 
 }
-/* 左上のホームに戻るロゴのスタイル */
-.home-logo {
-    position: fixed; /* 画面の左上に固定 */
-    top: 20px;
-    left: 25px;
-    z-index: 1000; /* 他の要素より手前に表示 */
-    
-    color: #4a5568; /* 少し落ち着いたテキストの色 */
-    font-size: 22px;
-    font-weight: 700; /* 太字 */
-    text-decoration: none; /* 下線を消す */
-    letter-spacing: 0.5px; /* 文字間を少しだけ広げる */
-    
-    transition: all 0.3s ease-in-out;
-}
 
-/* ロゴにマウスを乗せたときのスタイル */
-.home-logo:hover {
-    color: #2980b9; /* 色を鮮やかに */
-    transform: scale(1.05); /* 少しだけ拡大 */
-}
-
-/* スマートフォン向けの調整 */
-@media (max-width: 768px) {
-    .home-logo {
-        top: 15px;
-        left: 20px;
-        font-size: 20px;
-    }
-}
