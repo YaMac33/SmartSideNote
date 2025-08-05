@@ -1,1 +1,406 @@
+<!DOCTYPE html>
+<html lang="ja" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>インタラクティブ・レポート：AIの未来予測（2024-2030）</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Calm Harmony (Warm Neutrals with Blue/Green Accents) -->
+    <!-- Application Structure Plan: A thematic, dashboard-style single-page application designed for intuitive exploration of AI's future. The structure is built around three core pillars: Business Integration, Technological Leaps, and Global Governance. Users can select a pillar to dynamically load detailed analysis, charts, and data into a central content area. This is followed by dedicated sections on the AGI debate, societal impact, and strategic recommendations. This structure was chosen to transform a dense report into a user-driven experience, allowing exploration from a high-level overview down to specific details, enhancing comprehension and engagement. -->
+    <!-- Visualization & Content Choices: 
+        - Core Pillars: Report Info -> Three main transformation themes -> Goal: Organize/Navigate -> Viz: Interactive Cards -> Interaction: Click to load detailed content -> Justification: Creates a clear, intuitive main navigation hub for the report's core themes.
+        - AGI Debate: Report Info -> Differing views of Hinton, LeCun, Altman -> Goal: Compare -> Viz: Side-by-Side Cards -> Interaction: Static comparison -> Justification: Clearly presents the conflicting expert opinions, highlighting the strategic uncertainty.
+        - Governance Comparison: Report Info -> US vs EU vs China AI policy -> Goal: Compare -> Viz: Interactive HTML Table -> Interaction: Hover to highlight a region's policy -> Justification: Facilitates direct comparison of complex geopolitical strategies.
+        - Industry Use Cases: Report Info -> AI adoption rates by function -> Goal: Compare -> Viz: Bar Chart -> Interaction: Hover for details -> Justification: Provides a quick, visual summary of where AI is being implemented most actively. -> Library: Chart.js.
+        - AI Evolution: Report Info -> Shift from LLM to Agent AI -> Goal: Organize/Process -> Viz: HTML/CSS Diagram -> Interaction: Static visual flow -> Justification: Simplifies the technological progression into an easy-to-understand visual narrative. NO SVG/Mermaid used.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+        }
+        .pillar-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+            border-width: 2px;
+            border-color: transparent;
+        }
+        .pillar-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .pillar-card.active {
+            border-color: #2563eb;
+            transform: translateY(-6px);
+            box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.2), 0 4px 6px -2px rgba(37, 99, 235, 0.1);
+        }
+        .content-fade-in {
+            animation: fadeIn 0.7s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 400px;
+        }
+        .nav-link {
+            position: relative;
+            transition: color 0.3s ease;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #2563eb;
+            transition: width 0.3s ease;
+        }
+        .nav-link:hover::after, .nav-link.active::after {
+            width: 100%;
+        }
+    </style>
+</head>
+<body class="antialiased">
+    <header class="bg-white/80 backdrop-blur-lg sticky top-0 z-50 shadow-sm">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="text-2xl font-bold text-gray-800">
+                AIの未来予測
+            </div>
+            <div class="hidden md:flex space-x-8">
+                <a href="#trends" class="nav-link text-gray-600 hover:text-gray-900 font-medium">3つの大変革</a>
+                <a href="#agi" class="nav-link text-gray-600 hover:text-gray-900 font-medium">AGI論争</a>
+                <a href="#impact" class="nav-link text-gray-600 hover:text-gray-900 font-medium">社会への影響</a>
+                <a href="#strategy" class="nav-link text-gray-600 hover:text-gray-900 font-medium">戦略的提言</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container mx-auto px-6 py-12">
+        <!-- Hero Section -->
+        <section class="text-center py-16">
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
+                人工知能の未来：<br class="md:hidden"><span class="text-blue-600">産業、社会、ガバナンスの変革</span>
+            </h1>
+            <p class="text-lg text-gray-600 max-w-3xl mx-auto">
+                2024年から2030年にかけて、AIは実験段階から社会実装の核へ。本レポートは、ビジネス、テクノロジー、そしてグローバルなルール形成に起きる3つの巨大な潮流を分析し、未来への航路を示します。
+            </p>
+        </section>
+
+        <!-- Core Trends Section -->
+        <section id="trends" class="py-16">
+            <h2 class="text-3xl font-bold text-center mb-10">2030年への道筋を定義する「3つの大変革」</h2>
+            <div id="pillar-selector" class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                <!-- Pillar cards will be dynamically generated here -->
+            </div>
+        </section>
+
+        <!-- Dynamic Content Display Section -->
+        <section id="content-display" class="bg-white rounded-2xl shadow-lg p-6 md:p-10 min-h-[500px] mb-20">
+            <div class="text-center py-20">
+                <p class="text-xl text-gray-500">上の「変革」を選択して、詳細な分析をご覧ください。</p>
+            </div>
+        </section>
+
+        <!-- AGI Debate Section -->
+        <section id="agi" class="py-16 bg-slate-50 rounded-2xl">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-800">汎用人工知能（AGI）を巡る論争</h2>
+                <p class="text-lg text-gray-600 mt-4 max-w-3xl mx-auto">AGIはいつ、どのように到来するのか？それともしないのか？トップランナーたちの見解は、未来への戦略を左右する根本的な不確実性を示しています。</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-bold mb-2">ジェフリー・ヒントン</h3>
+                    <p class="font-semibold text-red-600">懸念するゴッドファーザー</p>
+                    <p class="text-gray-600 mt-3">「AGIは20年以内に到来する可能性。人類を絶滅させるリスク（10-20%）を真剣に懸念している。制御問題の解決が急務。」</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-bold mb-2">ヤン・ルカン</h3>
+                    <p class="font-semibold text-yellow-600">懐疑的な現実主義者</p>
+                    <p class="text-gray-600 mt-3">「現在のLLMではAGIには絶対に到達しない。計画や物理世界の理解能力が欠如している。ワールドモデルの開発こそが進むべき道。」</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-bold mb-2">サム・アルトマン</h3>
+                    <p class="font-semibold text-green-600">楽観的な構築者</p>
+                    <p class="text-gray-600 mt-3">「AGIは早ければ2025年にも実現可能。人類に計り知れない利益をもたらす。反復的な展開を通じてリスクは管理できる。」</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Societal Impact Section -->
+        <section id="impact" class="py-20">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-800">社会システムとライフスタイルの変容</h2>
+                <p class="text-lg text-gray-600 mt-4 max-w-3xl mx-auto">AIは単なるツールではありません。私たちの働き方、学び方、そしてテクノロジーとの関わり方そのものを根本から変えていきます。</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+                <div class="bg-white p-8 rounded-lg shadow-lg">
+                    <h3 class="text-2xl font-bold mb-4">仕事の未来：雇用の再構築</h3>
+                    <p class="text-gray-600 mb-4">AIは定型的なタスクを自動化し、約<span class="font-bold text-blue-600">3億人分</span>の雇用に影響を与える可能性があります。しかし、同時に新たな雇用も創出します。未来の労働市場で価値が高まるのは、創造的思考、リーダーシップ、適応力といった、人間特有の「ヒューマンスキル」です。</p>
+                    <div class="text-center mt-6 p-4 bg-slate-50 rounded-md">
+                        <p class="text-sm text-gray-500">人間の役割は「オペレーター」から</p>
+                        <p class="text-xl font-bold text-blue-600">「オーケストレーター」へ</p>
+                    </div>
+                </div>
+                <div class="bg-white p-8 rounded-lg shadow-lg">
+                    <h3 class="text-2xl font-bold mb-4">教育の未来：学習のパーソナライズ</h3>
+                    <p class="text-gray-600 mb-4">全ての生徒が、世界最高の家庭教師を24時間利用できる時代が到来します。AIチューターは個々の学習ペースや理解度に合わせてカリキュラムを最適化し、教育格差を是正する可能性を秘めています。教師の役割は、知識伝達者から、生徒の創造性や探求心を育むメンターへと進化します。</p>
+                     <div class="text-center mt-6 p-4 bg-slate-50 rounded-md">
+                        <p class="text-sm text-gray-500">世界の教育AI市場の年間成長率予測</p>
+                        <p class="text-xl font-bold text-blue-600">約45%</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Strategy Section -->
+        <section id="strategy" class="py-16 bg-gray-800 text-white rounded-2xl">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold">未来への戦略的提言</h2>
+                <p class="text-lg text-gray-300 mt-4 max-w-3xl mx-auto">来るべきAI時代を航海するために、企業と政策立案者が今、取るべき行動とは。</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+                <div class="bg-gray-700 p-6 rounded-lg">
+                    <h3 class="text-xl font-bold mb-3">企業向け提言</h3>
+                    <ul class="space-y-3 text-gray-300">
+                        <li class="flex items-start"><span class="text-blue-400 mr-3">✓</span><span>**デュアルホライズン戦略：** 短期的なROI追求と、長期的な破壊的変化への備えを両立させる。</span></li>
+                        <li class="flex items-start"><span class="text-blue-400 mr-3">✓</span><span>**ガバナンスの競争優位化：** 倫理的で透明性の高いAIフレームワークを、信頼とブランド価値の源泉とする。</span></li>
+                        <li class="flex items-start"><span class="text-blue-400 mr-3">✓</span><span>**「AI即応性」への投資：** 特定のモデルではなく、組織の適応能力そのもの（データ基盤、学習文化）に投資する。</span></li>
+                    </ul>
+                </div>
+                <div class="bg-gray-700 p-6 rounded-lg">
+                    <h3 class="text-xl font-bold mb-3">政策立案者向け提言</h3>
+                    <ul class="space-y-3 text-gray-300">
+                        <li class="flex items-start"><span class="text-blue-400 mr-3">✓</span><span>**段階的な規制アプローチ：** リスクベースの規制を導入し、イノベーションと安全性のバランスを取る。</span></li>
+                        <li class="flex items-start"><span class="text-blue-400 mr-3">✓</span><span>**公共インフラへの投資：** 公共の計算資源やオープンソースモデルを支援し、巨大テック企業への権力集中を防ぐ。</span></li>
+                        <li class="flex items-start"><span class="text-blue-400 mr-3">✓</span><span>**国家的な再スキル化：** 労働市場の変革に対応するため、官民連携で大規模なスキルアッププログラムを開始する。</span></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="text-center p-8 mt-12 text-gray-500 text-sm">
+        <p>&copy; 2025 AI Future Analysis. All Rights Reserved.</p>
+    </footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const pillars = [
+        {
+            id: 'business',
+            name: 'ビジネスへの実装',
+            icon: '🏢',
+            summary: '熱狂から現実へ。企業はROIとリスク管理を重視し、AIを中核的な競争優位の源泉として活用し始めています。',
+            content: `
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div>
+                        <h3 class="text-2xl font-bold mb-4">実験から事業価値創造へ</h3>
+                        <p class="text-gray-600 mb-4">多くの企業は、ROI達成に1年以上かかると認識しており、パイロットプロジェクトから利益を生むソリューションへの移行に苦戦しています。成功の鍵は、AI導入に伴う「ワークフローの根本的な再設計」にあります。</p>
+                        <h4 class="font-bold mt-6 mb-2">新たな脅威：シャドーAI</h4>
+                        <p class="text-gray-600">従業員がIT部門の許可なく利用する「シャドーAI」が蔓延し、データ漏洩のリスクが急増しています。これにより、企業のAI導入における最大の障壁は「人材不足」から「規制とリスク」へと変化しました。</p>
+                    </div>
+                    <div>
+                        <div class="chart-container" style="height:300px;">
+                            <canvas id="useCaseChart"></canvas>
+                        </div>
+                        <p class="text-sm text-center text-gray-500 mt-2">主要なAIユースケース（機能別）</p>
+                    </div>
+                </div>
+            `
+        },
+        {
+            id: 'tech',
+            name: 'テクノロジーの飛躍',
+            icon: '🚀',
+            summary: 'AIは「生成」から「実行」へ。テキスト、画像、音声を統合するマルチモーダルAIが標準となり、自律的にタスクをこなすエージェントAIが次の主戦場です。',
+            content: `
+                <h3 class="text-2xl font-bold mb-6 text-center">言語から世界認識へ：次世代AIの萌芽</h3>
+                <div class="grid grid-cols-1 md:grid-cols-5 items-center gap-4 text-center font-bold text-gray-700">
+                    <div class="p-4 bg-slate-100 rounded-lg">LLM<br><span class="text-sm font-normal">(言語モデル)</span></div>
+                    <div class="text-2xl text-blue-500">→</div>
+                    <div class="p-4 bg-blue-100 rounded-lg">マルチモーダルAI<br><span class="text-sm font-normal">(テキスト+画像+音声)</span></div>
+                    <div class="text-2xl text-blue-500">→</div>
+                    <div class="p-4 bg-blue-200 rounded-lg">エージェントAI<br><span class="text-sm font-normal">(自律的タスク実行)</span></div>
+                </div>
+                <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h4 class="font-bold">マルチモーダルAI (LMM)</h4>
+                        <p class="text-gray-600 text-sm mt-1">GPT-4oやGeminiのように、多様なデータを統合処理し、より人間らしい対話を実現。複雑な文書の分析や自律システムの訓練に応用されています。</p>
+                    </div>
+                    <div>
+                        <h4 class="font-bold">経済性のパラダイムシフト</h4>
+                        <p class="text-gray-600 text-sm mt-1">AIのコストは「学習」から「推論（実行）」へ移行。これにより、より小型で効率的なモデルや、タスクを実行するエージェントAIの開発が加速しています。</p>
+                    </div>
+                </div>
+            `
+        },
+        {
+            id: 'governance',
+            name: 'グローバル・ガバナンス',
+            icon: '🌍',
+            summary: 'ルール形成を巡る地政学。イノベーション重視の米国、リスクベースのEU、国家統制の中国。三極のアプローチが、世界の技術標準を形成します。',
+            content: `
+                <h3 class="text-2xl font-bold mb-6">AI覇権と規制の地政学：米・EU・中のアプローチ比較</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-slate-100">
+                                <th class="p-3 font-bold">地域</th>
+                                <th class="p-3 font-bold">中核的哲学</th>
+                                <th class="p-3 font-bold">ビジネスへの影響</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b hover:bg-slate-50">
+                                <td class="p-3 font-semibold text-blue-700">欧州連合 (EU)</td>
+                                <td class="p-3">リスクベース、倫理、人権中心</td>
+                                <td class="p-3">高いコンプライアンス負担。信頼性向上による市場優位性の可能性。「ブリュッセル効果」による事実上のグローバル標準化。</td>
+                            </tr>
+                            <tr class="border-b hover:bg-slate-50">
+                                <td class="p-3 font-semibold text-green-700">米国</td>
+                                <td class="p-3">イノベーション主導、競争力重視</td>
+                                <td class="p-3">イノベーションの自由度が高い。州ごとの規制のばらつき。同盟国への輸出促進、競合国への規制。</td>
+                            </tr>
+                            <tr class="border-b hover:bg-slate-50">
+                                <td class="p-3 font-semibold text-red-700">中国</td>
+                                <td class="p-3">国家統制、社会の安定</td>
+                                <td class="p-3">厳格な国内コンテンツ管理。AI生成コンテンツのラベリング義務。グローバルサウスへの影響力拡大の可能性。</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                    <div class="bg-slate-50 p-3 rounded-md">
+                        <h4 class="font-bold">深刻な脅威</h4>
+                        <p>ディープフェイクによる偽情報拡散や、自律型致死兵器（LAWS）の開発が、デジタル社会の安全保障を揺るがす喫緊の課題となっています。</p>
+                    </div>
+                    <div class="bg-slate-50 p-3 rounded-md">
+                        <h4 class="font-bold">新たなリスク管理</h4>
+                        <p>AIの「幻覚」による損害を補償する「AI幻覚保険」のような新しいリスク管理手法や、企業内での倫理委員会の設置が標準化しつつあります。</p>
+                    </div>
+                </div>
+            `
+        }
+    ];
+
+    const selectorContainer = document.getElementById('pillar-selector');
+    const displayContainer = document.getElementById('content-display');
+    let currentChart = null;
+
+    pillars.forEach(pillar => {
+        const card = document.createElement('div');
+        card.className = 'pillar-card bg-white p-6 rounded-xl shadow-md cursor-pointer';
+        card.dataset.id = pillar.id;
+        card.innerHTML = `
+            <div class="text-4xl mb-3">${pillar.icon}</div>
+            <h3 class="text-xl font-bold text-gray-800 mb-2">${pillar.name}</h3>
+            <p class="text-gray-600 text-sm">${pillar.summary}</p>
+        `;
+        card.addEventListener('click', () => displayPillar(pillar));
+        selectorContainer.appendChild(card);
+    });
+
+    function displayPillar(pillar) {
+        document.querySelectorAll('.pillar-card').forEach(card => {
+            card.classList.toggle('active', card.dataset.id === pillar.id);
+        });
+
+        displayContainer.innerHTML = '';
+        displayContainer.classList.remove('content-fade-in');
+        void displayContainer.offsetWidth; // Trigger reflow
+        displayContainer.classList.add('content-fade-in');
+        
+        displayContainer.innerHTML = pillar.content;
+
+        if (pillar.id === 'business') {
+            createUseCaseChart();
+        }
+    }
+
+    function createUseCaseChart() {
+        if (currentChart) {
+            currentChart.destroy();
+        }
+        const ctx = document.getElementById('useCaseChart')?.getContext('2d');
+        if (!ctx) return;
+
+        currentChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['IT運用', '業務', 'マーケティング', '顧客サービス'],
+                datasets: [{
+                    label: '先進的なAIの取り組みが見られる割合 (%)',
+                    data: [28, 11, 10, 8],
+                    backgroundColor: ['#3b82f6', '#60a5fa', '#93c5fd', '#bfdbfe'],
+                    borderColor: '#1e3a8a',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        beginAtZero: true
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            title: function(tooltipItems) {
+                                const item = tooltipItems[0];
+                                let label = item.chart.data.labels[item.dataIndex];
+                                if (Array.isArray(label)) {
+                                  return label.join(' ');
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+    
+    // Smooth scrolling for nav links
+    const navLinks = document.querySelectorAll('.nav-link');
+    const sections = document.querySelectorAll('section[id]');
+    window.addEventListener('scroll', () => {
+        let current = '';
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop;
+            if (pageYOffset >= sectionTop - 80) {
+                current = section.getAttribute('id');
+            }
+        });
+        navLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href').includes(current)) {
+                link.classList.add('active');
+            }
+        });
+    });
+});
+</script>
+</body>
+</html>
 
