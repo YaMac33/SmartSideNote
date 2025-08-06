@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>メッセージ送信ページ</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      font-family: "Helvetica Neue", sans-serif;
+      background-color: #f8f9fa;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: #007BFF;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+    }
+
+    main {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 1rem;
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+
+    section {
+      margin-bottom: 2rem;
+    }
+
+    iframe {
+      width: 100%;
+      border: none;
+      height: 800px;
+    }
+
+    a.button-link {
+      display: inline-block;
+      background-color: #28a745;
+      color: white;
+      text-decoration: none;
+      padding: 12px 24px;
+      border-radius: 6px;
+      font-size: 16px;
+      margin-top: 1rem;
+    }
+
+    a.button-link:hover {
+      background-color: #218838;
+    }
+
+    footer {
+      text-align: center;
+      color: #888;
+      padding: 1rem 0;
+    }
+
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>テキスト送信ページ</h1>
+</header>
+
+<main>
+  <section>
+    <h2>方法①：Googleフォームで送信</h2>
+    <p>以下のフォームからメッセージを入力して送信すると、Googleスプレッドシートに保存されます。</p>
+
+    <!-- Googleフォームの埋め込み -->
+    <iframe src="https://docs.google.com/forms/d/e/あなたのフォームID/viewform?embedded=true" loading="lazy">
+      読み込んでいます…
+    </iframe>
+  </section>
+
+  <section>
+    <h2>方法②：GitHub Issueで送信</h2>
+    <p>GitHubアカウントがある場合はこちらの方法も使えます。Issueフォームを使ってメッセージを送信します。</p>
+
+    <!-- GitHub Issueフォームへのリンク -->
+    <a href="https://github.com/ユーザー名/リポジトリ名/issues/new?assignees=&labels=message&template=message.yml&title=📩+新しいメッセージ" class="button-link" target="_blank">
+      GitHubフォームで送信する
+    </a>
+  </section>
+</main>
+
+<footer>
+  © 2025 GitHub Pages Message Sender
+</footer>
+
+</body>
+</html>
