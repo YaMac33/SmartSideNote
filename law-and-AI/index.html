@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>インタラクティブ・レポート：アルゴリズムの天秤 - AIは司法の未来をどう描くか</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Judicious Blue & Parchment -->
+    <!-- Application Structure Plan: The SPA is designed as a narrative journey, guiding the user from the tangible present to the abstract future. It begins with "The Revolution Today" (current AI tools), moves to "The Evolving Professional" (skill shifts), explores "The Courtroom of Tomorrow" (judicial impact), confronts "Navigating the Maze" (ethical dilemmas), and concludes with a "Strategic Playbook" (actionable advice). This thematic, scrolling structure transforms the linear report into an exploratory experience, prioritizing user engagement and comprehension over the original document's chapter format. -->
+    <!-- Visualization & Content Choices: Market growth is shown with a bar chart (Chart.js) for clarity. AI tools are presented as interactive cards (HTML/JS) instead of a static table. The core concept of skill transformation is visualized with an interactive "Then vs. Now" slider (HTML/JS), making the change tangible. Complex ethical issues are mapped onto a central graphic with clickable hotspots (HTML/JS), turning abstract concepts into an explorable diagram. Strategic advice is organized into tabs for different audiences. All choices replace static text with interactive components, adhering to the NO SVG/Mermaid rule. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background-color: #FDFBF8;
+            color: #3A3A3A;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        .nav-link {
+            transition: all 0.3s ease;
+            position: relative;
+            padding-bottom: 4px;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #4A55A2;
+            transition: width 0.3s ease;
+        }
+        .nav-link:hover::after, .nav-link.active::after {
+            width: 100%;
+        }
+        .section-fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .section-fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .glassmorphism {
+            background: rgba(253, 251, 248, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(200, 200, 200, 0.2);
+        }
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            border-bottom: 1px dotted #4A55A2;
+            cursor: help;
+        }
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 240px;
+            background-color: #3A3A3A;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 8px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -120px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.875rem;
+            line-height: 1.4;
+        }
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header id="header" class="sticky top-0 z-50 w-full glassmorphism">
+        <nav class="container mx-auto px-6 py-3">
+            <div class="flex justify-between items-center">
+                <div class="text-lg font-bold text-[#4A55A2]">アルゴリズムの天秤</div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#revolution" class="nav-link">今日の革命</a>
+                    <a href="#evolution" class="nav-link">専門家の進化</a>
+                    <a href="#courtroom" class="nav-link">未来の法廷</a>
+                    <a href="#ethics" class="nav-link">倫理の迷宮</a>
+                    <a href="#strategy" class="nav-link">戦略</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container mx-auto px-6 py-12">
+        <section id="hero" class="text-center mb-24 section-fade-in">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4 leading-tight">アルゴリズムの天秤</h1>
+            <h2 class="text-2xl md:text-3xl font-bold text-[#4A55A2] mb-6">AIは法曹界の仕事をどう変え、司法の未来をどう描くか？</h2>
+            <p class="max-w-3xl mx-auto text-base md:text-lg text-gray-700">
+                AIはもはや単なる効率化ツールではありません。法務実務の根幹を揺るがし、弁護士の役割を再定義し、司法のあり方そのものに問いを投げかけています。このインタラクティブ・レポートで、リーガルテックの最前線とその先にある未来を探求しましょう。
+            </p>
+        </section>
+
+        <section id="revolution" class="mb-24 section-fade-in">
+            <h2 class="text-3xl font-bold text-center mb-4">今日の革命：法務実務の自動化</h2>
+            <p class="text-center max-w-3xl mx-auto mb-12 text-gray-700">
+                AIは既に、法務の現場で不可欠な力となっています。契約書レビューから判例リサーチまで、AIがどのように弁護士の日常業務を変革しているのか、具体的な応用例を通じて見ていきましょう。
+            </p>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300">
+                    <div class="text-4xl mb-4">📄</div>
+                    <h3 class="font-bold text-xl mb-2">AI契約書レビュー</h3>
+                    <p class="text-sm text-gray-600">不利な条項や欠落リスクを瞬時に検知。レビュー時間を最大90%削減し、品質を均一化します。LegalForceやGVA assistなどが市場をリードしています。</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300">
+                    <div class="text-4xl mb-4">🔍</div>
+                    <h3 class="font-bold text-xl mb-2">次世代リーガルリサーチ</h3>
+                    <p class="text-sm text-gray-600">キーワードではなく「文脈」で判例や文献を検索。Legalscapeのように、自然言語での質問にAIが要約付きで回答し、リサーチの質と速度を飛躍的に向上させます。</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300">
+                    <div class="text-4xl mb-4">🗂️</div>
+                    <h3 class="font-bold text-xl mb-2">eディスカバリー (電子証拠開示)</h3>
+                    <p class="text-sm text-gray-600">訴訟における膨大な電子データをAIが解析・分類。予測コーディング技術で重要文書を特定し、レビューコストを劇的に削減します。</p>
+                </div>
+            </div>
+            <div class="mt-16">
+                <h3 class="text-2xl font-bold text-center mb-4">急成長する国内リーガルテック市場</h3>
+                <p class="text-center max-w-2xl mx-auto mb-8 text-gray-700">
+                    リモートワークの普及とDXの波に乗り、日本のリーガルテック市場は急速に拡大しています。
+                </p>
+                <div class="chart-container">
+                    <canvas id="marketChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <section id="evolution" class="mb-24 section-fade-in">
+            <h2 class="text-3xl font-bold text-center mb-4">専門家の進化：弁護士の役割変化</h2>
+            <p class="text-center max-w-3xl mx-auto mb-12 text-gray-700">
+                AIが定型業務を担うことで、弁護士の価値は「作業」から「思考」へとシフトします。求められるスキルはどのように変わるのでしょうか。以下のスライダーを動かして、未来の弁護士像を覗いてみてください。
+            </p>
+            <div class="bg-white rounded-xl shadow-lg p-8 max-w-4xl mx-auto">
+                <div class="mb-4">
+                    <label for="skill-slider" class="block text-center text-sm font-medium text-gray-700">スライダーをドラッグ</label>
+                    <input id="skill-slider" type="range" min="0" max="100" value="50" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                </div>
+                <div id="skill-comparison" class="relative overflow-hidden h-80 md:h-64">
+                    <div id="skill-before" class="absolute top-0 left-0 h-full bg-[#7895B2] text-white p-6 rounded-l-lg transition-all duration-300">
+                        <h4 class="font-bold text-xl mb-2">伝統的な弁護士</h4>
+                        <ul class="list-disc list-inside space-y-2">
+                            <li>手作業での判例検索</li>
+                            <li>ゼロからの文書作成</li>
+                            <li>経験に基づく定性的アドバイス</li>
+                            <li>時間単価での請求</li>
+                        </ul>
+                    </div>
+                    <div id="skill-after" class="absolute top-0 right-0 h-full bg-[#4A55A2] text-white p-6 rounded-r-lg text-right transition-all duration-300">
+                        <h4 class="font-bold text-xl mb-2">AI時代の弁護士</h4>
+                        <ul class="list-disc list-inside space-y-2">
+                            <li>AIによる文脈検索・分析</li>
+                            <li>AI生成ドラフトの監督・編集</li>
+                            <li>データに基づく戦略的アドバイス</li>
+                            <li>価値・成果に基づく料金体系</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="courtroom" class="mb-24 section-fade-in">
+            <h2 class="text-3xl font-bold text-center mb-4">未来の法廷：AIは裁判官になれるか？</h2>
+            <p class="text-center max-w-3xl mx-auto mb-12 text-gray-700">
+                AIを司法の中核に導入する構想は、効率化への期待と公平性への懸念という、二つの側面を持ち合わせています。以下のタブを切り替えて、AIが司法に与える光と影を探ってみましょう。
+            </p>
+            <div class="max-w-4xl mx-auto">
+                <div class="flex border-b border-gray-300">
+                    <button class="court-tab active flex-1 py-3 text-center font-bold text-[#4A55A2] border-b-2 border-[#4A55A2]">可能性：AIによる裁判支援</button>
+                    <button class="court-tab flex-1 py-3 text-center font-bold text-gray-500">危険性：アルゴリズムの罠</button>
+                </div>
+                <div id="court-content" class="bg-white p-8 rounded-b-xl shadow-lg min-h-[250px]">
+                </div>
+            </div>
+        </section>
+
+        <section id="ethics" class="mb-24 section-fade-in">
+            <h2 class="text-3xl font-bold text-center mb-4">倫理の迷宮：4つの核心的課題</h2>
+            <p class="text-center max-w-3xl mx-auto mb-12 text-gray-700">
+                AIの導入は、避けて通れない倫理的・法的な問いを突きつけます。法曹界が直面する4つの大きな課題を、以下の図から探ってみましょう。各項目をクリックすると詳細が表示されます。
+            </p>
+            <div class="flex flex-col md:flex-row items-center justify-center gap-8">
+                <div class="w-full md:w-1/2 grid grid-cols-2 gap-4">
+                    <div id="ethic-bias" class="ethic-card bg-white p-4 rounded-lg shadow-md cursor-pointer hover:bg-blue-50 transition">
+                        <h4 class="font-bold text-center">⚖️ アルゴリズム・バイアス</h4>
+                    </div>
+                    <div id="ethic-blackbox" class="ethic-card bg-white p-4 rounded-lg shadow-md cursor-pointer hover:bg-blue-50 transition">
+                        <h4 class="font-bold text-center">⬛ ブラックボックス問題</h4>
+                    </div>
+                    <div id="ethic-privacy" class="ethic-card bg-white p-4 rounded-lg shadow-md cursor-pointer hover:bg-blue-50 transition">
+                        <h4 class="font-bold text-center">🤫 守秘義務</h4>
+                    </div>
+                    <div id="ethic-regulation" class="ethic-card bg-white p-4 rounded-lg shadow-md cursor-pointer hover:bg-blue-50 transition">
+                        <h4 class="font-bold text-center">📜 非弁活動規制</h4>
+                    </div>
+                </div>
+                <div id="ethic-detail" class="w-full md:w-1/2 bg-gray-50 p-6 rounded-xl min-h-[150px]">
+                    <p class="text-gray-500 text-center">左の課題をクリックして詳細を表示</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="strategy" class="section-fade-in">
+            <h2 class="text-3xl font-bold text-center mb-4">未来への戦略：あなたの次の打ち手は？</h2>
+            <p class="text-center max-w-3xl mx-auto mb-12 text-gray-700">
+                この変革の時代、あなたの立場によって取るべき戦略は異なります。以下のタブからあなたの役割を選び、具体的な行動指針を確認してください。
+            </p>
+            <div class="max-w-4xl mx-auto">
+                <div class="flex border-b border-gray-300">
+                    <button class="strategy-tab active flex-1 py-3 text-center font-bold text-[#4A55A2] border-b-2 border-[#4A55A2]">法曹専門家の方へ</button>
+                    <button class="strategy-tab flex-1 py-3 text-center font-bold text-gray-500">法律事務所・法務部門の方へ</button>
+                    <button class="strategy-tab flex-1 py-3 text-center font-bold text-gray-500">政策立案者の方へ</button>
+                </div>
+                <div id="strategy-content" class="bg-white p-8 rounded-b-xl shadow-lg min-h-[250px]">
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-[#3A3A3A] text-white mt-24">
+        <div class="container mx-auto px-6 py-8 text-center">
+            <p>本インタラクティブ・レポートは、提供された調査レポート「アルゴリズムの天秤」を基に生成されました。</p>
+            <p class="text-sm text-gray-400 mt-2">&copy; 2025 The Algorithmic Scales Interactive Report. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const marketData = {
+                labels: ['2018', '2019', '2020', '2021', '2022', '2023', '2024(予)', '2025(予)'],
+                datasets: [{
+                    label: '国内リーガルテック市場規模 (億円)',
+                    data: [228, 243, 261, 284, 310, 341, 375, 412],
+                    backgroundColor: 'rgba(74, 85, 162, 0.6)',
+                    borderColor: 'rgba(74, 85, 162, 1)',
+                    borderWidth: 1
+                }]
+            };
+            const marketChartConfig = {
+                type: 'bar',
+                data: marketData,
+                options: {
+                    maintainAspectRatio: false,
+                    scales: { y: { beginAtZero: true } },
+                    plugins: { legend: { display: false } }
+                }
+            };
+            const marketCtx = document.getElementById('marketChart').getContext('2d');
+            new Chart(marketCtx, marketChartConfig);
+
+            const slider = document.getElementById('skill-slider');
+            const beforeDiv = document.getElementById('skill-before');
+            const afterDiv = document.getElementById('skill-after');
+            const comparisonDiv = document.getElementById('skill-comparison');
+            slider.addEventListener('input', (e) => {
+                const value = e.target.value;
+                const width = comparisonDiv.offsetWidth;
+                const beforeWidth = width * (value / 100);
+                beforeDiv.style.width = `${beforeWidth}px`;
+                afterDiv.style.width = `${width - beforeWidth}px`;
+            });
+            // Initial trigger
+            slider.dispatchEvent(new Event('input'));
+            window.addEventListener('resize', () => slider.dispatchEvent(new Event('input')));
+
+            const courtTabs = document.querySelectorAll('.court-tab');
+            const courtContent = document.getElementById('court-content');
+            const courtDescriptions = {
+                '可能性：AIによる裁判支援': `
+                    <h4 class="font-bold text-xl mb-2">司法へのアクセス向上</h4>
+                    <p class="text-gray-700 mb-4">AIは、裁判官を煩雑な事務作業から解放します。事件管理の効率化、証拠の要約、判決文のドラフト作成などを支援し、裁判官がより本質的な法的判断に集中できる環境を整えます。</p>
+                    <h4 class="font-bold text-xl mb-2">オンライン紛争解決 (ODR)</h4>
+                    <p class="text-gray-700">少額の金銭トラブルなどを、裁判所に行かずにオンラインで解決するODRの普及をAIが後押しします。これにより、司法サービスがより安価で身近なものになります。</p>
+                `,
+                '危険性：アルゴリズムの罠': `
+                    <h4 class="font-bold text-xl mb-2">増幅されるバイアス</h4>
+                    <p class="text-gray-700 mb-4">過去の判例データに含まれる人種的・社会的なバイアスをAIが学習し、増幅させる危険性があります。米国のCOMPASアルゴリズムは、黒人被告を不当に高リスクと判定する傾向が指摘されました。</p>
+                    <h4 class="font-bold text-xl mb-2">人間の判断力の摩耗</h4>
+                    <p class="text-gray-700">AIの分析に過度に依存することで、裁判官自身の判断力が鈍る「<span class="tooltip">デスキリング<span class="tooltiptext">特定のスキルが技術によって代替され、人間がそのスキルを失っていく現象。</span></span>」のリスクがあります。正義の最終判断は、共感や倫理観を持つ人間に委ねられるべきです。</p>
+                `
+            };
+            const updateCourtContent = (tabName) => {
+                courtContent.innerHTML = courtDescriptions[tabName];
+            };
+            courtTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    courtTabs.forEach(t => t.classList.remove('active', 'text-[#4A55A2]', 'border-[#4A55A2]'));
+                    tab.classList.add('active', 'text-[#4A55A2]', 'border-[#4A55A2]');
+                    updateCourtContent(tab.textContent);
+                });
+            });
+            updateCourtContent('可能性：AIによる裁判支援');
+
+            const ethicCards = document.querySelectorAll('.ethic-card');
+            const ethicDetail = document.getElementById('ethic-detail');
+            const ethicDescriptions = {
+                'ethic-bias': { title: 'アルゴリズム・バイアス', text: 'AIが学習する過去のデータには、社会の偏見が反映されています。これをAIが学習・増幅し、採用や量刑判断で差別的な結果を生むリスクがあります。' },
+                'ethic-blackbox': { title: 'ブラックボックス問題', text: 'AIがなぜその結論に至ったのか、人間には説明できないことがあります。これは、判断に異議を唱える権利や、説明責任の原則を損なう可能性があります。' },
+                'ethic-privacy': { title: '守秘義務', text: '弁護士が依頼者の機密情報をクラウドAIに入力する際、弁護士・依頼者間の秘匿特権が侵害されるリスクがあります。ツールのセキュリティ評価が不可欠です。' },
+                'ethic-regulation': { title: '非弁活動規制', text: '日本では、AIが具体的な法的助言を行うと弁護士法違反（非弁活動）になる恐れがありました。2023年の法務省ガイドラインで「支援ツール」としての利用は許容される方向性が示されました。' }
+            };
+            ethicCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    const data = ethicDescriptions[card.id];
+                    ethicDetail.innerHTML = `<h4 class="font-bold text-lg mb-2">${data.title}</h4><p class="text-sm text-gray-700">${data.text}</p>`;
+                    ethicCards.forEach(c => c.classList.remove('bg-blue-100'));
+                    card.classList.add('bg-blue-100');
+                });
+            });
+
+            const strategyTabs = document.querySelectorAll('.strategy-tab');
+            const strategyContent = document.getElementById('strategy-content');
+            const strategyDescriptions = {
+                '法曹専門家の方へ': `
+                    <ul class="space-y-4 list-disc list-inside text-gray-700">
+                        <li><strong>生涯学習の受容：</strong>新しいツールやAIに関する知識を継続的に学び、スキルをアップデートし続ける。</li>
+                        <li><strong>人間中心スキルの涵養：</strong>AIが不得手な戦略的思考、共感、創造的問題解決、倫理的判断といった能力に磨きをかける。</li>
+                        <li><strong>「倫理的監査人」としての役割：</strong>AIの生成物を鵜呑みにせず、その正確性、公平性、倫理性を批判的に評価・監督する能力を確立する。</li>
+                    </ul>`,
+                '法律事務所・法務部門の方へ': `
+                    <ul class="space-y-4 list-disc list-inside text-gray-700">
+                        <li><strong>明確なAI戦略の策定：</strong>事業目標と連動した包括的なAI導入戦略を立て、導入目的を明確化する。</li>
+                        <li><strong>人材とプロセスへの投資：</strong>従業員へのトレーニング、AIを前提とした業務フローの再設計、イノベーションを奨励する組織文化を醸成する。</li>
+                        <li><strong>ビジネスモデルの再構築：</strong>時間単価制から脱却し、AIによる効率化を前提とした価値に基づく料金体系（AFA）を開発・導入する。</li>
+                    </ul>`,
+                '政策立案者の方へ': `
+                    <ul class="space-y-4 list-disc list-inside text-gray-700">
+                        <li><strong>アジャイルなガバナンス：</strong>技術中立的で柔軟な、原則ベースの規制を目指す。日本のソフトロー的ガイドラインが参考になる。</li>
+                        <li><strong>透明性と監査の義務化：</strong>市民の権利に重大な影響を与える司法AIシステムには、透明性の確保と第三者による監査を義務付ける。</li>
+                        <li><strong>「規制のサンドボックス」の活用：</strong>革新的なリーガルサービスを監督下で試験的に運用できる制度を設け、リスクを安全に評価する。</li>
+                    </ul>`
+            };
+            const updateStrategyContent = (tabName) => {
+                strategyContent.innerHTML = strategyDescriptions[tabName];
+            };
+            strategyTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    strategyTabs.forEach(t => t.classList.remove('active', 'text-[#4A55A2]', 'border-[#4A55A2]'));
+                    tab.classList.add('active', 'text-[#4A55A2]', 'border-[#4A55A2]');
+                    updateStrategyContent(tab.textContent);
+                });
+            });
+            updateStrategyContent('法曹専門家の方へ');
+
+            const sections = document.querySelectorAll('.section-fade-in');
+            const navLinks = document.querySelectorAll('.nav-link');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, { threshold: 0.1 });
+            sections.forEach(section => observer.observe(section));
+
+            const navObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        navLinks.forEach(link => {
+                            link.classList.toggle('active', link.getAttribute('href').substring(1) === entry.target.id);
+                        });
+                    }
+                });
+            }, { rootMargin: "-50% 0px -50% 0px" });
+            document.querySelectorAll('section[id]').forEach(section => navObserver.observe(section));
+            
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>
