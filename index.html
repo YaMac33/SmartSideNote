@@ -16,115 +16,93 @@
         <p>AIを活用したテストページの一覧です。</p>
     </header>
 
-    <main class="project-list">
-        <a href="./car-sharing/" class="project-card">
-            <h2>カーシェアリング料金比較</h2>
-            <p>複数のカーシェアリングサービスの料金をシミュレーション・比較するサイトです。</p>
-        </a>
-
-        <a href="./owarai/" class="project-card">
-            <h2>日本漫才の「ウケる」構造分析</h2>
-            <p>日本漫才の「ウケる」構造を分析したページです。</p>
-        </a>
-
-        <a href="./administration/" class="project-card">
-            <h2>AI駆動型ガバナンス</h2>
-            <p>日本の行政セクターにおけるAI活用の現状、課題、そして未来への戦略的青写真をインタラクティブに探るページです。</p>
-        </a>
-
-        <a href="./AI/" class="project-card">
-            <h2>人工知能の未来</h2>
-            <p>産業、社会、ガバナンスの変革について調査したページです。</p>
-        </a>
-
-        <a href="./civil servant/" class="project-card">
-            <h2>「副業」から、地域を支える『複業』へ。</h2>
-            <p>公務員の「副業」について調査したページです。</p>
-        </a>
-
-        <a href="./law/" class="project-card">
-            <h2>生ける法：解釈の探求</h2>
-            <p>なぜ同じ法律で、解釈が分かれるのかについて調査したページです。</p>
-        </a>
-
-        <a href="./National and local/" class="project-card">
-            <h2>司法が描く国と地方の境界線</h2>
-            <p>国と地方が対立する時、誰が最終判断を下すのかについて調査したページです。</p>
-        </a>
-        
+    <main class="project-list" id="project-list-container">
         </main>
-
     <footer>
         <p>&copy; 2025 YaMac33. All Rights Reserved.</p>
     </footer>
 
-    <script src="script.js"></script>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ホームページ</title>
-</head>
-<body>
-
-    <h1>プロジェクト一覧</h1>
-    <p>以下のリンクはリポジトリ内のディレクトリから自動生成されています。</p>
-
-    <ul id="project-links">
-        <li>読み込み中...</li>
-    </ul>
-
     <script>
-        // --- 設定項目 ---
-        const username = "あなたのGitHubユーザー名"; // 1. あなたのGitHubユーザー名に書き換える
-        const repoName = "あなたのリポジトリ名";     // 2. このHPのGitHubリポジトリ名に書き換える
-        // ----------------
+        // --- ① GitHub情報の設定 ---
+        const username = "YaMac33"; // あなたのGitHubユーザー名
+        const repoName = "あなたのリポジトリ名"; // このHPのGitHubリポジトリ名
+
+        // --- ② プロジェクト情報の設定 ---
+        // ディレクトリ名と、表示したいタイトル・説明文を紐づけます。
+        const projectDetails = {
+            "car-sharing": {
+                title: "カーシェアリング料金比較",
+                description: "複数のカーシェアリングサービスの料金をシミュレーション・比較するサイトです。"
+            },
+            "owarai": {
+                title: "日本漫才の「ウケる」構造分析",
+                description: "日本漫才の「ウケる」構造を分析したページです。"
+            },
+            "administration": {
+                title: "AI駆動型ガバナンス",
+                description: "日本の行政セクターにおけるAI活用の現状、課題、そして未来への戦略的青写真をインタラクティブに探るページです。"
+            },
+            "AI": {
+                title: "人工知能の未来",
+                description: "産業、社会、ガバナンスの変革について調査したページです。"
+            },
+            "civil servant": {
+                title: "「副業」から、地域を支える『複業』へ。",
+                description: "公務員の「副業」について調査したページです。"
+            },
+            "law": {
+                title: "生ける法：解釈の探求",
+                description: "なぜ同じ法律で、解釈が分かれるのかについて調査したページです。"
+            },
+            "National and local": {
+                title: "司法が描く国と地方の境界線",
+                description: "国と地方が対立する時、誰が最終判断を下すのかについて調査したページです。"
+            }
+        };
+        // ------------------------------------
 
         const apiUrl = `https://api.github.com/repos/${username}/${repoName}/contents/`;
-        const listElement = document.getElementById('project-links');
+        const container = document.getElementById('project-list-container');
+        container.innerHTML = '<p style="text-align: center;">読み込み中...</p>'; // 読み込み中の表示
 
         fetch(apiUrl)
             .then(response => {
-                if (!response.ok) {
-                    throw new Error('リポジトリ情報の取得に失敗しました。');
-                }
+                if (!response.ok) { throw new Error('リポジトリ情報の取得に失敗しました。'); }
                 return response.json();
             })
             .then(data => {
-                listElement.innerHTML = ''; // 「読み込み中...」を消去
+                container.innerHTML = ''; // 読み込み中表示を消去
 
-                // 取得したアイテムの中から「ディレクトリ(dir)」だけをフィルタリング
-                const dirs = data.filter(item => item.type === 'dir');
+                const dirs = data.filter(item => item.type === 'dir' && !item.name.startsWith('.'));
 
                 if (dirs.length === 0) {
-                    listElement.innerHTML = '<li>サブディレクトリが見つかりませんでした。</li>';
+                    container.innerHTML = '<p>プロジェクトが見つかりませんでした。</p>';
                     return;
                 }
 
                 dirs.forEach(dir => {
-                    // .gitなどの隠しディレクトリは除外
-                    if (dir.name.startsWith('.')) {
-                        return;
-                    }
+                    const details = projectDetails[dir.name];
+                    if (details) { // projectDetailsに情報があるディレクトリのみカードを生成
+                        const card = document.createElement('a');
+                        card.href = `./${dir.name}/`;
+                        card.className = 'project-card';
 
-                    const listItem = document.createElement('li');
-                    const link = document.createElement('a');
-                    
-                    link.href = `./${dir.name}/`; // 例: ./projectA/
-                    link.textContent = dir.name;
-                    
-                    listItem.appendChild(link);
-                    listElement.appendChild(listItem);
+                        const title = document.createElement('h2');
+                        title.textContent = details.title;
+
+                        const description = document.createElement('p');
+                        description.textContent = details.description;
+
+                        card.appendChild(title);
+                        card.appendChild(description);
+                        container.appendChild(card);
+                    }
                 });
             })
             .catch(error => {
                 console.error('エラー:', error);
-                listElement.innerHTML = '<li>エラーが発生しました。リンクを読み込めません。</li>';
+                container.innerHTML = '<p style="text-align: center; color: red;">エラーが発生しました。一覧を読み込めません。</p>';
             });
     </script>
-
 </body>
 </html>
