@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>インタラクティブ・フィードバックダッシュボード</title>
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js via CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Chosen Palette: Warm Neutral Harmony -->
+    <!-- Application Structure Plan: A single-page dashboard structure was chosen to provide a comprehensive overview of user feedback at a glance. The layout uses a top-bar for key metrics (KPIs) and a two-column grid for detailed visualizations and raw feedback. This allows users to see high-level trends on the left (the "what") and drill down into the specific comments on the right (the "why"). An interactive filter connecting the charts to the comment list enables intuitive data exploration, which is more effective for analysis than a static, linear report. -->
+    <!-- Visualization & Content Choices: 
+        - Report Info: Overall satisfaction scores -> Goal: Compare -> Viz: Bar Chart -> Interaction: Tooltip on hover -> Justification: Easily compare performance across different categories. -> Library: Chart.js.
+        - Feedback type distribution -> Goal: Show Proportions -> Viz: Donut Chart -> Interaction: Click to filter comments -> Justification: Understand the composition of feedback and allow users to focus on specific types (e.g., only "Bugs"). -> Library: Chart.js.
+        - Raw comments -> Goal: Organize & Inform -> Presentation: Interactive List -> Interaction: Filtered by donut chart clicks -> Justification: Provides qualitative context to the quantitative data. Filtering makes the raw data manageable. -> Method: Vanilla JS + Tailwind CSS.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <style>
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background-color: #f8f7f4; /* Warm Neutral Background */
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 350px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        .feedback-card {
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .feedback-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .nav-button {
+            transition: all 0.2s ease;
+        }
+        .nav-button.active {
+            background-color: #3B82F6; /* Blue-500 */
+            color: white;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <div class="container mx-auto p-4 md:p-8 max-w-7xl">
+        
+        <!-- Header Section -->
+        <header class="text-center mb-8 md:mb-12">
+            <h1 class="text-3xl md:text-4xl font-bold text-gray-800 mb-2">ユーザーフィードバック分析レポート</h1>
+            <p class="text-gray-600">収集されたフィードバックの概要と詳細な洞察</p>
+        </header>
+
+        <!-- Main Content: Dashboard -->
+        <main>
+            <!-- Section 1: Key Metrics (KPIs) -->
+            <section id="kpi" class="mb-8">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+                    <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200 text-center">
+                        <h3 class="text-sm font-medium text-gray-500">総フィードバック数</h3>
+                        <p id="total-feedback" class="text-3xl font-bold text-blue-600 mt-1">1,284</p>
+                    </div>
+                    <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200 text-center">
+                        <h3 class="text-sm font-medium text-gray-500">総合満足度スコア</h3>
+                        <p id="avg-rating" class="text-3xl font-bold text-green-600 mt-1">4.2<span class="text-lg">/5.0</span></p>
+                    </div>
+                    <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200 text-center">
+                        <h3 class="text-sm font-medium text-gray-500">最も多い意見</h3>
+                        <p id="top-category" class="text-3xl font-bold text-purple-600 mt-1">提案</p>
+                    </div>
+                    <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200 text-center">
+                        <h3 class="text-sm font-medium text-gray-500">未対応のバグ報告</h3>
+                        <p id="open-bugs" class="text-3xl font-bold text-red-600 mt-1">12</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 2: Visualizations and Feedback List -->
+            <section id="details" class="grid grid-cols-1 lg:grid-cols-5 gap-8">
+                
+                <!-- Left Column: Charts -->
+                <div class="lg:col-span-2 space-y-8">
+                    <!-- Bar Chart: Satisfaction by Category -->
+                    <div class="bg-white p-4 md:p-6 rounded-xl shadow-sm border border-gray-200">
+                        <h3 class="text-lg font-bold text-gray-700 mb-4 text-center">カテゴリ別 満足度スコア</h3>
+                        <div class="chart-container">
+                            <canvas id="satisfactionChart"></canvas>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-4 text-center">各機能や要素に対するユーザーの平均評価（5段階）を示します。</p>
+                    </div>
+
+                    <!-- Donut Chart: Feedback Type Distribution -->
+                    <div class="bg-white p-4 md:p-6 rounded-xl shadow-sm border border-gray-200">
+                        <h3 class="text-lg font-bold text-gray-700 mb-4 text-center">フィードバック種別の内訳</h3>
+                        <div class="chart-container">
+                            <canvas id="typeChart"></canvas>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-4 text-center">グラフの各項目をクリックすると、右側のリストが絞り込まれます。</p>
+                    </div>
+                </div>
+
+                <!-- Right Column: Feedback List -->
+                <div class="lg:col-span-3 bg-white p-4 md:p-6 rounded-xl shadow-sm border border-gray-200">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-bold text-gray-700">受信したフィードバック一覧</h3>
+                        <div id="filter-controls" class="flex space-x-2">
+                            <button data-filter="all" class="nav-button active px-3 py-1 text-sm rounded-full bg-gray-200 text-gray-700">すべて</button>
+                            <button data-filter="提案" class="nav-button px-3 py-1 text-sm rounded-full bg-gray-200 text-gray-700">提案</button>
+                            <button data-filter="バグ報告" class="nav-button px-3 py-1 text-sm rounded-full bg-gray-200 text-gray-700">バグ</button>
+                            <button data-filter="賞賛" class="nav-button px-3 py-1 text-sm rounded-full bg-gray-200 text-gray-700">賞賛</button>
+                        </div>
+                    </div>
+                    <div id="feedback-list" class="space-y-4 h-[600px] md:h-[784px] overflow-y-auto pr-2">
+                        <!-- Feedback items will be dynamically inserted here -->
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // --- 1. DATA (Source Report Content) ---
+            const feedbackData = [
+                { id: 1, type: '提案', rating: 4, comment: 'ダークモードのオプションが欲しいです。夜間の利用時に目が疲れにくくなると思います。', category: 'デザイン' },
+                { id: 2, type: 'バグ報告', rating: 2, comment: 'ログイン状態でページを再読み込みすると、稀にログアウトしてしまう。', category: '機能性' },
+                { id: 3, type: '賞賛', rating: 5, comment: 'サイトのデザインが非常にクリーンで、直感的に操作できるのが素晴らしい。', category: 'デザイン' },
+                { id: 4, type: '提案', rating: 4, comment: '検索機能に、日付範囲でのフィルタリングを追加してほしい。', category: '機能性' },
+                { id: 5, type: 'バグ報告', rating: 3, comment: 'スマートフォンで表示した際、一部の表が画面からはみ出してしまいます。', category: 'レスポンシブ' },
+                { id: 6, type: '賞賛', rating: 5, comment: 'コンテンツが非常に充実しており、知りたい情報がすぐに見つかりました。', category: 'コンテンツ' },
+                { id: 7, type: '提案', rating: 3, comment: 'チュートリアル機能があると、初めてのユーザーがもっと使いやすくなるはず。', category: '使いやすさ' },
+                { id: 8, type: 'バグ報告', rating: 1, comment: '特定の条件下でデータを保存しようとすると、エラー500が発生する。', category: '機能性' },
+                { id: 9, type: '賞賛', rating: 5, comment: 'ページの読み込み速度が速く、ストレスなく利用できます。', category: 'パフォーマンス' },
+                { id: 10, type: '提案', rating: 4, comment: 'API連携機能を提供していただけると、業務の自動化ができて助かります。', category: '機能性' },
+            ];
+
+            // --- 2. CHART CONFIGURATION & RENDERING ---
+            const ctxSatisfaction = document.getElementById('satisfactionChart').getContext('2d');
+            const ctxType = document.getElementById('typeChart').getContext('2d');
+
+            // Helper function to calculate average ratings
+            const getCategoryRatings = () => {
+                const categories = ['デザイン', '機能性', '使いやすさ', 'コンテンツ', 'パフォーマンス', 'レスポンシブ'];
+                const ratings = {};
+                categories.forEach(c => {
+                    const items = feedbackData.filter(f => f.category === c);
+                    if (items.length > 0) {
+                        const sum = items.reduce((acc, item) => acc + item.rating, 0);
+                        ratings[c] = (sum / items.length).toFixed(1);
+                    } else {
+                        ratings[c] = 0;
+                    }
+                });
+                return ratings;
+            };
+
+            const categoryRatings = getCategoryRatings();
+            
+            // Bar Chart: Satisfaction
+            const satisfactionChart = new Chart(ctxSatisfaction, {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(categoryRatings),
+                    datasets: [{
+                        label: '平均満足度スコア',
+                        data: Object.values(categoryRatings),
+                        backgroundColor: 'rgba(59, 130, 246, 0.7)',
+                        borderColor: 'rgba(59, 130, 246, 1)',
+                        borderWidth: 1,
+                        borderRadius: 4,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    indexAxis: 'y',
+                    scales: {
+                        x: { beginAtZero: true, max: 5, grid: { color: '#e5e7eb' } },
+                        y: { grid: { display: false } }
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: (context) => `${context.dataset.label}: ${context.raw} / 5.0`
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Donut Chart: Feedback Type
+            const typeCounts = feedbackData.reduce((acc, item) => {
+                acc[item.type] = (acc[item.type] || 0) + 1;
+                return acc;
+            }, {});
+
+            const typeChart = new Chart(ctxType, {
+                type: 'doughnut',
+                data: {
+                    labels: Object.keys(typeCounts),
+                    datasets: [{
+                        data: Object.values(typeCounts),
+                        backgroundColor: [
+                            'rgba(168, 85, 247, 0.7)', // Purple for 提案
+                            'rgba(239, 68, 68, 0.7)',  // Red for バグ報告
+                            'rgba(22, 163, 74, 0.7)',  // Green for 賞賛
+                        ],
+                        borderColor: [
+                            'rgba(168, 85, 247, 1)',
+                            'rgba(239, 68, 68, 1)',
+                            'rgba(22, 163, 74, 1)',
+                        ],
+                        borderWidth: 1,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '60%',
+                    plugins: {
+                        legend: { position: 'bottom' },
+                        tooltip: {
+                            callbacks: {
+                                label: (context) => `${context.label}: ${context.raw}件`
+                            }
+                        }
+                    },
+                    onClick: (event, elements) => {
+                        if (elements.length > 0) {
+                            const clickedLabel = typeChart.data.labels[elements[0].index];
+                            filterFeedback(clickedLabel);
+                        }
+                    }
+                }
+            });
+
+            // --- 3. DYNAMIC CONTENT & INTERACTIVITY ---
+            const feedbackList = document.getElementById('feedback-list');
+            const filterControls = document.getElementById('filter-controls');
+
+            const getTypeStyles = (type) => {
+                switch (type) {
+                    case '提案': return { bg: 'bg-purple-100', text: 'text-purple-800', border: 'border-purple-300' };
+                    case 'バグ報告': return { bg: 'bg-red-100', text: 'text-red-800', border: 'border-red-300' };
+                    case '賞賛': return { bg: 'bg-green-100', text: 'text-green-800', border: 'border-green-300' };
+                    default: return { bg: 'bg-gray-100', text: 'text-gray-800', border: 'border-gray-300' };
+                }
+            };
+
+            const renderFeedbackList = (filter = 'all') => {
+                feedbackList.innerHTML = '';
+                const filteredData = (filter === 'all') ? feedbackData : feedbackData.filter(item => item.type === filter);
+                
+                if (filteredData.length === 0) {
+                    feedbackList.innerHTML = `<p class="text-gray-500 text-center mt-8">該当するフィードバックはありません。</p>`;
+                    return;
+                }
+
+                filteredData.forEach(item => {
+                    const styles = getTypeStyles(item.type);
+                    const card = `
+                        <div class="feedback-card bg-white p-4 rounded-lg border ${styles.border}">
+                            <div class="flex justify-between items-start">
+                                <span class="text-xs font-medium px-2 py-0.5 rounded-full ${styles.bg} ${styles.text}">${item.type}</span>
+                                <div class="flex items-center text-sm text-yellow-500">
+                                    <span>${'★'.repeat(item.rating)}${'☆'.repeat(5 - item.rating)}</span>
+                                    <span class="ml-2 text-gray-600 font-medium">${item.rating}.0</span>
+                                </div>
+                            </div>
+                            <p class="text-gray-700 mt-3">${item.comment}</p>
+                            <p class="text-right text-xs text-gray-400 mt-3">カテゴリ: ${item.category}</p>
+                        </div>
+                    `;
+                    feedbackList.insertAdjacentHTML('beforeend', card);
+                });
+
+                // Update active button style
+                document.querySelectorAll('.nav-button').forEach(btn => {
+                    btn.classList.toggle('active', btn.dataset.filter === filter);
+                });
+            };
+
+            const filterFeedback = (filter) => {
+                renderFeedbackList(filter);
+            };
+
+            // Event listener for filter buttons
+            filterControls.addEventListener('click', (e) => {
+                if (e.target.tagName === 'BUTTON') {
+                    const filter = e.target.dataset.filter;
+                    filterFeedback(filter);
+                }
+            });
+
+            // Initial render
+            renderFeedbackList();
+
+            // Populate KPIs
+            document.getElementById('total-feedback').textContent = feedbackData.length;
+            const totalRating = feedbackData.reduce((acc, item) => acc + item.rating, 0);
+            document.getElementById('avg-rating').innerHTML = `${(totalRating / feedbackData.length).toFixed(1)}<span class="text-lg">/5.0</span>`;
+            const topCat = Object.entries(typeCounts).sort((a, b) => b[1] - a[1])[0][0];
+            document.getElementById('top-category').textContent = topCat;
+            document.getElementById('open-bugs').textContent = feedbackData.filter(f => f.type === 'バグ報告').length;
+
+        });
+    </script>
+</body>
+</html>
