@@ -11,25 +11,27 @@
 </head>
 <body>
 
-    <header>
-        <h1>ページ一覧</h1>
-        <p>AIを活用したテストページの一覧です。</p>
-    </header>
+    <div class="container">
+        <header>
+            <h1>ページ一覧</h1>
+            <p>AIを活用したテストページの一覧です。</p>
+        </header>
 
-    <main class="project-list" id="project-list-container">
-        </main>
-    <footer>
-        <p>&copy; 2025 YaMac33. All Rights Reserved.</p>
-    </footer>
+        <main class="project-list" id="project-list-container">
+            </main>
+        
+        <footer>
+            <p>&copy; 2025 YaMac33. All Rights Reserved.</p>
+        </footer>
+    </div>
 
     <script>
         // --- ① GitHub情報の設定 ---
-        const username = "YaMac33"; // あなたのGitHubユーザー名
-        const repoName = "ai-comparison-test-site"; // このHPのGitHubリポジトリ名
+        var username = "YaMac33";
+        var repoName = "ai-comparison-test-site";
 
         // --- ② プロジェクト情報の設定 ---
-        // ディレクトリ名と、表示したいタイトル・説明文を紐づけます。
-        const projectDetails = {
+        var projectDetails = {
             "car-sharing": {
                 title: "カーシェアリング料金比較",
                 description: "複数のカーシェアリングサービスの料金をシミュレーション・比較するサイトです。"
@@ -54,47 +56,49 @@
                 title: "生ける法：解釈の探求",
                 description: "なぜ同じ法律で、解釈が分かれるのかについて調査したページです。"
             },
-            "National-and-local": {
+            "national-and-local": {
                 title: "司法が描く国と地方の境界線",
                 description: "国と地方が対立する時、誰が最終判断を下すのかについて調査したページです。"
-            }
-            "autonomous-enterprise": {
-                title: "自律型エンタープライズ",
-                description: "AI搭載型DAOは、次世紀の株式会社の進化を定義するか？について調査したページです。"
             },
+            "autonomous-enterprise": {
+                title: "自律的企業(Autonomous Enterprise)",
+                description: "次世代のビジネスモデルと組織構造について解説します。"
+            }
         };
         // ------------------------------------
 
-        const apiUrl = `https://api.github.com/repos/${username}/${repoName}/contents/`;
-        const container = document.getElementById('project-list-container');
-        container.innerHTML = '<p style="text-align: center;">読み込み中...</p>'; // 読み込み中の表示
+        var apiUrl = 'https://api.github.com/repos/' + username + '/' + repoName + '/contents/';
+        var container = document.getElementById('project-list-container');
+        container.innerHTML = '<p style="text-align: center;">読み込み中...</p>';
 
         fetch(apiUrl)
-            .then(response => {
+            .then(function(response) {
                 if (!response.ok) { throw new Error('リポジトリ情報の取得に失敗しました。'); }
                 return response.json();
             })
-            .then(data => {
-                container.innerHTML = ''; // 読み込み中表示を消去
+            .then(function(data) {
+                container.innerHTML = ''; 
 
-                const dirs = data.filter(item => item.type === 'dir' && !item.name.startsWith('.'));
+                var dirs = data.filter(function(item) {
+                    return item.type === 'dir' && !item.name.startsWith('.');
+                });
 
                 if (dirs.length === 0) {
                     container.innerHTML = '<p>プロジェクトが見つかりませんでした。</p>';
                     return;
                 }
 
-                dirs.forEach(dir => {
-                    const details = projectDetails[dir.name];
-                    if (details) { // projectDetailsに情報があるディレクトリのみカードを生成
-                        const card = document.createElement('a');
-                        card.href = `./${dir.name}/`;
+                dirs.forEach(function(dir) {
+                    var details = projectDetails[dir.name];
+                    if (details) {
+                        var card = document.createElement('a');
+                        card.href = './' + dir.name + '/';
                         card.className = 'project-card';
 
-                        const title = document.createElement('h2');
+                        var title = document.createElement('h2');
                         title.textContent = details.title;
 
-                        const description = document.createElement('p');
+                        var description = document.createElement('p');
                         description.textContent = details.description;
 
                         card.appendChild(title);
@@ -103,7 +107,7 @@
                     }
                 });
             })
-            .catch(error => {
+            .catch(function(error) {
                 console.error('エラー:', error);
                 container.innerHTML = '<p style="text-align: center; color: red;">エラーが発生しました。一覧を読み込めません。</p>';
             });
