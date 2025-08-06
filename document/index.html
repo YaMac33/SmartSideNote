@@ -92,30 +92,75 @@
             padding: 2rem 0;
             margin-top: 2rem;
         }
+        
+        /* === ここからアニメーション用のスタイルを追加 === */
+        
+        /* アニメーションの対象要素の初期状態 */
+        .fade-in {
+            opacity: 0; /* 最初は透明 */
+            transform: translateY(20px); /* 少し下に配置 */
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out; /* 0.8秒かけてアニメーション */
+        }
+
+        /* 画面内に入ったときに適用されるスタイル */
+        .fade-in.visible {
+            opacity: 1; /* 不透明にする */
+            transform: translateY(0); /* 元の位置に戻す */
+        }
+
     </style>
 </head>
 <body>
 
-    <header>
+    <header class="fade-in">
         <h1>メッセージ送信方法のまとめ</h1>
     </header>
 
-    <main>
+    <main class="fade-in">
         <section>
             <h2>方法1：Googleフォームでメッセージを送信 📝</h2>
             <p>
-                一番簡単な方法です。下のフォームに入力すると、指定したGoogleアカウントのGoogleスプレッドシートに内容が自動で記録されます。 [cite: 54]
+                一番簡単な方法です。下のフォームに入力すると、指定したGoogleアカウントのGoogleスプレッドシートに内容が自動で記録されます。
                 誰でも手軽にメッセージを送ることができます。
             </p>
-            <iframe src="https://docs.google.com/forms/d/e/1FAIpQLScwUIh_kH0tLiywJ3_eXRzYEQxYD8rTm65xYnLvmIdPur9vmg/viewform?embedded=true" width="640" height="510" frameborder="0" marginheight="0" marginwidth="0">読み込んでいます…</iframe>/viewform?embedded=true" loading="lazy">
-                読み込んでいます…
-            </iframe>
-            </section>
+            <iframe src="https://docs.google.com/forms/d/e/1FAIpQLScwUIh_kH0tLiywJ3_eXRzYEQxYD8rTm65xYnLvmIdPur9vmg/viewform?embedded=true" width="640" height="510" frameborder="0" marginheight="0" marginwidth="0">読み込んでいます…</iframe>
+        </section>
     </main>
 
-    <footer>
+    <footer class="fade-in">
         <p>&copy; 2025 Your Name</p>
     </footer>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // アニメーションさせたい要素をすべて取得
+            const targets = document.querySelectorAll('.fade-in');
+
+            // Intersection Observerのオプション設定
+            const options = {
+                root: null, // ビューポートを基準にする
+                rootMargin: '0px',
+                threshold: 0.1 // 10%要素が見えたら実行
+            };
+
+            // Intersection Observerのインスタンスを作成
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    // 要素が画面内に入った場合
+                    if (entry.isIntersecting) {
+                        // `visible`クラスを追加してアニメーションを発火
+                        entry.target.classList.add('visible');
+                        // 一度表示したら監視を停止して負荷を軽減
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, options);
+
+            // 各要素の監視を開始
+            targets.forEach(target => {
+                observer.observe(target);
+            });
+        });
+    </script>
 </body>
 </html>
