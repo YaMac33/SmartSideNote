@@ -1,0 +1,71 @@
+/* 全体の設定 */
+body {
+    font-family: 'Noto Sans JP', sans-serif;
+    background-color: #f0f2f5;
+    color: #333;
+    margin: 0;
+    padding: 20px;
+}
+
+/* ヘッダー */
+header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+header h1 {
+    font-size: 2.5em;
+    margin-bottom: 0.2em;
+}
+
+/* プロジェクト一覧のコンテナ */
+.project-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* プロジェクトカード */
+.project-card {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    text-decoration: none; /* 下線を消す */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.project-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+}
+
+/* カード内の文字色をここで指定 */
+.project-card h2,
+.project-card p {
+    color: #333; /* 文字を濃い灰色に */
+    margin: 0;
+}
+
+.project-card h2 {
+    margin-bottom: 10px;
+    font-size: 1.4em;
+}
+
+.project-card p {
+    font-size: 1em;
+    line-height: 1.6;
+}
+
+/* フッター */
+footer {
+    text-align: center;
+    margin-top: 50px;
+    padding: 20px;
+    color: #888;
+}
+
+/* フッター内のリンクだけ白くする場合の例（もしフッターの背景が濃い色なら） */
+/* footer a { color: #fff; } */
