@@ -54,30 +54,17 @@
             margin-top: 20px;
             border: 1px solid #e8eaed;
         }
-        .placeholder-box {
-             text-align: center;
-             padding: 40px 20px;
-             background-color: #e8eaed;
-             border: 2px dashed #dcdcdc;
-             border-radius: 8px;
-             margin: 25px auto;
-             color: #5f6368;
-        }
-        .flex-container {
-            display: flex;
-            gap: 20px;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-        .flex-item {
-            flex: 1;
-            min-width: 300px;
-        }
         ul {
             padding-left: 20px;
         }
         li {
             margin-bottom: 10px;
+        }
+        iframe {
+            width: 100%;
+            height: 400px; /* 高さを調整 */
+            border: 1px solid #dcdcdc; /* 境界線を分かりやすく */
+            border-radius: 8px;
         }
         footer {
             text-align: center;
@@ -97,21 +84,13 @@
             <p>GitHub Pagesのような静的なサイトでも、外部サービスを利用することで簡単にお問い合わせフォームを設置できます。</p>
 
             <div class="section-box">
-                <h3>方法1: Formspreeなどの外部サービスを利用する</h3>
-                <p>HTMLフォームの送信先を外部サービスに設定するだけで、指定したメールアドレスに内容を転送してくれます。</p>
-                <div class="placeholder-box">[ここにFormspreeの仕組みを示すイラストが入ります]</div>
-                <ul>
-                    <li><strong>手順:</strong> サイトにHTMLフォームを設置し、`action`属性にFormspreeのURLを指定します。</li>
-                    <li><strong>メリット:</strong> 簡単に実装でき、カスタマイズ性が高い。</li>
-                </ul>
-            </div>
-
-            <div class="section-box">
-                <h3>方法2: Googleフォームを埋め込む</h3>
+                <h3>方法: Googleフォームを埋め込む</h3>
                 <p>作成したGoogleフォームを`<iframe>`タグを使ってページに埋め込む方法です。回答は自動でスプレッドシートにたまります。</p>
-                <div class="placeholder-box">[ここにGoogleフォーム埋め込みの仕組みを示すイラストが入ります]</div>
+                
+                <iframe src="https://docs.google.com/forms/d/e/1FAIpQLScwUIh_kH0tLiywJ3_eXRzYEQxYD8rTm65xYnLvmIdPur9vmg/viewform=true">読み込んでいます…</iframe>
+                
                 <ul>
-                    <li><strong>手順:</strong> Googleフォームを作成し、「送信」→「埋め込みHTML」からコードを取得して貼り付けます。</li>
+                    <li><strong>手順:</strong> Googleフォームを作成し、「送信」→「< >」(埋め込みHTML)からコードを取得して、`src`の中身を貼り付けます。</li>
                     <li><strong>メリット:</strong> 誰でも簡単に作成でき、回答管理が楽。</li>
                 </ul>
             </div>
@@ -120,61 +99,20 @@
         <section>
             <h2>RSSニュースフィードをAIで自動要約</h2>
             <p>RSSフィードから最新ニュースを取得し、GeminiなどのAIで要約してGoogleスプレッドシートにまとめる自動化の仕組みです。</p>
-            <div class="placeholder-box">[ここにRSS自動要約のフローを示すイラストが入ります]</div>
-            <div class="section-box">
-                <h3>Google Apps Script (GAS) を利用した実装フロー</h3>
-                <ol>
-                    <li><strong>RSSフィード取得:</strong> GASが指定されたRSSのURLから最新記事の情報を取得します。</li>
-                    <li><strong>AIへ要約依頼:</strong> 取得した記事のタイトルや本文を、Gemini APIに送信して要約を依頼します。</li>
-                    <li><strong>スプレッドシートへ出力:</strong> AIから返ってきた要約結果を、タイトルやリンクと共にスプレッドシートに書き出します。</li>
-                </ol>
-                <p>このスクリプトに「トリガー（定時実行）」を設定すれば、毎日自動でニュース要約リストが完成します。</p>
-            </div>
         </section>
 
         <section>
             <h2>原稿・スライド・音声から動画を生成</h2>
             <p>用意したテキスト原稿、スライド、ナレーション音声をAIサービスに入力することで、効率的に動画コンテンツを作成するワークフローです。</p>
-            <div class="placeholder-box">[ここに原稿から動画を作成するワークフローのイラストが入ります]</div>
-            <div class="section-box">
-                <h3>動画生成の3ステップ</h3>
-                <ul>
-                    <li><strong>ステップ1 (素材準備):</strong> ChatGPTでプレゼン原稿を作成し、Canvaでスライド画像を生成。iPhoneの読み上げ機能などでナレーション音声も用意します。</li>
-                    <li><strong>ステップ2 (AI動画生成):</strong> PictoryやVEED.IOのようなAI動画作成サービスに、準備したスライドと音声をアップロードします。</li>
-                    <li><strong>ステップ3 (完成):</strong> AIが音声のタイミングに合わせてスライドを配置し、字幕やBGMを追加して動画を自動生成します。</li>
-                </ul>
-            </div>
         </section>
 
         <section>
             <h2>NotebookLMで自分だけのAIアシスタントを構築</h2>
             <p>NotebookLMは、あなたがアップロードした資料（PDF、ドキュメント等）の内容だけを元に回答してくれる、パーソナルなAIリサーチツールです。</p>
-            
-            <div class="flex-container">
-                <div class="flex-item">
-                    <h3>NotebookLMの基本コンセプト</h3>
-                    <p>Web全体ではなく、あなたの資料（ソース）に「グラウンディング（接地）」されたAIです。これにより、不正確な情報を生成する「ハルシネーション」を大幅に抑制し、信頼性の高い回答を得られます。</p>
-                    <ul>
-                        <li>大量の議事録から特定の発言を探す</li>
-                        <li>論文をアップロードして要約させる</li>
-                        <li>マニュアルを元にしたQ&Aチャットボットを作る</li>
-                    </ul>
-                </div>
-                <div class="flex-item">
-                     <div class="placeholder-box">[ここにNotebookLMの仕組みを示すイラストが入ります]</div>
-                </div>
-            </div>
-
-            <div class="section-box">
-                <h3>便利な機能：Video Overviews</h3>
-                <p>アップロードした資料から、AIがナレーション付きのスライドショー動画を自動で生成してくれる機能です。複雑な内容を視覚的に理解するのに役立ちます。</p>
-                <div class="placeholder-box">[ここにVideo Overviews機能のイメージを示すイラストが入ります]</div>
-            </div>
-
         </section>
 
         <footer>
-            <p>AI-Generated Illustrations & Content | 2025</p>
+            <p>AI活用ドキュメント | 2025</p>
         </footer>
     </div>
 
