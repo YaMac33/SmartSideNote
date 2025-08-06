@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>iCloud+ と Google One AI Pro 活用ガイド</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.7;
+            background-color: #f9f9f9;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+        }
+        header {
+            border-bottom: 2px solid #007BFF;
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        h1 {
+            color: #007BFF;
+            font-size: 2em;
+            margin: 0;
+        }
+        h2 {
+            color: #333;
+            border-left: 5px solid #007BFF;
+            padding-left: 15px;
+            font-size: 1.6em;
+            margin-top: 40px;
+            margin-bottom: 20px;
+        }
+        h3 {
+            color: #555;
+            font-size: 1.3em;
+            margin-top: 30px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 8px;
+        }
+        p, li {
+            font-size: 1em;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+            vertical-align: top;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        code {
+            font-family: "Fira Code", "Courier New", monospace;
+            font-size: 0.95em;
+        }
+        .checklist {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        .checklist li {
+            margin-bottom: 10px;
+        }
+        .checklist li::before {
+            content: '[ ] ';
+            font-family: monospace;
+            margin-right: 10px;
+        }
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #888;
+        }
+        .highlight {
+            background-color: #e6f7ff;
+            border-left: 4px solid #007BFF;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>iCloud+ と Google One AI Pro 活用ガイド</h1>
+        </header>
+
+        <div class="highlight">
+            [cite_start]<p><strong>最終目標：</strong>iCloud+ (2TB)とGoogle One AI Pro (2TB)を両方契約し、それぞれの長所を最大限に活用する。特に、ウェブ上の国会会議録を自動収集してGoogleドライブに格納し、NotebookLMなどのAIで検索・要約して資料作成を効率化することを目指す。[cite: 3, 4, 735, 864]</p>
+        </div>
+
+        <h2>iCloud+ と Google One AI Pro の最適な使い分け戦略</h2>
+        [cite_start]<p>両方のサービスを契約し、データの種類と用途に応じて役割を分担するのが最も効率的です。[cite: 736, 740]</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>用途・機能</th>
+                    <th>✅ iCloud+ 2TB（守りのストレージ）</th>
+                    <th>🚀 Google One AI Pro 2TB（攻めのAI活用）</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>デバイスのバックアップ</strong></td>
+                    [cite_start]<td>◎ Apple純正の完全自動バックアップはiCloud+が最適。[cite: 745]</td>
+                    [cite_start]<td>△ Android端末のみ一部対応。[cite: 688, 745]</td>
+                </tr>
+                <tr>
+                    <td><strong>写真・動画の保存</strong></td>
+                    [cite_start]<td>◎ Appleデバイス間で高品質な自動同期。[cite: 749]</td>
+                    [cite_start]<td>◎ 強力なAI検索、顔認識、編集機能が魅力。[cite: 750]</td>
+                </tr>
+                <tr>
+                    <td><strong>ファイルの保存・共有</strong></td>
+                    [cite_start]<td>△ Apple製品間の連携に強い。[cite: 751]</td>
+                    [cite_start]<td>◎ マルチOS対応で、共有機能も豊富。[cite: 752]</td>
+                </tr>
+                <tr>
+                    <td><strong>AIを使った文書作成・分析</strong></td>
+                    [cite_start]<td>❌ なし。[cite: 754]</td>
+                    [cite_start]<td>◎ Gemini 1.5 ProとNotebookLM Proが利用可能。[cite: 755]</td>
+                </tr>
+                <tr>
+                    <td><strong>プライバシー保護</strong></td>
+                    [cite_start]<td>◎ プライベートリレー、メール非公開機能が強力。[cite: 692]</td>
+                    [cite_start]<td>◎ Google One VPNや高度なメールフィルターを提供。[cite: 692]</td>
+                </tr>
+                 <tr>
+                    <td><strong>ファミリー共有</strong></td>
+                    [cite_start]<td>◎ 全機能を最大6人で共有可能。[cite: 762]</td>
+                    [cite_start]<td>△ ストレージは共有できるが、AI機能は契約者本人のみ。[cite: 762, 679]</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>国会会議録の自動収集とAI活用プロジェクト</h2>
+        [cite_start]<p>国会会議録を自動で収集し、Googleドライブに保存、NotebookLMで分析するための具体的なステップです。[cite: 865, 868]</p>
+        
+        <h3>ステップ1：Pythonによるスクレイピング</h3>
+        [cite_start]<p><code>requests</code>と<code>BeautifulSoup</code>ライブラリを使い、会議録ページのテキストデータを取得します。[cite: 916, 927]</p>
+        <pre><code>
+# サンプルコード（実際のサイト構造に合わせて調整が必要）
+import requests
+from bs4 import BeautifulSoup
+
+# 例：特定の会議録ページのURL
+[cite_start]url = 'https://kokkai.ndl.go.jp/txt/120605254X00520221208'  # サンプルURL [cite: 932]
+res = requests.get(url)
+soup = BeautifulSoup(res.text, 'html.parser')
+
+# 本文部分を取得
+[cite_start]content = soup.get_text() [cite: 936]
+
+# テキストファイルとしてローカルに保存
+with open('議事録_2022-12-08.txt', 'w', encoding='utf-8') as f:
+    [cite_start]f.write(content) [cite: 938, 939]
+        </code></pre>
+
+        <h3>ステップ2：Googleドライブへの自動アップロード</h3>
+        [cite_start]<p>Google Drive API (<code>pydrive</code>ライブラリ) を使って、取得したファイルをGoogleドライブに自動でアップロードします。[cite: 918, 944, 946]</p>
+        <pre><code>
+from pydrive.auth import GoogleAuth
+from pydrive.drive import GoogleDrive
+
+gauth = GoogleAuth()
+[cite_start]gauth.LocalWebserverAuth()  # 初回はブラウザで認証 [cite: 954]
+drive = GoogleDrive(gauth)
+
+# テキストファイルをDriveにアップロード
+[cite_start]file = drive.CreateFile({'title': '議事録_2022-12-08.txt'}) [cite: 957]
+[cite_start]file.SetContentFile('議事録_2022-12-08.txt') [cite: 958]
+[cite_start]file.Upload() [cite: 959]
+        </code></pre>
+
+        <h3>ステップ3：定期実行と自動化</h3>
+        [cite_start]<p>作成したスクリプトを定期的に実行することで、最新の会議録を自動で収集し続けることができます。[cite: 919, 966]</p>
+        <ul>
+            [cite_start]<li><strong>ローカルPCで実行:</strong> Windowsの「タスクスケジューラ」やMac/Linuxの「cron」を利用。[cite: 967, 968, 969]</li>
+            [cite_start]<li><strong>クラウドで実行:</strong> Google Cloud FunctionsやGitHub Actionsを利用して、サーバーレスで完全自動化。[cite: 971, 972, 974]</li>
+        </ul>
+
+        <h3>ステップ4：NotebookLMでのAI分析</h3>
+        [cite_start]<p>Googleドライブに保存した会議録のフォルダをNotebookLMのソースとして指定します。これにより、「〇〇法案に関する議論を要約して」「△△氏の発言を引用して」といった自然言語での検索、要約、引用が可能になります。[cite: 883, 984, 985]</p>
+        
+        <h2>参考情報：各種プランと移行ガイド</h2>
+
+        <h3>Googleストレージプラン＆AI機能 比較表</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>プラン名</th>
+                    <th>月額料金(目安)</th>
+                    <th>ストレージ容量</th>
+                    <th>主なAI機能</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Premium</td>
+                    <td>約 ¥1,300</td>
+                    <td>2 TB</td>
+                    <td>❌ なし</td>
+                </tr>
+                <tr>
+                    <td><strong>AI Pro</strong> (旧AI Premium)</td>
+                    <td><strong>約 ¥2,900</strong></td>
+                    <td><strong>2 TB</strong></td>
+                    <td><strong>✅ Gemini 1.5 Pro, NotebookLM Pro</strong></td>
+                </tr>
+                <tr>
+                    <td>5TB プラン</td>
+                    <td>約 ¥3,600〜</td>
+                    <td>5 TB</td>
+                    <td>⚠️ 一部AI特典（期間限定）</td>
+                </tr>
+                <tr>
+                    <td>AI Ultra</td>
+                    <td>約 ¥36,000〜</td>
+                    <td>30 TB</td>
+                    <td>✅ Gemini Ultra, Veoなど最高レベルのAI</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <h3>iCloudからGoogle Oneへのデータ移行チェックリスト</h3>
+        [cite_start]<p>将来的にデータを統合したくなった場合のためのテキストベースのチェックリストです。[cite: 552]</p>
+        <ul class="checklist">
+            [cite_start]<li>写真・動画をiCloud.comからダウンロードし、Googleフォトにアップロードする。[cite: 558, 560]</li>
+            [cite_start]<li>iCloud Driveのファイルをローカルにコピーし、Googleドライブにアップロードする。[cite: 566, 567]</li>
+            [cite_start]<li>Appleメモの内容をGoogle KeepやGoogleドキュメントに手動でコピーする。[cite: 572]</li>
+            [cite_start]<li>iCloudカレンダーを.ics形式で書き出し、Googleカレンダーに読み込む。[cite: 576, 577]</li>
+            [cite_start]<li>iCloud連絡先をvCard形式で書き出し、Google連絡先に読み込む。[cite: 581, 582]</li>
+            [cite_start]<li>全てのデータ移行が完了したら、iCloud+のサブスクリプションを解約する。[cite: 588]</li>
+        </ul>
+        
+        <footer>
+            <p>このドキュメントは、提供された情報をもとに生成されました。</p>
+        </footer>
+    </div>
+</body>
+</html>
