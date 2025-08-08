@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iPadで作る動的なウェブサイト | 開発ガイド</title>
+    <style>
+        /* CSS: ページのデザイン */
+        :root {
+            --primary-color: #007aff;
+            --background-color: #f8f9fa;
+            --text-color: #333;
+            --card-background: #ffffff;
+            --border-color: #e9ecef;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            line-height: 1.7;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        header h1 {
+            color: var(--primary-color);
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.1em;
+            color: #6c757d;
+        }
+
+        .section {
+            background: var(--card-background);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+        }
+
+        .section h2 {
+            font-size: 1.8em;
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
+        
+        .step-card {
+            background: var(--card-background);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .step-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .step-card h3 {
+            margin-top: 0;
+            font-size: 1.4em;
+            display: flex;
+            align-items: center;
+        }
+
+        .step-number {
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+
+        code {
+            background-color: #e9ecef;
+            color: #d63384;
+            padding: 0.2em 0.4em;
+            border-radius: 4px;
+            font-family: "SF Mono", "Fira Code", monospace;
+        }
+
+        .def-term {
+            font-weight: bold;
+            color: #0d6efd;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            color: #6c757d;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>iPad miniで動的なウェブサイトを作ろう！</h1>
+            <p>ReplitとRenderを使ったモダンな開発ステップガイド</p>
+        </header>
+
+        <div class="section">
+            <h2>全体像：役割分担を理解しよう 🎨⚙️</h2>
+            <p>動的なサイトは、ユーザーが見る「<span class="def-term">フロントエンド</span>」と、裏でデータを処理する「<span class="def-term">バックエンド</span>」の2つが連携して動きます。</p>
+            <ul>
+                <li><strong style="color: #fd7e14;">フロントエンド (Frontend)</strong>: ユーザーが操作する画面 (HTML, CSS, JS)。バックエンドに処理を依頼し、結果を表示します。</li>
+                <li><strong style="color: #6f42c1;">バックエンド (Backend)</strong>: サーバーで動く裏側の処理 (Node.js, データベース)。ユーザー登録やログイン認証など、データの保存や管理を担当します。</li>
+            </ul>
+        </div>
+        
+        <h2>おすすめの開発ステップ 🚀</h2>
+
+        <div class="step-card">
+            <h3><span class="step-number">1</span>開発環境をReplitに集約する</h3>
+            <p>開発の拠点を<code>Replit</code>に統一します。iPadのブラウザだけでフロントエンドとバックエンドの両方を開発でき、非常に快適です。</p>
+            <ul>
+                <li><strong>テンプレート選択:</strong> <code>Node.js</code> を選び、<code>index.html</code>, <code>style.css</code>, <code>script.js</code> (フロントエンド用) と <code>index.js</code> (バックエンド用) を管理します。</li>
+                <li><strong>開発フロー:</strong> 今後は、Replitでコーディングし、完成したコードを<code>Git</code>連携でGitHubに保存する流れに切り替えます。</li>
+            </ul>
+        </div>
+
+        <div class="step-card">
+            <h3><span class="step-number">2</span>バックエンドの骨組みを作る (API)</h3>
+            <p>フロントエンドとデータをやり取りするための「窓口」である<span class="def-term">API</span> (Application Programming Interface) を作ります。</p>
+            <ul>
+                <li><strong>Webサーバー起動:</strong> <code>Express</code>フレームワークを使って、<code>index.js</code>に簡単なWebサーバーを立てます。</li>
+                <li><strong>API設計:</strong> <code>/api/register</code> (ユーザー登録) や <code>/api/login</code> (ログイン) といったURL（エンドポイント）を決め、ダミーの応答を返す処理を実装します。</li>
+            </ul>
+        </div>
+
+        <div class="step-card">
+            <h3><span class="step-number">3</span>データベースを用意する (Render)</h3>
+            <p>ユーザー情報を永続的に保存するため、<code>Render</code>の無料<span class="def-term">PostgreSQL</span>データベースを準備します。作成後に表示される「接続情報URL」を控えておきましょう。</p>
+        </div>
+
+        <div class="step-card">
+            <h3><span class="step-number">4</span>バックエンドとデータベースをつなぐ</h3>
+            <p>ReplitからRenderのデータベースに接続します。</p>
+            <ul>
+                <li><strong>機密情報の保護:</strong> データベースの接続URLは、Replitの<code>Secrets</code>機能（鍵マーク）に保存し、コードに直接書き込まないようにします。</li>
+                <li><strong>処理の実装:</strong> <code>/api/register</code>が呼び出されたら、送られてきた情報をデータベースに保存する、といった実際の処理を記述します。</li>
+            </ul>
+        </div>
+
+        <div class="step-card">
+            <h3><span class="step-number">5</span>フロントエンドとバックエンドを連携させる</h3>
+            <p>ユーザーが操作する画面と裏側の処理を、JavaScriptの<code>fetch()</code>関数を使ってつなぎます。</p>
+            <ul>
+                <li><code>script.js</code>で、フォーム送信時にバックエンドのAPIを呼び出し、返ってきた結果（「登録成功」など）に応じて画面の表示を更新します。</li>
+            </ul>
+        </div>
+
+        <div class="step-card">
+            <h3><span class="step-number">6</span>Renderへデプロイし、公開する</h3>
+            <p>完成したアプリを本番環境である<code>Render</code>に公開します。</p>
+            <ul>
+                <li><strong>コード保存:</strong> ReplitのコードをGitHubに保存します。</li>
+                <li><strong>Webサービス作成:</strong> Renderで「Web Service」を新規作成し、GitHubリポジトリを連携させます。</li>
+                <li><strong>自動デプロイ:</strong> 今後、GitHubに新しいコードをプッシュするだけで、Renderが自動で最新版を公開してくれます。</li>
+            </ul>
+        </div>
+        
+        <footer>
+            Licensed by Google
+        </footer>
+    </div>
+
+    <script>
+        // JavaScript: ページに動的な要素を加えることができます
+        console.log("Web開発ガイドページが読み込まれました。頑張ってください！");
+    </script>
+
+</body>
+</html>
