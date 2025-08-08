@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF--8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Render解説</title>
+    <style>
+        /* CSS for styling the page */
+        body {
+            font-family: sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f4f8;
+            color: #333;
+        }
+        header {
+            background-color: #0c1f38;
+            color: #fff;
+            padding: 1rem 0;
+            text-align: center;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+            padding: 0 2rem;
+        }
+        .main {
+            padding: 2rem 0;
+        }
+        .section {
+            background: #fff;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.05);
+        }
+        h2 {
+            color: #0c1f38;
+            border-bottom: 2px solid #4ade80;
+            padding-bottom: 0.5rem;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        ul li {
+            background: #e6f7ff;
+            margin-bottom: 0.5rem;
+            padding: 0.8rem;
+            border-left: 5px solid #4ade80;
+        }
+        footer {
+            text-align: center;
+            padding: 1rem 0;
+            background-color: #0c1f38;
+            color: #fff;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+        .button {
+            display: inline-block;
+            background: #4ade80;
+            color: #0c1f38;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 1rem;
+            font-weight: bold;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+        .button:hover {
+            background: #36b36a;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Render: 次世代のクラウドプラットフォーム</h1>
+            <p>アイデアの構築、デプロイ、スケーリングをシンプルに。</p>
+        </div>
+    </header>
+
+    <div class="container main">
+        <div id="content" class="section">
+            <h2>Renderとは？ ☁️</h2>
+            <p><b>Render</b>は、開発者やチームがアプリケーションを簡単に構築、デプロイ、スケーリングできるクラウドプラットフォームです。インフラ管理の複雑さを解消し、開発者が本来の業務であるコーディングに集中できる環境を提供します。</p>
+        </div>
+
+        <div class="section">
+            <h2>主な特徴 🛠️</h2>
+            <ul>
+                <li><b>自動デプロイ:</b> Gitリポジトリにプッシュするだけで、ダウンタイムなく自動でデプロイが完了します。</li>
+                <li><b>多様な言語サポート:</b> Node.js, Python, Rubyなどのネイティブ環境に加え、Dockerコンテナもサポートしています。</li>
+                <li><b>高性能データストア:</b> 高可用性のPostgresやRedis互換のキャッシュを簡単に利用できます。</li>
+                <li><b>プライベートネットワーク:</b> サービス間を安全なプライベートネットワークで接続できます。</li>
+                <li><b>オートスケーリング:</b> トラフィックに応じて、インスタンス数を自動で増減させます。</li>
+                <li><b>コードとしてのインフラ(IaC):</b> 設定をファイルで管理し、環境の複製を迅速に行えます。</li>
+                <li><b>DDoS保護 &amp; 高いセキュリティ:</b> 標準でDDoS攻撃からの保護を提供し、GDPRおよびSOC 2に準拠しています。</li>
+                 <li><b>プレビュー環境:</b> プルリクエストごとに本番環境のコピーを作成し、安全にテストできます。</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>始めてみよう！</h2>
+            <p>Renderは無料で始めることができます。公式サイトにアクセスし、GitHubまたはGitLabアカウントを連携させるだけですぐに最初のアプリケーションをデプロイできます。</p>
+            <a href="https://render.com/" target="_blank" class="button">今すぐ無料で始める</a>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Render解説ページ</p>
+    </footer>
+
+    <script>
+        // JavaScript for interactivity
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('Render解説ページへようこそ！');
+            const sections = document.querySelectorAll('.section');
+            sections.forEach((section, index) => {
+                section.style.transition = `opacity 0.6s ease-out ${index * 0.2}s, transform 0.6s ease-out ${index * 0.2}s`;
+                section.style.opacity = '0';
+                section.style.transform = 'translateY(20px)';
+                setTimeout(() => {
+                    section.style.opacity = '1';
+                    section.style.transform = 'translateY(0)';
+                }, 100);
+            });
+        });
+    </script>
+</body>
+</html>
