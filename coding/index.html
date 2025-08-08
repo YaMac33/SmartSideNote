@@ -8,8 +8,9 @@
         /* CSS: ページのデザイン */
         :root {
             --primary-color: #007aff;
+            --secondary-color: #34c759;
             --background-color: #f8f9fa;
-            --text-color: #333;
+            --text-color: #212529;
             --card-background: #ffffff;
             --border-color: #e9ecef;
             --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
@@ -62,6 +63,41 @@
             margin-top: 0;
         }
         
+        /* タブ切り替え */
+        .tab-container {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--border-color);
+        }
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-size: 1.1em;
+            font-weight: 500;
+            position: relative;
+            color: #6c757d;
+        }
+        .tab.active {
+            color: var(--primary-color);
+        }
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--primary-color);
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+
         .step-card {
             background: var(--card-background);
             border-radius: 12px;
@@ -71,7 +107,7 @@
             border: 1px solid var(--border-color);
             transition: transform 0.2s ease-in-out;
         }
-
+        
         .step-card:hover {
             transform: translateY(-5px);
         }
@@ -97,6 +133,18 @@
             margin-right: 15px;
             flex-shrink: 0;
         }
+        
+        /* Python用のステップ番号 */
+        .python-content .step-number {
+            background-color: var(--secondary-color);
+        }
+        .python-content .tab.active {
+            color: var(--secondary-color);
+        }
+         .python-content .tab.active::after {
+            background-color: var(--secondary-color);
+        }
+
 
         code {
             background-color: #e9ecef;
@@ -105,10 +153,34 @@
             border-radius: 4px;
             font-family: "SF Mono", "Fira Code", monospace;
         }
+        
+        pre code {
+            display: block;
+            padding: 1em;
+            background-color: #212529;
+            color: #f8f9fa;
+            border-radius: 8px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
 
         .def-term {
             font-weight: bold;
             color: #0d6efd;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+        }
+        th, td {
+            border: 1px solid var(--border-color);
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #f8f9fa;
         }
         
         footer {
@@ -132,60 +204,112 @@
             <p>動的なサイトは、ユーザーが見る「<span class="def-term">フロントエンド</span>」と、裏でデータを処理する「<span class="def-term">バックエンド</span>」の2つが連携して動きます。</p>
             <ul>
                 <li><strong style="color: #fd7e14;">フロントエンド (Frontend)</strong>: ユーザーが操作する画面 (HTML, CSS, JS)。バックエンドに処理を依頼し、結果を表示します。</li>
-                <li><strong style="color: #6f42c1;">バックエンド (Backend)</strong>: サーバーで動く裏側の処理 (Node.js, データベース)。ユーザー登録やログイン認証など、データの保存や管理を担当します。</li>
+                <li><strong style="color: #6f42c1;">バックエンド (Backend)</strong>: サーバーで動く裏側の処理 (Node.js, Pythonなど)。ユーザー登録やログイン認証など、データの保存や管理を担当します。</li>
             </ul>
         </div>
         
-        <h2>おすすめの開発ステップ 🚀</h2>
+        <div class="section">
+            <h2>バックエンド開発ステップ 🚀</h2>
+            <p>バックエンドの言語を選択してください。フロントエンドや利用サービスは共通です。</p>
+            
+            <div class="tab-container">
+                <button class="tab active" onclick="showTab('nodejs')">Node.js (JavaScript)</button>
+                <button class="tab" onclick="showTab('python')">Python (Flask)</button>
+            </div>
 
-        <div class="step-card">
-            <h3><span class="step-number">1</span>開発環境をReplitに集約する</h3>
-            <p>開発の拠点を<code>Replit</code>に統一します。iPadのブラウザだけでフロントエンドとバックエンドの両方を開発でき、非常に快適です。</p>
-            <ul>
-                <li><strong>テンプレート選択:</strong> <code>Node.js</code> を選び、<code>index.html</code>, <code>style.css</code>, <code>script.js</code> (フロントエンド用) と <code>index.js</code> (バックエンド用) を管理します。</li>
-                <li><strong>開発フロー:</strong> 今後は、Replitでコーディングし、完成したコードを<code>Git</code>連携でGitHubに保存する流れに切り替えます。</li>
-            </ul>
+            <div id="nodejs-content" class="tab-content active">
+                <div class="step-card">
+                    <h3><span class="step-number">1</span>開発環境をReplitに集約する</h3>
+                    <p>テンプレートは<code>Node.js</code>を選択し、<code>index.html</code>, <code>style.css</code>, <code>script.js</code>とバックエンド用の<code>index.js</code>を管理します。</p>
+                </div>
+                 <div class="step-card">
+                    <h3><span class="step-number">2</span>バックエンドの骨組みを作る (API)</h3>
+                    <p><code>Express</code>フレームワークでWebサーバーを立て、<code>/api/register</code>などのURL（エンドポイント）を設計します。</p>
+                </div>
+                <div class="step-card">
+                    <h3><span class="step-number">3</span>データベースを用意する (Render)</h3>
+                    <p><code>Render</code>の無料<span class="def-term">PostgreSQL</span>データベースを準備し、「接続情報URL」を控えます。</p>
+                </div>
+                 <div class="step-card">
+                    <h3><span class="step-number">4</span>バックエンドとデータベースをつなぐ</h3>
+                    <p>データベース接続URLはReplitの<code>Secrets</code>機能に保存。<code>/api/register</code>が呼ばれたらDBに保存する処理を実装します。</p>
+                </div>
+                 <div class="step-card">
+                    <h3><span class="step-number">5</span>フロントエンドとバックエンドを連携させる</h3>
+                    <p>JavaScriptの<code>fetch()</code>関数を使い、フロントエンドのフォームからバックエンドのAPIを呼び出します。</p>
+                </div>
+                 <div class="step-card">
+                    <h3><span class="step-number">6</span>Renderへデプロイし、公開する</h3>
+                    <p>ReplitのコードをGitHubに保存後、RenderでWebサービスを作成し連携。Start Commandは<code>node index.js</code>です。</p>
+                </div>
+            </div>
+
+            <div id="python-content" class="tab-content python-content">
+                <table>
+                    <thead>
+                        <tr><th>項目</th><th>Node.jsの場合</th><th>Pythonの場合</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>言語</td><td>JavaScript</td><td>Python</td></tr>
+                        <tr><td>Webフレームワーク</td><td>Express.js</td><td>Flask や FastAPI</td></tr>
+                        <tr><td>パッケージ管理</td><td>package.json / npm</td><td>requirements.txt / pip</td></tr>
+                        <tr><td>DB連携ライブラリ</td><td>pg など</td><td>SQLAlchemy, psycopg2</td></tr>
+                        <tr><td>本番起動コマンド例</td><td>node server.js</td><td>gunicorn main:app</td></tr>
+                    </tbody>
+                </table>
+                <div class="step-card">
+                    <h3><span class="step-number">1</span>開発環境をReplitに集約する</h3>
+                    <p>テンプレートは<code>Python</code>（または<code>Flask</code>）を選択。ファイル構成はFlaskの作法に合わせ、<code>main.py</code>、<code>templates/index.html</code>、<code>static/style.css</code>のように配置します。</p>
+                </div>
+                <div class="step-card">
+                    <h3><span class="step-number">2</span>バックエンドの骨組みを作る (API)</h3>
+                    <p><code>pip install Flask</code>でFlaskをインストール。<code>main.py</code>にサーバーコードを書きます。</p>
+                    <pre><code>from flask import Flask, jsonify, request
+
+app = Flask(__name__)
+
+@app.route('/api/register', methods=['POST'])
+def register_user():
+    data = request.get_json()
+    username = data.get('username')
+    # (データベース保存処理)
+    print(f"登録リクエスト受信: {username}")
+    return jsonify({"status": "success"}), 201
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=8080)</code></pre>
+                </div>
+                 <div class="step-card">
+                    <h3><span class="step-number">3</span>データベースを用意する (Render)</h3>
+                    <p>このステップはNode.jsの場合と全く同じです。RenderでPostgreSQLを作成し、接続情報を控えます。</p>
+                </div>
+                <div class="step-card">
+                    <h3><span class="step-number">4</span>バックエンドとデータベースをつなぐ</h3>
+                    <p><code>pip install SQLAlchemy psycopg2-binary</code>を実行。DB接続URLを<code>Secrets</code>に保存し、<code>SQLAlchemy</code>を使ってDB操作コードを実装します。</p>
+                </div>
+                <div class="step-card">
+                    <h3><span class="step-number">5</span>フロントエンドとバックエンドを連携させる</h3>
+                    <p>このステップもNode.jsとほぼ同じ。フロントエンドの<code>script.js</code>から<code>fetch()</code>を使い、FlaskのAPIを呼び出します。</p>
+                </div>
+                <div class="step-card">
+                    <h3><span class="step-number">6</span>Renderへデプロイし、公開する</h3>
+                    <p>Renderの設定がNode.jsと少し異なります。</p>
+                    <ul>
+                        <li><strong>Build Command:</strong> <code>pip install -r requirements.txt</code></li>
+                        <li><strong>Start Command:</strong> 本番用の<code>Gunicorn</code>サーバーを使います。<code>gunicorn main:app</code>と設定します。</li>
+                    </ul>
+                </div>
+            </div>
         </div>
 
-        <div class="step-card">
-            <h3><span class="step-number">2</span>バックエンドの骨組みを作る (API)</h3>
-            <p>フロントエンドとデータをやり取りするための「窓口」である<span class="def-term">API</span> (Application Programming Interface) を作ります。</p>
+        <div class="section">
+            <h2>まとめ</h2>
+            <p>見ての通り、動的なサイトを作るという本質的な流れは、どの技術を使っても変わりません。フロントエンドとバックエンドの連携という中心的な概念を理解することが重要です。</p>
             <ul>
-                <li><strong>Webサーバー起動:</strong> <code>Express</code>フレームワークを使って、<code>index.js</code>に簡単なWebサーバーを立てます。</li>
-                <li><strong>API設計:</strong> <code>/api/register</code> (ユーザー登録) や <code>/api/login</code> (ログイン) といったURL（エンドポイント）を決め、ダミーの応答を返す処理を実装します。</li>
+                <li><strong>JavaScriptが好きなら</strong> → フロントとバックを同じ言語で書けるNode.jsがおすすめです。</li>
+                <li><strong>Pythonが好きなら</strong> → 将来的に機械学習など他の分野への応用も視野に入れやすいPythonがおすすめです。</li>
             </ul>
-        </div>
-
-        <div class="step-card">
-            <h3><span class="step-number">3</span>データベースを用意する (Render)</h3>
-            <p>ユーザー情報を永続的に保存するため、<code>Render</code>の無料<span class="def-term">PostgreSQL</span>データベースを準備します。作成後に表示される「接続情報URL」を控えておきましょう。</p>
-        </div>
-
-        <div class="step-card">
-            <h3><span class="step-number">4</span>バックエンドとデータベースをつなぐ</h3>
-            <p>ReplitからRenderのデータベースに接続します。</p>
-            <ul>
-                <li><strong>機密情報の保護:</strong> データベースの接続URLは、Replitの<code>Secrets</code>機能（鍵マーク）に保存し、コードに直接書き込まないようにします。</li>
-                <li><strong>処理の実装:</strong> <code>/api/register</code>が呼び出されたら、送られてきた情報をデータベースに保存する、といった実際の処理を記述します。</li>
-            </ul>
-        </div>
-
-        <div class="step-card">
-            <h3><span class="step-number">5</span>フロントエンドとバックエンドを連携させる</h3>
-            <p>ユーザーが操作する画面と裏側の処理を、JavaScriptの<code>fetch()</code>関数を使ってつなぎます。</p>
-            <ul>
-                <li><code>script.js</code>で、フォーム送信時にバックエンドのAPIを呼び出し、返ってきた結果（「登録成功」など）に応じて画面の表示を更新します。</li>
-            </ul>
-        </div>
-
-        <div class="step-card">
-            <h3><span class="step-number">6</span>Renderへデプロイし、公開する</h3>
-            <p>完成したアプリを本番環境である<code>Render</code>に公開します。</p>
-            <ul>
-                <li><strong>コード保存:</strong> ReplitのコードをGitHubに保存します。</li>
-                <li><strong>Webサービス作成:</strong> Renderで「Web Service」を新規作成し、GitHubリポジトリを連携させます。</li>
-                <li><strong>自動デプロイ:</strong> 今後、GitHubに新しいコードをプッシュするだけで、Renderが自動で最新版を公開してくれます。</li>
-            </ul>
+            <p>ご自身の興味に合わせて、最高の学習体験を楽しんでください！</p>
         </div>
         
         <footer>
@@ -194,7 +318,28 @@
     </div>
 
     <script>
-        // JavaScript: ページに動的な要素を加えることができます
+        // JavaScript: タブ切り替え機能
+        function showTab(tabName) {
+            // すべてのタブコンテンツを非表示にする
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(content => {
+                content.classList.remove('active');
+            });
+
+            // すべてのタブボタンからactiveクラスを削除
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // クリックされたタブに対応するコンテンツを表示
+            document.getElementById(tabName + '-content').classList.add('active');
+            
+            // クリックされたタブボタンにactiveクラスを追加
+            const activeTab = document.querySelector(`.tab[onclick="showTab('${tabName}')"]`);
+            activeTab.classList.add('active');
+        }
+
         console.log("Web開発ガイドページが読み込まれました。頑張ってください！");
     </script>
 
