@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LINE / LINE WORKS と GitHub の連携ガイド</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+            line-height: 1.6;
+            color: #333;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        h1, h2, h3 {
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+            margin-top: 40px;
+        }
+        h1 {
+            font-size: 2em;
+            color: #1a1a1a;
+        }
+        h2 {
+            font-size: 1.6em;
+            color: #2a2a2a;
+        }
+        h3 {
+            font-size: 1.3em;
+            color: #3a3a3a;
+            border-bottom: 1px solid #eee;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            font-size: 0.9em;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        code {
+            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+        }
+        strong {
+            color: #007bff;
+        }
+        .intro, .conclusion {
+            background-color: #eef7ff;
+            border-left: 5px solid #007bff;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .note {
+            font-size: 0.9em;
+            background-color: #fffbe6;
+            border-left: 4px solid #ffc107;
+            padding: 10px 15px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>LINE / LINE WORKS と GitHub の連携ガイド</h1>
+
+        <p class="intro">
+            LINE / LINE WORKSとGitHubの連携については、<strong>通知連携・開発フローの自動化・チャットボット連携</strong>など、意外といろいろできます！<br>
+            以下に、目的別に「できること」「使うツール」「具体的な例」などをまとめて説明します。
+        </p>
+
+        <h2>✅ LINE / LINE WORKS × GitHub でできること一覧</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>目的</th>
+                    <th>できること</th>
+                    <th>ツール・方法</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>通知連携</td>
+                    <td>プルリク/Issue/PushなどをLINEに通知</td>
+                    <td>GitHub Webhook + LINE Messaging API / LINE WORKS Webhook</td>
+                </tr>
+                <tr>
+                    <td>チーム共有</td>
+                    <td>GitHubの更新内容をチームに通知</td>
+                    <td>LINE公式アカウント or LINE WORKS Bot</td>
+                </tr>
+                <tr>
+                    <td>自動処理</td>
+                    <td>GitHubイベントをトリガーに処理実行</td>
+                    <td>GitHub Actions + LINE API</td>
+                </tr>
+                <tr>
+                    <td>開発サポート</td>
+                    <td>Botでコマンド実行・データ取得</td>
+                    <td>LINE Bot + GitHub API</td>
+                </tr>
+                <tr>
+                    <td>エラー監視</td>
+                    <td>CI/CD失敗を通知</td>
+                    <td>GitHub Actions + LINE通知</td>
+                </tr>
+                <tr>
+                    <td>ドキュメント通知</td>
+                    <td>READMEやWikiの変更通知</td>
+                    <td>Webhookで監視して通知</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>🔔 1. LINE / LINE WORKS に GitHub通知を送る</h2>
+        <h3>✅ 実現方法（どちらでも共通）：</h3>
+        <ul>
+            <li>GitHubの<strong>Webhook機能</strong>を使って、特定イベント（push、PRなど）を検知</li>
+            <li>LINEまたはLINE WORKSのBotへ<strong>HTTP POSTリクエスト</strong>で通知</li>
+        </ul>
+
+        <h3>📦 必要なもの：</h3>
+        <ul>
+            <li>LINE公式アカウント or LINE WORKSのBot（Webhook URL）</li>
+            <li>GitHubリポジトリの設定 → Webhook追加</li>
+            <li>メッセージ整形（JSONで送る）</li>
+        </ul>
+
+        <h3>例（GitHub → LINE）：</h3>
+        <pre><code>[GitHub通知]
+リポジトリ: my-project
+ユーザー: username
+イベント: Pull Request #12 が作成されました！
+リンク: https://github.com/your-org/my-project/pull/12</code></pre>
+
+        <h2>⚙️ 2. GitHub Actions でLINEに通知を送る</h2>
+        <h3>✅ 使用例：</h3>
+        <ul>
+            <li>CIが失敗したらLINE通知</li>
+            <li>デプロイ完了後にLINE通知</li>
+            <li>PRがマージされたら通知</li>
+        </ul>
+
+        <h3>💡 例：GitHub ActionsのYAMLに以下を追加</h3>
+        <pre><code class="language-yaml">- name: Notify LINE
+  run: |
+    curl -X POST https://api.line.me/v2/bot/message/push \
+      -H "Authorization: Bearer ${{ secrets.LINE_TOKEN }}" \
+      -H "Content-Type: application/json" \
+      -d '{
+        "to": "ユーザーIDまたはグループID",
+        "messages": [{"type": "text", "text": "CI/CDが成功しました！"}]
+      }'</code></pre>
+        <p class="note">🔑 <strong>LINEトークンなどはGitHub Secretsに登録</strong>しておくと安全です。</p>
+
+        <h2>🧠 3. LINE Bot から GitHubの情報を取得・操作</h2>
+        <p>LINE Botにメッセージを送ると、GitHubのAPIを叩いて情報を返すようにできます。</p>
+        <h3>✅ 例：</h3>
+        <ul>
+            <li>ユーザー「PR一覧見せて」</li>
+            <li>Bot「以下がオープン中のPRです：...」</li>
+        </ul>
+        <h3>📦 必要な知識：</h3>
+        <ul>
+            <li>LINE Messaging API</li>
+            <li>GitHub REST API or GraphQL API</li>
+            <li>サーバー or FaaS（Google Apps Script、Firebase Functionsなど）</li>
+        </ul>
+
+        <h2>💬 4. LINE WORKS 専用の連携方法</h2>
+        <h3>✅ 特徴：</h3>
+        <ul>
+            <li>LINE WORKS Botは<strong>Webhook URLが簡単に使える</strong></li>
+            <li><strong>管理者がBotを組織に追加</strong>するだけで、全員に通知可能</li>
+            <li><strong>トークルームへの自動投稿</strong>ができる</li>
+        </ul>
+        <h3>🔗 参考：</h3>
+        <ul>
+            <li><a href="https://developers.worksmobile.com/jp/document/100500801?lang=ja" target="_blank" rel="noopener noreferrer">LINE WORKS Developers（Webhookガイド）</a></li>
+            <li>Webhook + GitHubからの通知で業務利用しやすい</li>
+        </ul>
+
+        <h2>🧰 補助ツール・サービス</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>ツール</th>
+                    <th>用途</th>
+                    <th>補足</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Zapier / Make</td>
+                    <td>GitHubとLINEの中継</td>
+                    <td>無料枠あり、ノーコードでも可</td>
+                </tr>
+                <tr>
+                    <td>Google Apps Script</td>
+                    <td>GitHub API + LINE通知</td>
+                    <td>無料で動作可能</td>
+                </tr>
+                <tr>
+                    <td>Firebase Functions</td>
+                    <td>LIFFやBotのバックエンドに</td>
+                    <td>無料で拡張性あり</td>
+                </tr>
+                <tr>
+                    <td>Vercel / Render</td>
+                    <td>LINE Botのホスティング</td>
+                    <td>GitHubと自動連携可能</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>🧪 ちょっと高度な活用例</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>応用例</th>
+                    <th>説明</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>LINE経由でデプロイをトリガー</td>
+                    <td>「/deploy」などのメッセージでGitHub Actionsを起動</td>
+                </tr>
+                <tr>
+                    <td>GitHubのIssueをLINEから投稿</td>
+                    <td>LINE BotからAPI経由でIssue作成</td>
+                </tr>
+                <tr>
+                    <td>マイページ風の通知画面</td>
+                    <td>LIFFでGitHub関連の個人情報を表示（ログイン連携付き）</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>📊 まとめ</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>目的</th>
+                    <th>LINE</th>
+                    <th>LINE WORKS</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>GitHubの通知を受けたい</td>
+                    <td>✅</td>
+                    <td>✅（Webhookが楽）</td>
+                </tr>
+                <tr>
+                    <td>開発フローの自動化</td>
+                    <td>✅（GitHub Actionsと組み合わせ）</td>
+                    <td>✅</td>
+                </tr>
+                <tr>
+                    <td>ユーザー別対応・チャットボット</td>
+                    <td>✅（Bot + GitHub API）</td>
+                    <td>✅</td>
+                </tr>
+                <tr>
+                    <td>UI付きマイページ（LIFF）</td>
+                    <td>✅</td>
+                    <td>❌（LIFFはLINE専用）</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="conclusion">
+            <h3>👋 興味がある具体例があれば教えてください！</h3>
+            <p>
+                「通知だけしたい」「LINEからIssueを作成したい」「社内チームにLINE WORKSでGitHubの情報を共有したい」など、やりたいことを教えてもらえれば<strong>コード例や手順を具体的にお渡しできます！</strong>
+            </p>
+        </div>
+    </div>
+</body>
+</html>
