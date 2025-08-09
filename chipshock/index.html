@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>インタラクティブ・レポート：チップショック - 半導体危機が世界経済をどう変えたか</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Silicon & Steel -->
+    <!-- Application Structure Plan: A thematic, narrative-driven SPA that guides users from the causes of the chip crisis to its widespread impact, the global response, and future outlook. The structure uses interactive diagrams, charts, and a map interface to make complex data digestible and engaging, prioritizing an exploratory user journey over the linear report format. -->
+    <!-- Visualization & Content Choices: Causes -> Interactive Diagram (HTML/JS); Industry Impact -> Animated Stats & Chart.js Line Chart; Geopolitical Response -> Clickable Map Interface (HTML/JS); Future Outlook -> Chart.js Bar Chart & Interactive Toggle. All choices are designed to replace static text with dynamic, user-driven exploration, adhering to the NO SVG/Mermaid rule. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background-color: #F8F9FA;
+            color: #212529;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) { .chart-container { height: 350px; } }
+        .nav-link {
+            transition: all 0.3s ease;
+            position: relative;
+            padding-bottom: 4px;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #007BFF;
+            transition: width 0.3s ease;
+        }
+        .nav-link:hover::after, .nav-link.active::after { width: 100%; }
+        .section-fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .section-fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .hero-bg {
+            background-color: #343A40;
+            background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6));
+        }
+        .map-hotspot {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: #007BFF;
+            border-radius: 50%;
+            border: 2px solid white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            animation: pulse 2s infinite;
+        }
+        .map-hotspot:hover { transform: scale(1.5); animation: none; }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(0, 123, 255, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(0, 123, 255, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 123, 255, 0); }
+        }
+        .tab-btn.active { border-color: #007BFF; color: #007BFF; }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="sticky top-0 z-50 w-full bg-white/90 backdrop-blur-sm shadow-sm">
+        <nav class="container mx-auto px-6 py-3">
+            <div class="flex justify-between items-center">
+                <div class="text-lg font-bold text-[#007BFF]">チップショック</div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#causes" class="nav-link">原因</a>
+                    <a href="#impact" class="nav-link">影響</a>
+                    <a href="#response" class="nav-link">世界の対応</a>
+                    <a href="#future" class="nav-link">未来</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section id="hero" class="hero-bg text-white text-center py-20 md:py-28">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4">チップショック</h1>
+            <h2 class="text-2xl md:text-3xl mb-6">見えざる危機が世界経済をどう変えたか</h2>
+            <p class="max-w-3xl mx-auto text-lg">
+                2020年から始まった半導体不足は、単なる部品不足ではなかった。パンデミック、地政学、自然災害が絡み合い、現代社会の脆弱性を暴いたシステミックな危機だった。
+            </p>
+        </section>
+
+        <div class="container mx-auto px-6 py-16">
+
+            <section id="causes" class="mb-24 section-fade-in">
+                <h2 class="text-3xl font-bold text-center mb-4">なぜ起きたのか？ 複合危機の構造</h2>
+                <p class="text-center max-w-2xl mx-auto mb-12 text-gray-600">
+                    半導体不足は、複数の要因が連鎖した「パーフェクトストーム」でした。下の図の各要因をクリックして、危機の全体像を解き明かしましょう。
+                </p>
+                <div class="relative max-w-3xl mx-auto p-8">
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <div class="w-48 h-48 bg-red-500 text-white rounded-full flex items-center justify-center text-center font-bold text-2xl shadow-2xl p-4">半導体<br>不足</div>
+                    </div>
+                    <div class="cause-item absolute top-0 left-1/2 -translate-x-1/2 -mt-8 text-center cursor-pointer group" data-id="pandemic">
+                        <div class="w-24 h-24 bg-blue-500 rounded-full flex items-center justify-center text-4xl shadow-lg transition transform group-hover:scale-110">💻</div>
+                        <p class="font-bold mt-2">パンデミック</p>
+                    </div>
+                    <div class="cause-item absolute right-0 top-1/2 -translate-y-1/2 -mr-8 text-center cursor-pointer group" data-id="geopolitics">
+                        <div class="w-24 h-24 bg-yellow-500 rounded-full flex items-center justify-center text-4xl shadow-lg transition transform group-hover:scale-110">🇨🇳🇺🇸</div>
+                        <p class="font-bold mt-2">地政学リスク</p>
+                    </div>
+                    <div class="cause-item absolute bottom-0 left-1/2 -translate-x-1/2 -mb-8 text-center cursor-pointer group" data-id="jit">
+                        <div class="w-24 h-24 bg-green-500 rounded-full flex items-center justify-center text-4xl shadow-lg transition transform group-hover:scale-110">🚗</div>
+                        <p class="font-bold mt-2">サプライチェーン</p>
+                    </div>
+                    <div class="cause-item absolute left-0 top-1/2 -translate-y-1/2 -ml-8 text-center cursor-pointer group" data-id="disaster">
+                        <div class="w-24 h-24 bg-purple-500 rounded-full flex items-center justify-center text-4xl shadow-lg transition transform group-hover:scale-110">🔥❄️💧</div>
+                        <p class="font-bold mt-2">自然災害・事故</p>
+                    </div>
+                </div>
+                <div id="cause-detail" class="mt-48 max-w-3xl mx-auto bg-white p-6 rounded-lg shadow-lg min-h-[120px]">
+                    <p class="text-center text-gray-500">上の要因をクリックして詳細を表示</p>
+                </div>
+            </section>
+
+            <section id="impact" class="mb-24 section-fade-in">
+                <h2 class="text-3xl font-bold text-center mb-4">衝撃の連鎖：産業と経済への影響</h2>
+                <p class="text-center max-w-2xl mx-auto mb-12 text-gray-600">
+                    チップの供給停止は、生産ラインから消費者物価まで、経済のあらゆる側面に深刻な影響を及ぼしました。
+                </p>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="bg-white p-8 rounded-lg shadow-lg text-center">
+                        <h3 class="text-2xl font-bold mb-2">自動車産業の損失</h3>
+                        <p class="text-5xl font-bold text-red-600 my-4" id="loss-counter">0</p>
+                        <p class="text-gray-600">2021年だけで失われた収益機会</p>
+                        <p class="mt-4">世界で数百万台の生産が削減され、新車不足が深刻化しました。</p>
+                    </div>
+                    <div class="bg-white p-8 rounded-lg shadow-lg">
+                        <h3 class="text-2xl font-bold mb-2 text-center">中古車価格の異常な高騰</h3>
+                        <div class="chart-container" style="height: 250px; max-height: 250px;">
+                            <canvas id="usedCarChart"></canvas>
+                        </div>
+                        <p class="text-center text-sm text-gray-600 mt-2">新車不足により需要がシフトし、米国では価格が最大45%上昇。これがインフレの主要因の一つとなりました。</p>
+                    </div>
+                </div>
+                <div class="mt-8 grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <h4 class="font-bold text-xl mb-2">🎮 家電・ゲーム</h4>
+                        <p class="text-sm text-gray-600">PS5やGPUが極端な品薄に。PCやテレビの価格も軒並み上昇しました。</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <h4 class="font-bold text-xl mb-2">🏭 産業機械</h4>
+                        <p class="text-sm text-gray-600">工場の自動化機器の納期が1年以上に。経済全体の回復の足かせとなりました。</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <h4 class="font-bold text-xl mb-2">🌐 通信インフラ</h4>
+                        <p class="text-sm text-gray-600">5G網やデータセンターの構築に必要なネットワーク機器の供給が滞りました。</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <h4 class="font-bold text-xl mb-2">🩺 医療機器</h4>
+                        <p class="text-sm text-gray-600">人工呼吸器やペースメーカーなど、生命に関わる機器の生産にも遅れが生じました。</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="response" class="mb-24 section-fade-in">
+                <h2 class="text-3xl font-bold text-center mb-4">世界の対応：「チップナショナリズム」の競争</h2>
+                <p class="text-center max-w-2xl mx-auto mb-12 text-gray-600">
+                    半導体を「21世紀の石油」と見なした各国は、巨額の補助金を投じて国内生産を強化する国家戦略へと舵を切りました。地図上の拠点をクリックして、各国の戦略を見てみましょう。
+                </p>
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div class="md:col-span-2 bg-white p-4 rounded-lg shadow-lg">
+                        <div class="relative w-full pb-[50%] bg-gray-200 rounded-md" style="background-image: url('https://placehold.co/1200x600/DDEEFF/333333?text=World+Map'); background-size: cover; background-position: center;">
+                            <div class="map-hotspot" style="top: 35%; left: 20%;" data-id="usa"></div>
+                            <div class="map-hotspot" style="top: 30%; left: 48%;" data-id="eu"></div>
+                            <div class="map-hotspot" style="top: 40%; left: 80%;" data-id="japan"></div>
+                        </div>
+                    </div>
+                    <div id="response-detail" class="bg-white p-6 rounded-lg shadow-lg">
+                         <p class="text-center text-gray-500">地図上の拠点をクリックして詳細を表示</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="future" class="section-fade-in">
+                <h2 class="text-3xl font-bold text-center mb-4">未来への道筋：新たな常識と市場の二極化</h2>
+                <p class="text-center max-w-2xl mx-auto mb-12 text-gray-600">
+                    この危機は、サプライチェーン戦略と半導体市場の構造に恒久的な変化をもたらしました。
+                </p>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="bg-white p-8 rounded-lg shadow-lg">
+                        <h3 class="text-2xl font-bold mb-4 text-center">戦略の転換</h3>
+                        <div class="flex items-center justify-center space-x-4 my-4">
+                            <span id="jit-label" class="font-bold text-gray-400">ジャストインタイム</span>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" id="strategy-toggle" class="sr-only peer">
+                                <div class="w-14 h-7 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-blue-600"></div>
+                            </label>
+                            <span id="jic-label" class="font-bold text-blue-600">ジャストインケース</span>
+                        </div>
+                        <div id="strategy-desc" class="text-center text-gray-700">
+                            <p>効率最優先から、戦略的在庫を確保し強靭性を重視するモデルへ。企業は半導体メーカーと直接契約を結ぶようになりました。</p>
+                        </div>
+                    </div>
+                    <div class="bg-white p-8 rounded-lg shadow-lg">
+                        <h3 class="text-2xl font-bold mb-4 text-center">二極化する未来の市場</h3>
+                        <div class="chart-container" style="height: 250px; max-height: 250px;">
+                            <canvas id="marketChart"></canvas>
+                        </div>
+                        <p class="text-center text-sm text-gray-600 mt-2">AIやEVが牽引する先端半導体と、自動車や産業機械に不可欠な成熟（レガシー）半導体。投資は先端分野に集中し、成熟品は構造的な供給不安が残る可能性があります。</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="bg-[#343A40] text-white mt-16">
+        <div class="container mx-auto px-6 py-8 text-center">
+            <p>本インタラクティブ・レポートは、提供された調査レポートを基に生成されました。</p>
+            <p class="text-sm text-gray-400 mt-2">&copy; 2025 Chip Shock Interactive Report. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Causes Section ---
+            const causeItems = document.querySelectorAll('.cause-item');
+            const causeDetail = document.getElementById('cause-detail');
+            const causeData = {
+                pandemic: { title: 'パンデミックによる需要激変', text: 'リモートワークや巣ごもり需要でPC・家電向けチップが急増。一方、自動車メーカーは需要減を見込み発注をキャンセルしましたが、想定外の急回復で完全な供給不足に陥りました。' },
+                geopolitics: { title: '地政学リスクの高まり', text: '米中技術覇権争いの中、米国が中国企業ファーウェイに制裁を発動。これにより、多くの企業が制裁を恐れてチップの予防的在庫確保に走り、需要を人為的に押し上げました。' },
+                jit: { title: '脆弱なサプライチェーン', text: '在庫を極限まで減らす「ジャストインタイム」方式は、平時の効率化には貢献しましたが、予期せぬ危機には対応できませんでした。特に自動車業界はこの影響を大きく受けました。' },
+                disaster: { title: '自然災害・事故', text: '日本のルネサス工場の火災、米テキサス州の寒波による停電、台湾の干ばつなど、物理的な生産停止が供給網に追い打ちをかけました。' }
+            };
+            causeItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    const data = causeData[item.dataset.id];
+                    causeDetail.innerHTML = `<h4 class="font-bold text-lg mb-2">${data.title}</h4><p class="text-gray-700">${data.text}</p>`;
+                });
+            });
+
+            // --- Impact Section ---
+            const lossCounter = document.getElementById('loss-counter');
+            function animateCounter(target) {
+                let current = 0;
+                const step = target / 100;
+                const interval = setInterval(() => {
+                    current += step;
+                    if (current >= target) {
+                        lossCounter.textContent = `$${target.toLocaleString()}億`;
+                        clearInterval(interval);
+                    } else {
+                        lossCounter.textContent = `$${Math.ceil(current).toLocaleString()}億`;
+                    }
+                }, 20);
+            }
+
+            const usedCarChartCtx = document.getElementById('usedCarChart').getContext('2d');
+            const usedCarChart = new Chart(usedCarChartCtx, {
+                type: 'line',
+                data: {
+                    labels: ['2020初', '2020末', '2021末', '2022中'],
+                    datasets: [{
+                        label: '米国中古車価格指数',
+                        data: [100, 115, 145, 135],
+                        borderColor: '#DC2626',
+                        backgroundColor: 'rgba(220, 38, 38, 0.1)',
+                        fill: true,
+                        tension: 0.3
+                    }]
+                },
+                options: { maintainAspectRatio: false, plugins: { legend: { display: false } } }
+            });
+
+            // --- Response Section ---
+            const hotspots = document.querySelectorAll('.map-hotspot');
+            const responseDetail = document.getElementById('response-detail');
+            const responseData = {
+                usa: { title: '🇺🇸 米国：CHIPS・科学法', text: '総額527億ドルの補助金と税制優遇で国内の半導体製造を強力に推進。Intel、TSMC、Samsungなどが大規模工場を建設中です。' },
+                eu: { title: '🇪🇺 EU：欧州半導体法', text: '官民で430億ユーロ以上を動員し、2030年までに世界の半導体シェアを20%に倍増させることを目指しています。' },
+                japan: { title: '🇯🇵 日本：Rapidus計画', text: '官民一体で次世代2nm半導体の国産化を目指す国家プロジェクト。北海道に工場を建設し、2027年の量産開始を目標としています。' }
+            };
+            hotspots.forEach(spot => {
+                spot.addEventListener('click', () => {
+                    const data = responseData[spot.dataset.id];
+                    responseDetail.innerHTML = `<h4 class="font-bold text-lg mb-2">${data.title}</h4><p class="text-gray-700">${data.text}</p>`;
+                });
+            });
+
+            // --- Future Section ---
+            const strategyToggle = document.getElementById('strategy-toggle');
+            const jitLabel = document.getElementById('jit-label');
+            const jicLabel = document.getElementById('jic-label');
+            strategyToggle.addEventListener('change', () => {
+                if (strategyToggle.checked) {
+                    jitLabel.classList.remove('text-blue-600');
+                    jitLabel.classList.add('text-gray-400');
+                    jicLabel.classList.add('text-blue-600');
+                    jicLabel.classList.remove('text-gray-400');
+                } else {
+                    jitLabel.classList.add('text-blue-600');
+                    jitLabel.classList.remove('text-gray-400');
+                    jicLabel.classList.remove('text-blue-600');
+                    jicLabel.classList.add('text-gray-400');
+                }
+            });
+            strategyToggle.checked = true;
+            strategyToggle.dispatchEvent(new Event('change'));
+
+            const marketChartCtx = document.getElementById('marketChart').getContext('2d');
+            const marketChart = new Chart(marketChartCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['先端半導体 (AI, HPC)', '成熟半導体 (自動車, 産業)'],
+                    datasets: [{
+                        label: '政府・民間投資の集中度',
+                        data: [85, 15],
+                        backgroundColor: ['#007BFF', '#FD7E14'],
+                    }]
+                },
+                options: { maintainAspectRatio: false, indexAxis: 'y', plugins: { legend: { display: false } } }
+            });
+
+            // --- Scroll Animations & Observers ---
+            const sections = document.querySelectorAll('.section-fade-in');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        if (entry.target.id === 'impact') {
+                            animateCounter(2100);
+                        }
+                    }
+                });
+            }, { threshold: 0.15 });
+            sections.forEach(section => observer.observe(section));
+
+            const navLinks = document.querySelectorAll('.nav-link');
+            const navObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const id = entry.target.getAttribute('id');
+                        navLinks.forEach(link => {
+                            link.classList.toggle('active', link.getAttribute('href') === `#${id}`);
+                        });
+                    }
+                });
+            }, { rootMargin: "-40% 0px -60% 0px" });
+            document.querySelectorAll('section[id]').forEach(section => navObserver.observe(section));
+        });
+    </script>
+</body>
+</html>
