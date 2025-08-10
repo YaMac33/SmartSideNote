@@ -17,116 +17,20 @@
             <p>AIを活用したテストページの一覧です。</p>
         </header>
 
+        <div class="controls">
+            <input type="text" id="search-box" class="search-box" placeholder="ページ検索...">
+            <button class="theme-toggle" id="theme-toggle">🌗 ダークモード切替</button>
+        </div>
+
         <main class="project-list" id="project-list-container">
-            </main>
+            <div class="loader"></div>
+        </main>
         
         <footer>
             <p>&copy; 2025 YaMac33. All Rights Reserved.</p>
         </footer>
     </div>
 
-    <script>
-        // --- ① GitHub情報の設定 ---
-        var username = "YaMac33";
-        var repoName = "ai-comparison-test-site";
-
-        // --- ② プロジェクト情報の設定 ---
-        var projectDetails = {
-            "car-sharing": {
-                title: "カーシェアリング料金比較",
-                description: "複数のカーシェアリングサービスの料金をシミュレーション・比較するサイトです。"
-            },
-            "owarai": {
-                title: "日本漫才の「ウケる」構造分析",
-                description: "日本漫才の「ウケる」構造を分析したページです。"
-            },
-            "administration": {
-                title: "AI駆動型ガバナンス",
-                description: "日本の行政セクターにおけるAI活用の現状、課題、そして未来への戦略的青写真をインタラクティブに探るページです。"
-            },
-            "AI": {
-                title: "人工知能の未来",
-                description: "産業、社会、ガバナンスの変革について調査したページです。"
-            },
-            "civil-servant": {
-                title: "「副業」から、地域を支える『複業』へ。",
-                description: "公務員の「副業」について調査したページです。"
-            },
-            "law": {
-                title: "生ける法：解釈の探求",
-                description: "なぜ同じ法律で、解釈が分かれるのかについて調査したページです。"
-            },
-            "national-and-local": {
-                title: "司法が描く国と地方の境界線",
-                description: "国と地方が対立する時、誰が最終判断を下すのかについて調査したページです。"
-            },
-            "autonomous-enterprise": {
-                title: "自律的企業(Autonomous Enterprise)",
-                description: "次世代のビジネスモデルと組織構造について解説します。"
-            },
-            "document": {
-                title: "AI活用ドキュメント解説",
-                description: "メール送信フォームをWebサイトに設置する方法"
-            },
-        　　　"RSS": {
-                title: "RSS取得からのGAS自動化",
-                description: "Google One AI Premiumを活用したGoogle Apps Script自動化について解説します。"
-            },
-            "law-and-AI": {
-                title: "アルゴリズムの天秤",
-                description: "AIは法曹界の仕事をどう変え、司法の未来をどう描くか？"
-            },
-            "CloudStorage": {
-                title: "iCloud+ と Google One AI Pro 活用",
-                description: "iCloud+ と Google One AI Pro の最適な使い分け戦略"
-            },
-        };
-        // ------------------------------------
-
-        var apiUrl = 'https://api.github.com/repos/' + username + '/' + repoName + '/contents/';
-        var container = document.getElementById('project-list-container');
-        container.innerHTML = '<p style="text-align: center;">読み込み中...</p>';
-
-        fetch(apiUrl)
-            .then(function(response) {
-                if (!response.ok) { throw new Error('リポジトリ情報の取得に失敗しました。'); }
-                return response.json();
-            })
-            .then(function(data) {
-                container.innerHTML = ''; 
-
-                var dirs = data.filter(function(item) {
-                    return item.type === 'dir' && !item.name.startsWith('.');
-                });
-
-                if (dirs.length === 0) {
-                    container.innerHTML = '<p>プロジェクトが見つかりませんでした。</p>';
-                    return;
-                }
-
-                dirs.forEach(function(dir) {
-                    var details = projectDetails[dir.name];
-                    if (details) {
-                        var card = document.createElement('a');
-                        card.href = './' + dir.name + '/';
-                        card.className = 'project-card';
-
-                        var title = document.createElement('h2');
-                        title.textContent = details.title;
-
-                        var description = document.createElement('p');
-                        description.textContent = details.description;
-
-                        card.appendChild(title);
-                        card.appendChild(description);
-                        container.appendChild(card);
-                    }
-                });
-            })
-            .catch(function(error) {
-                console.error('エラー:', error);
-                container.innerHTML = '<p style="text-align: center; color: red;">エラーが発生しました。一覧を読み込めません。</p>';
-            });
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
