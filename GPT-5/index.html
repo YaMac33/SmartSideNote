@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenAI: GPT-5のご紹介</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* 基本的なフォントと背景色の設定 */
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background-color: #ffffff;
+            color: #101828;
+        }
+
+        /* 見出しのスタイル */
+        h1, h2, h3 {
+            font-weight: 700;
+        }
+
+        /* リンクのスタイル */
+        .prose a {
+            color: #101828;
+            text-decoration: underline;
+            font-weight: 500;
+        }
+        .prose a:hover {
+            color: #475467;
+        }
+
+        /* 引用ブロックのスタイル */
+        .prose blockquote {
+            border-left-color: #d1d5db;
+            color: #475467;
+            font-style: italic;
+        }
+
+        /* CTAボタンのスタイル */
+        .cta-button {
+            display: inline-block;
+            background-color: #101828;
+            color: #ffffff;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: background-color 0.2s;
+        }
+        .cta-button:hover {
+            background-color: #344054;
+        }
+        
+        /* グラフコンテナのスタイル */
+        .chart-container {
+            height: 400px;
+            width: 100%;
+            max-width: 700px;
+            margin: auto;
+        }
+    </style>
+</head>
+<body class="bg-white">
+
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+        
+        <header class="text-center mb-12">
+            <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight mb-4">GPT-5 のご紹介</h1>
+            <p class="text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto mb-8">推論とチャットを単一システムに統合した、当社の最高性能モデルです。</p>
+            <a href="#" target="_blank" class="cta-button">ChatGPT で試す</a>
+        </header>
+
+        <main class="prose prose-lg max-w-none">
+            
+            <figure class="mb-12">
+                <img src="https://placehold.co/1600x900/d1e0ff/101828?text=GPT-5+Sizzle" alt="GPT-5 Sizzle Thumbnail" class="rounded-lg shadow-lg w-full">
+            </figure>
+
+            <div class="flex items-center justify-between bg-gray-50 rounded-lg p-4 mb-12">
+                <div class="flex items-center space-x-3">
+                    <svg class="w-6 h-6 text-gray-700" fill="currentColor" viewBox="0 0 20 20"><path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z"></path></svg>
+                    <span class="font-medium text-gray-700">記事を音声で聴く</span>
+                    <span class="text-gray-500">0:00</span>
+                </div>
+                <button class="text-gray-600 hover:text-gray-900 font-medium">共有</button>
+            </div>
+
+            <p>本日、当社の中でも最も高い性能・速度・汎用性を備えたフラッグシップモデル GPT‑5 をリリースします。GPT‑5 は、ChatGPT の優れた機能を統合し、常に安定して最適な回答を提供できるよう設計されています。GPT‑5 は、コーディング、数学、データ分析、科学など、より長い思考が求められる場面では、回答前に自動で推論を行い、最適な回答を導き出します。そのため、どのモデルを使うかを意識しなくても、常に丁寧で専門的レベルの回答を受け取れます。</p>
+            <p>GPT‑5 は GPT‑4o や OpenAI o3 をはじめとする当社の従来モデルと比べて、知能が飛躍的に向上しており、コーディング、数学、資格認識のベンチマークにおいて最高水準を達成しています。特に重要なのは、多くの人にとって ChatGPT の日常的な使用目的となっている文章作成支援、フロントエンドのコーディング、健康に関する質問などで優れた能力を発揮する点です。これまでよりも信頼性の高い、正確な回答を自然な文体で返します。</p>
+            <p>本日以降、GPT‑5 はすべてのユーザーにご利用いただけるため、誰もが専門家並みの知能を活用することが可能となります。有料ユーザーの場合は、利用制限が引き上げられます。Pro 登録者は GPT‑5 Pro にもアクセスできるようになります。このバージョンは、拡張推論機能を搭載しているため、さらに信頼性と精度が向上した回答を得られます。</p>
+            
+            <hr class="my-12">
+
+            <section>
+                <h2 class="text-3xl sm:text-4xl mb-6">あらゆる機能を 1 つのシステムに一元化</h2>
+                <p>GPT‑5 は 2 つのモデルを搭載しています。ほとんどの質問に回答する、高性能かつ高速度のハイスループットモデルと、より難しい問題に対応する高度なリーズニングモデル（GPT‑5 思考）です。また、会話のタイプや複雑さ、必要なツール、あるいは「慎重に考えて」といったユーザーの明確な意思に基づき、リアルタイムルーターがどのモデルを使用するかをすばやく判断します。ルーターは、ユーザーによる手動切り替え、優先設定、測定された正確性など、実際のシグナルを基に継続的に学習し、継続的に進化しています。いずれかのモデルで利用上限に達した場合は、推論機能を備えたモデルの mini バージョンが残りのクエリに対応します。近いうちに、これらの機能をすべて 1 つのモデルに統合する予定ですが、ユーザー体験は現時点ですでに一貫性のあるものに感じられるはずです。</p>
+            </section>
+
+            <hr class="my-12">
+
+            <section>
+                <h2 class="text-3xl sm:text-4xl mb-6">性能と汎用性が向上したモデル</h2>
+
+                <h3 class="text-2xl sm:text-3xl mt-10 mb-4">コーディング</h3>
+                <p>GPT‑5 は、弊社製品の中で最強のコーディングモデルです。特に、複雑なフロントエンド生成と大規模リポジトリのデバッグで、優れた能力を発揮します。美的感覚を備えているため、多くの場合、たったひとつのプロンプトで、洗練されたレスポンシブデザインのウェブサイトやアプリ、ゲームを作成することが可能です。また、従来のモデルよりも文間・行間の空きや文字デザイン、余白などに対する理解が向上しているため、ChatGPT‑5 のデザイン選択能力についても、初期テスターから高い評価を得ています。</p>
+                
+                <blockquote>
+                    <p>PR の範囲設定や計画から一連のビルド処理まで、あらゆることに対応してくれるので、当社にとっては今や日々の業務に欠かせないツールです。</p>
+                    <footer>— Cursor</footer>
+                </blockquote>
+                <blockquote>
+                    <p>GPT‑5 は、実際のソフトウェアエンジニアリングタスクを用いてモデル性能を測定する社内評価において、SOTA を達成しました。また、他の最先端モデルと比較して、ツール呼び出し時のエラー率が半分に抑えられていることも確認されています。</p>
+                    <footer>— Windsurf</footer>
+                </blockquote>
+                <p><a href="#">開発者向けの機能の詳細については、こちらをご覧ください。</a></p>
+
+                <div class="not-prose mt-10 grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <figure>
+                        <a href="#"><img src="https://placehold.co/400x300/e0f2fe/0c4a6e?text=ピクセルペイント" class="rounded-md shadow-md hover:opacity-80 transition-opacity"></a>
+                        <figcaption class="text-center text-sm text-gray-600 mt-2">ピクセルペイント</figcaption>
+                    </figure>
+                    <figure>
+                        <a href="#"><img src="https://placehold.co/400x300/e0f2fe/0c4a6e?text=タイピングゲーム" class="rounded-md shadow-md hover:opacity-80 transition-opacity"></a>
+                        <figcaption class="text-center text-sm text-gray-600 mt-2">タイピングゲーム</figcaption>
+                    </figure>
+                    <figure>
+                        <a href="#"><img src="https://placehold.co/400x300/e0f2fe/0c4a6e?text=ドラムキット" class="rounded-md shadow-md hover:opacity-80 transition-opacity"></a>
+                        <figcaption class="text-center text-sm text-gray-600 mt-2">ドラムキット</figcaption>
+                    </figure>
+                    <figure>
+                        <a href="#"><img src="https://placehold.co/400x300/e0f2fe/0c4a6e?text=Lofi+Visualizer" class="rounded-md shadow-md hover:opacity-80 transition-opacity"></a>
+                        <figcaption class="text-center text-sm text-gray-600 mt-2">Lofi Visualizer</figcaption>
+                    </figure>
+                </div>
+                
+                <h3 class="text-2xl sm:text-3xl mt-10 mb-4">クリエイティブな表現と文章作成</h3>
+                <p>GPT‑5 は文章作成ツールとしても、従来モデルより優れており、文章に深みとリズム感を添えます。自分の中にある概念やアイデアを説得力のある、心に響く文章にすることも可能です。読者の心を打ったり、驚かせたりすることも難しくはありません。韻を踏まない詩や、無韻の弱強五歩格のような形式があいまない文章にも、これまでより確実に対応し、形式を保ったまま、表現を明確にすることが可能です。このように強化された文章作成機能は、ChatGPT が対応するレポート作成、メール作成、編集作業などの日常タスクにも反映されます。</p>
+
+                <h3 class="text-2xl sm:text-3xl mt-10 mb-4">健康</h3>
+                <p>GPT‑5 は健康関連の質問に関しても当社の最高位モデルです。ユーザーが自分の健康を正しく理解し、行動できるよう支援します。このモデルは、OpenAI が今年公開した、現実的なシナリオと医師が定義した基準に基づく評価ベンチマーク HealthBench⁠において、従来モデルに比べて著しく高いスコアを獲得しました。従来モデルよりも積極的な思考パートナーとして機能し、潜在的な懸念事項を前もって知らせたり、より有益な回答を出すために、質問を投げかけたりします。さらに、コミュニケーションスタイルをユーザーの知識レベルや地域に合わせ、治療水準の差、地域特有の疾患、現地の薬剤名を考慮しながら、より正確で信頼性の高い回答を提供します。ただし、これは非常に重要なことなのですが、ChatGPT は医療専門家の代わりになるわけではありません。</p>
+
+                <div class="not-prose mt-10 space-y-12">
+                    <div class="chart-container">
+                        <canvas id="healthBenchChart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="healthBenchHardChart"></canvas>
+                    </div>
+                </div>
+            </section>
+            
+            <hr class="my-12">
+            
+            <section>
+                <h2 class="text-3xl sm:text-4xl mb-6">自然な文体でのやり取り</h2>
+                <p>GPT‑5 はこれまでのモデルよりも同調性が低く、不要な絵文字の使用も少ないですが、きめの細かい、思慮に富んだフォローアップを行います。このため、「AI に話しかけている」というよりは、PhD レベルの知識を持つ親切な友人とチャットしているように感じられるはずです。</p>
+                
+                <div class="not-prose my-10 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <a href="#" class="block p-4 bg-gray-50 hover:bg-gray-100 rounded-md transition">超短編小説 →</a>
+                    <a href="#" class="block p-4 bg-gray-50 hover:bg-gray-100 rounded-md transition">家庭向け太陽光発電計画 →</a>
+                    <a href="#" class="block p-4 bg-gray-50 hover:bg-gray-100 rounded-md transition">過去のモデルへの追悼 →</a>
+                    <a href="#" class="block p-4 bg-gray-50 hover:bg-gray-100 rounded-md transition">バンドの世界ツアーの計画 →</a>
+                    <a href="#" class="block p-4 bg-gray-50 hover:bg-gray-100 rounded-md transition">投手のリハビリプラン →</a>
+                </div>
+
+                <div class="not-prose mt-12 grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="bg-gray-50 p-6 rounded-lg">
+                        <h4 class="font-bold text-lg mb-2">GPT-4o</h4>
+                        <p class="text-sm italic text-gray-600 mb-4">write a short poem that makes an emotional impact. A widow in Kyoto keeps finding her late husband’s socks in strange places.</p>
+                        <div class="text-gray-800 space-y-4">
+                            <p class="font-semibold">Where Socks Shouldn't Be</p>
+                            <p>In the cupboard with the rice bowls — one,<br>
+                            folded neat, like he’d just stepped out.<br>
+                            Another behind the garden broom,<br>
+                            dusted with plum blossoms and doubt.</p>
+                            <p>On the tatami, soft and alone,<br>
+                            a heel turned toward the temple bell.<br>
+                            One in the kotatsu, warm as breath —<br>
+                            she weeps and doesn’t tell.</p>
+                            <p>The washer’s empty. Always is.<br>
+                            But socks keep surfacing, sly and kind.<br>
+                            She never asks how they return.<br>
+                            She only hopes he doesn’t mind.</p>
+                        </div>
+                    </div>
+                     <div class="bg-blue-50 border border-blue-200 p-6 rounded-lg">
+                        <h4 class="font-bold text-lg mb-2 flex items-center">
+                            GPT-5
+                            <span class="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                Improved
+                            </span>
+                        </h4>
+                        <p class="text-sm italic text-blue-700/70 mb-4">[GPT-5による、より洗練された詩の出力がここに表示されます]</p>
+                        <div class="text-blue-900/80 space-y-4 animate-pulse">
+                           <div class="h-4 bg-blue-200 rounded w-3/4"></div>
+                           <div class="h-4 bg-blue-200 rounded w-full"></div>
+                           <div class="h-4 bg-blue-200 rounded w-5/6"></div>
+                           <div class="h-4 bg-blue-200 rounded w-full"></div>
+                           <div class="h-4 bg-blue-200 rounded w-1/2"></div>
+                           <div class="h-4 bg-blue-200 rounded w-3/4"></div>
+                           <div class="h-4 bg-blue-200 rounded w-5/6"></div>
+                           <div class="h-4 bg-blue-200 rounded w-full"></div>
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+        </main>
+    </div>
+    
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // --- HealthBench Chart ---
+        const healthBenchCtx = document.getElementById('healthBenchChart').getContext('2d');
+        new Chart(healthBenchCtx, {
+            type: 'bar',
+            data: {
+                labels: ['GPT-5', 'OpenAI o3', 'GPT-4o'],
+                datasets: [
+                    {
+                        label: 'Without thinking',
+                        data: [54.3, 59.8, 32.0],
+                        backgroundColor: '#60a5fa', // blue-400
+                        borderColor: '#3b82f6', // blue-500
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'With thinking (Added)',
+                        data: [67.2 - 54.3, 0, 0], // Only GPT-5 has this data
+                        backgroundColor: '#2563eb', // blue-600
+                        borderColor: '#1d4ed8', // blue-700
+                        borderWidth: 1
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'HealthBench: Realistic health conversations',
+                        font: { size: 18, weight: 'bold' }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.parsed.y !== null) {
+                                    // For stacked charts, calculate total
+                                    if (context.datasetIndex === 1) {
+                                       const total = context.chart.data.datasets[0].data[context.dataIndex] + context.chart.data.datasets[1].data[context.dataIndex];
+                                       label = `With thinking: ${total.toFixed(1)}%`;
+                                    } else {
+                                       label += `${context.parsed.y.toFixed(1)}%`;
+                                    }
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        stacked: true,
+                    },
+                    y: {
+                        stacked: true,
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Score (%)'
+                        }
+                    }
+                }
+            }
+        });
+
+        // --- HealthBench Hard Chart ---
+        const healthBenchHardCtx = document.getElementById('healthBenchHardChart').getContext('2d');
+        new Chart(healthBenchHardCtx, {
+            type: 'bar',
+            data: {
+                labels: ['GPT-5', 'OpenAI o3', 'GPT-4o'],
+                datasets: [
+                    {
+                        label: 'Without thinking',
+                        data: [25.5, 31.6, 0.0],
+                        backgroundColor: '#fca5a5', // red-300
+                        borderColor: '#ef4444', // red-500
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'With thinking (Added)',
+                        data: [46.2 - 25.5, 0, 0], // Only GPT-5 has this data
+                        backgroundColor: '#b91c1c', // red-700
+                        borderColor: '#991b1b', // red-800
+                        borderWidth: 1
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'HealthBench Hard: Challenging health conversations',
+                        font: { size: 18, weight: 'bold' }
+                    },
+                     tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.parsed.y !== null) {
+                                    if (context.datasetIndex === 1) {
+                                       const total = context.chart.data.datasets[0].data[context.dataIndex] + context.chart.data.datasets[1].data[context.dataIndex];
+                                       label = `With thinking: ${total.toFixed(1)}%`;
+                                    } else {
+                                       label += `${context.parsed.y.toFixed(1)}%`;
+                                    }
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        stacked: true,
+                    },
+                    y: {
+                        stacked: true,
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Score (%)'
+                        }
+                    }
+                }
+            }
+        });
+    });
+    </script>
+
+</body>
+</html>
