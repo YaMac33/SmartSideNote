@@ -1,4 +1,4 @@
-// 先ほどのnewsTicker.jsの内容をコピペしてください
+// newsTicker.js
 (function() {
     const feeds = [
         { title: "国内総合（NHK）", icon: "📰", url: "https://www3.nhk.or.jp/rss/news/cat0.xml", genreUrl: "https://www3.nhk.or.jp/news/cat0.html" },
