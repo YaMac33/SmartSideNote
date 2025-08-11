@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>日本の省庁新着情報一覧</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 700px;
+      margin: auto;
+      padding: 1em;
+      background: #f7f7f7;
+    }
+    h1 {
+      text-align: center;
+    }
+    .news-section {
+      margin-bottom: 2em;
+      background: white;
+      padding: 1em;
+      border-radius: 8px;
+      box-shadow: 0 0 5px #ccc;
+    }
+    .news-section h2 {
+      border-bottom: 2px solid #333;
+      padding-bottom: 0.5em;
+    }
+    ul {
+      list-style: none;
+      padding-left: 0;
+    }
+    li {
+      margin-bottom: 0.5em;
+    }
+    a {
+      color: #0066cc;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    .date {
+      color: #999;
+      font-size: 0.9em;
+      margin-right: 0.5em;
+    }
+  </style>
+</head>
+<body>
+  <h1>日本の省庁 新着情報</h1>
+
+  <div class="news-section" id="kantei">
+    <h2>首相官邸</h2>
+    <ul id="kantei-list">読み込み中...</ul>
+  </div>
+
+  <!-- ここに他省庁のセクションを追加可能 -->
+
+  <script>
+    // rss2json API の無料版を使う例
+    // 例: 首相官邸ニュースRSS URL
+    const rssFeeds = {
+      kantei: "https://www.kantei.go.jp/jp/rss/news.rdf"
+      // 他の省庁のRSSがあればここに追加
+      // 例: "財務省": "https://www.mof.go.jp/rss/news.xml"
+    };
+
+    // rss2json APIエンドポイント (無料版は1日制限あり)
+    // https://rss2json.com/
+    const rss2jsonEndpoint = "https://api.rss2json.com/v1/api.json?rss_url=";
+
+    async function fetchAndDisplayRSS(id, rssUrl) {
+      const listEl = document.getElementById(id + "-list");
+      try {
+        const res = await fetch(rss2jsonEndpoint + encodeURIComponent(rssUrl));
+        if (!res.ok) throw new Error("ネットワークエラー");
+        const data = await res.json();
+        if (data.status !== "ok") throw new Error("RSS取得失敗");
+
+        const items = data.items.slice(0, 5); // 最新5件表示
+        listEl.innerHTML = "";
+
+        items.forEach(item => {
+          const li = document.createElement("li");
+          li.innerHTML = `<span class="date">[${new Date(item.pubDate).toLocaleDateString()}]</span> 
+            <a href="${item.link}" target="_blank" rel="noopener noreferrer">${item.title}</a>`;
+          listEl.appendChild(li);
+        });
+      } catch (e) {
+        listEl.textContent = "情報の取得に失敗しました。";
+        console.error(e);
+      }
+    }
+
+    // 複数RSSを順に読み込み表示
+    for (const [id, url] of Object.entries(rssFeeds)) {
+      fetchAndDisplayRSS(id, url);
+    }
+  </script>
+</body>
+</html>
