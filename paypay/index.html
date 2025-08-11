@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>PayPay（ペイペイ）とは — かんたん説明</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <h1>PayPay（ペイペイ）とは？</h1>
+      <p class="lead">スマホで使える日本のキャッシュレス決済アプリ。QRコードやバーコードでかんたんに支払えます。</p>
+    </div>
+  </header>
+
+  <main class="container">
+    <section id="overview" class="card">
+      <h2>概要</h2>
+      <p>
+        PayPayはスマートフォンで支払いができる決済サービスです。アプリに銀行口座やクレジットカードを紐づけて使います。街のお店やネットショッピング、公共料金の支払いなど幅広く利用されています。
+      </p>
+    </section>
+
+    <section id="how" class="card">
+      <h2>使い方（かんたん）</h2>
+      <ol>
+        <li>アプリをダウンロードしてアカウントを作る。</li>
+        <li>チャージ（残高方式）またはカード登録で支払い準備。</li>
+        <li>お店で「スキャン（QR読み取り）」または「バーコード提示（店員がスキャン）」で支払う。</li>
+      </ol>
+
+      <div class="demo">
+        <div class="demo-left">
+          <h3>支払い方式の説明</h3>
+          <ul>
+            <li><strong>ユーザースキャン（QR読み取り）</strong>：店頭にあるQRを自分で読み取って金額を入力。</li>
+            <li><strong>ストアスキャン（バーコード/提示）</strong>：自分のバーコードを店員に読み取ってもらう方式。</li>
+          </ul>
+        </div>
+        <div class="demo-right">
+          <h3>動くイメージ</h3>
+          <div id="fake-qr" class="qr">
+            <div class="qr-inner">QR</div>
+          </div>
+          <button id="simulatePay" class="btn">決済をシミュレーション</button>
+          <p id="payResult" class="muted"></p>
+        </div>
+      </div>
+    </section>
+
+    <section id="features" class="card">
+      <h2>主な特徴・メリット</h2>
+      <ul>
+        <li>スマホだけで支払い完了（カードや現金不要）</li>
+        <li>ポイントやキャンペーンでお得になることが多い</li>
+        <li>加盟店が多く、コンビニや飲食店、ECでも使える</li>
+        <li>送金・割り勘機能など、便利な機能がある</li>
+      </ul>
+    </section>
+
+    <section id="security" class="card">
+      <h2>セキュリティ・安心ポイント</h2>
+      <p>画面ロックやアプリのPIN、SMS認証などの本人確認が行われます。万が一のトラブル時は公式サポート窓口で対応しています（詳細は公式へ）。</p>
+    </section>
+
+    <section id="start" class="card">
+      <h2>はじめ方（とっかかり）</h2>
+      <ol>
+        <li>App Store / Google Play で「PayPay」を検索してインストール</li>
+        <li>アプリを起動して電話番号・SMS認証でアカウント作成</li>
+        <li>「チャージ」や「カード登録」で支払い準備完了</li>
+      </ol>
+      <p class="note">※ 実際の登録手順や対応カード・チャージ方法は公式の最新版を確認してください。</p>
+    </section>
+
+    <section id="faq" class="card">
+      <h2>よくある質問</h2>
+      <dl>
+        <dt>Q: 現金は使わなくていいの？</dt>
+        <dd>A: 基本的にはスマホで完結しますが、使えるお店によって異なるため現金も念のため持つと安心です。</dd>
+
+        <dt>Q: 手数料はかかる？</dt>
+        <dd>A: ユーザー側の基本的な支払いでは通常かからないことが多いですが、カードチャージや一部のサービスでは例外があるため公式情報を確認してください。</dd>
+      </dl>
+    </section>
+
+    <section id="sources" class="card">
+      <h2>参考・公式情報</h2>
+      <p>以下の公式ページやヘルプを基に作成しました（詳細や最新情報は公式サイトでご確認ください）。</p>
+      <ul id="sourceList" class="sources"></ul>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <small>このページは説明用サンプルです。正確な最新情報はPayPay公式サイトをご確認ください。</small>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
