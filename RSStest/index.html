@@ -2,11 +2,11 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <title>日本の省庁新着情報一覧</title>
+  <title>日本の省庁 新着情報一覧</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      max-width: 700px;
+      max-width: 800px;
       margin: auto;
       padding: 1em;
       background: #f7f7f7;
@@ -49,35 +49,80 @@
 <body>
   <h1>日本の省庁 新着情報</h1>
 
-  <div class="news-section" id="kantei">
-    <h2>首相官邸</h2>
-    <ul id="kantei-list">読み込み中...</ul>
+  <div class="news-section" id="somu">
+    <h2>総務省</h2>
+    <ul id="somu-list">読み込み中...</ul>
   </div>
 
-  <!-- ここに他省庁のセクションを追加可能 -->
+  <div class="news-section" id="mof">
+    <h2>財務省</h2>
+    <ul id="mof-list">読み込み中...</ul>
+  </div>
+
+  <div class="news-section" id="moj">
+    <h2>法務省</h2>
+    <ul id="moj-list">読み込み中...</ul>
+  </div>
+
+  <div class="news-section" id="mext">
+    <h2>文部科学省</h2>
+    <ul id="mext-list">読み込み中...</ul>
+  </div>
+
+  <div class="news-section" id="mhlw">
+    <h2>厚生労働省</h2>
+    <ul id="mhlw-list">読み込み中...</ul>
+  </div>
+
+  <div class="news-section" id="meti">
+    <h2>経済産業省</h2>
+    <ul id="meti-list">読み込み中...</ul>
+  </div>
+
+  <div class="news-section" id="mlit">
+    <h2>国土交通省</h2>
+    <ul id="mlit-list">読み込み中...</ul>
+  </div>
+
+  <div class="news-section" id="maff">
+    <h2>農林水産省</h2>
+    <ul id="maff-list">読み込み中...</ul>
+  </div>
+
+  <div class="news-section" id="env">
+    <h2>環境省</h2>
+    <ul id="env-list">読み込み中...</ul>
+  </div>
 
   <script>
-    // rss2json API の無料版を使う例
-    // 例: 首相官邸ニュースRSS URL
     const rssFeeds = {
-      kantei: "https://www.kantei.go.jp/jp/rss/news.rdf"
-      // 他の省庁のRSSがあればここに追加
-      // 例: "財務省": "https://www.mof.go.jp/rss/news.xml"
+      somu: "https://www.soumu.go.jp/menu_news/rss/rss.xml",
+      mof: "https://www.mof.go.jp/public_relations/rss.xml",
+      // 法務省は公式RSSがないため、暫定的に空に（将来別の方法で対応可）
+      moj: "", 
+      mext: "https://www.mext.go.jp/b_menu/rss/index.xml",
+      mhlw: "https://www.mhlw.go.jp/stf/houdou/index.rdf",
+      meti: "https://www.meti.go.jp/press/rss.xml",
+      mlit: "https://www.mlit.go.jp/rss/index.xml",
+      maff: "https://www.maff.go.jp/j/press/rss.xml",
+      env: "https://www.env.go.jp/press/rss/press.rdf"
     };
 
-    // rss2json APIエンドポイント (無料版は1日制限あり)
-    // https://rss2json.com/
     const rss2jsonEndpoint = "https://api.rss2json.com/v1/api.json?rss_url=";
 
     async function fetchAndDisplayRSS(id, rssUrl) {
       const listEl = document.getElementById(id + "-list");
+      if (!rssUrl) {
+        listEl.textContent = "RSSフィードがありません。";
+        return;
+      }
       try {
         const res = await fetch(rss2jsonEndpoint + encodeURIComponent(rssUrl));
         if (!res.ok) throw new Error("ネットワークエラー");
         const data = await res.json();
         if (data.status !== "ok") throw new Error("RSS取得失敗");
 
-        const items = data.items.slice(0, 5); // 最新5件表示
+        const items = data.items.slice(0, 5);
         listEl.innerHTML = "";
 
         items.forEach(item => {
@@ -92,7 +137,6 @@
       }
     }
 
-    // 複数RSSを順に読み込み表示
     for (const [id, url] of Object.entries(rssFeeds)) {
       fetchAndDisplayRSS(id, url);
     }
