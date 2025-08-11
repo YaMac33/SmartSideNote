@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>最新ニュースRSS表示</title>
+    <style>
+        body { font-family: sans-serif; background: #f9f9f9; padding: 20px; }
+        h2 { border-left: 5px solid #0078d4; padding-left: 8px; }
+        ul { list-style: none; padding: 0; }
+        li { margin-bottom: 5px; }
+        a { text-decoration: none; color: #0078d4; }
+        a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <h1>最新ニュース</h1>
+    <div id="news"></div>
+
+    <script>
+        // 表示するRSSフィード（ジャンル別）
+        const feeds = [
+            { title: "国内総合（NHK）", url: "https://www3.nhk.or.jp/rss/news/cat0.xml" },
+            { title: "政治（NHK）", url: "https://www3.nhk.or.jp/rss/news/cat4.xml" },
+            { title: "経済（日経）", url: "https://www.nikkei.com/rss/headline" },
+            { title: "国際（BBC日本語）", url: "https://feeds.bbci.co.uk/japanese/rss.xml" },
+            { title: "スポーツ（NHK）", url: "https://www3.nhk.or.jp/rss/news/cat7.xml" },
+            { title: "テクノロジー（ITmedia）", url: "https://rss.itmedia.co.jp/rss/2.0/news_bursts.xml" }
+        ];
+
+        // RSSを取得・表示（GoogleのRSS→JSON API経由）
+        async function loadRSS(feed) {
+            const api = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feed.url)}`;
+            try {
+                const res = await fetch(api);
+                const data = await res.json();
+                let html = `<h2>${feed.title}</h2><ul>`;
+                data.items.slice(0, 5).forEach(item => {
+                    html += `<li><a href="${item.link}" target="_blank">${item.title}</a></li>`;
+                });
+                html += "</ul>";
+                document.getElementById("news").innerHTML += html;
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        // 全フィード読み込み
+        feeds.forEach(loadRSS);
+    </script>
+</body>
+</html>
