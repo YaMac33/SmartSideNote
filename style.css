@@ -1,225 +1,138 @@
-/* :rootでカラー変数を定義 */
 :root {
-    --bg-color-light: #f4f7f9;
-    --text-color-light: #2c3e50;
-    --card-bg-color-light: #ffffff;
-    --border-color-light: #e0e0e0;
-    --accent-color: #3498db;
-    --accent-color-hover: #2980b9;
-    --shadow-color: rgba(0, 0, 0, 0.08);
-
-    --bg-color-dark: #2c3e50;
-    --text-color-dark: #ecf0f1;
-    --card-bg-color-dark: #34495e;
-    --border-color-dark: #4a627a;
+    --color-bg-light: #f9fafb;
+    --color-text-light: #1f2937;
+    --color-bg-dark: #1f2937;
+    --color-text-dark: #f9fafb;
+    --primary-color: #4f46e5;
+    --secondary-color: #6b7280;
+    --border-radius: 12px;
+    --transition-speed: 0.3s;
+    font-family: 'Noto Sans JP', sans-serif;
 }
 
-/* テーマに応じて変数を切り替え */
+/* テーマ切替 */
 [data-theme="light"] {
-    --bg-color: var(--bg-color-light);
-    --text-color: var(--text-color-light);
-    --card-bg-color: var(--card-bg-color-light);
-    --border-color: var(--border-color-light);
+    --color-bg: var(--color-bg-light);
+    --color-text: var(--color-text-light);
 }
-
 [data-theme="dark"] {
-    --bg-color: var(--bg-color-dark);
-    --text-color: var(--text-color-dark);
-    --card-bg-color: var(--card-bg-color-dark);
-    --border-color: var(--border-color-dark);
-}
-
-/* 基本設定 */
-*, *::before, *::after {
-    box-sizing: border-box;
+    --color-bg: var(--color-bg-dark);
+    --color-text: var(--color-text-dark);
 }
 
 body {
-    font-family: 'Noto Sans JP', sans-serif;
     margin: 0;
-    background-color: var(--bg-color);
-    color: var(--text-color);
-    transition: background-color 0.3s, color 0.3s;
+    padding: 0;
+    background: var(--color-bg);
+    color: var(--color-text);
+    transition: background var(--transition-speed), color var(--transition-speed);
 }
 
 .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 2rem;
+    max-width: 1000px;
+    margin: auto;
+    padding: 1.5rem;
 }
 
-/* ヘッダー */
-header {
+.site-header {
     text-align: center;
-    margin-bottom: 2rem;
+    padding: 1.5rem 0;
+}
+.site-header h1 {
+    margin: 0;
+    font-size: 2rem;
+    font-weight: 700;
+}
+.site-header p {
+    color: var(--secondary-color);
+    margin-top: 0.5rem;
 }
 
-header h1 {
-    font-size: 2.5rem;
-    margin-bottom: 0.5rem;
-}
-
-/* コントロール */
 .controls {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 2rem;
-    gap: 1rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
 }
 
+.search-wrapper {
+    flex: 1;
+}
 .search-box {
     width: 100%;
-    max-width: 400px;
-    padding: 0.75rem 1rem;
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    background-color: var(--card-bg-color);
-    color: var(--text-color);
+    padding: 0.6rem 1rem;
     font-size: 1rem;
-    transition: all 0.3s;
-}
-
-.search-box:focus {
+    border-radius: var(--border-radius);
+    border: 1px solid #ccc;
     outline: none;
-    border-color: var(--accent-color);
-    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.3);
+    transition: border var(--transition-speed);
+}
+.search-box:focus {
+    border: 1px solid var(--primary-color);
 }
 
 .theme-toggle {
-    background: none;
-    border: 1px solid var(--border-color);
-    padding: 0.5rem;
-    border-radius: 8px;
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: var(--border-radius);
+    padding: 0.6rem 1rem;
     cursor: pointer;
-    font-size: 1.5rem;
-    line-height: 1;
-    transition: all 0.3s;
+    font-size: 1.2rem;
+    transition: background var(--transition-speed);
 }
 .theme-toggle:hover {
-    background-color: var(--bg-color-light);
-}
-[data-theme="dark"] .theme-toggle:hover {
-    background-color: var(--card-bg-color-dark);
+    background: #3730a3;
 }
 
-/* テーマアイコンの表示切り替え */
-[data-theme="light"] .theme-icon-dark { display: none; }
-[data-theme="dark"] .theme-icon-light { display: none; }
-
-
-/* プロジェクト一覧 */
+/* プロジェクトカード */
 .project-list {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 1.5rem;
-    min-height: 200px; /* ローダー表示時の高さを確保 */
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
 }
-
-/* プロジェクトカード（JavaScriptで生成される要素のスタイル） */
 .project-card {
-    background-color: var(--card-bg-color);
-    border: 1px solid var(--border-color);
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 4px 12px var(--shadow-color);
-    transition: transform 0.3s, box-shadow 0.3s;
-    display: flex;
-    flex-direction: column;
+    background: white;
+    padding: 1rem;
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    transition: transform var(--transition-speed), box-shadow var(--transition-speed);
 }
-
 .project-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 20px var(--shadow-color);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
 }
 
-.project-card a {
-    text-decoration: none;
-    color: inherit;
-    display: flex;
-    flex-direction: column;
-    height: 100%;
+/* ダークテーマ用カード色 */
+[data-theme="dark"] .project-card {
+    background: #2d3748;
 }
 
-.project-thumbnail img {
-    width: 100%;
-    height: 180px;
-    object-fit: cover;
-    border-bottom: 1px solid var(--border-color);
-}
-
-.project-info {
-    padding: 1rem 1.5rem;
-    flex-grow: 1;
-}
-
-.project-info h3 {
-    margin: 0 0 0.5rem 0;
-    color: var(--accent-color);
-}
-
-.project-info p {
-    margin: 0;
+footer {
+    text-align: center;
+    padding: 2rem 0;
     font-size: 0.9rem;
-    line-height: 1.5;
+    color: var(--secondary-color);
 }
 
 /* ローダー */
 .loader {
-    margin: 4rem auto;
-    border: 6px solid var(--bg-color);
-    border-top: 6px solid var(--accent-color);
+    border: 4px solid #ccc;
+    border-top: 4px solid var(--primary-color);
     border-radius: 50%;
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
     animation: spin 1s linear infinite;
-    grid-column: 1 / -1; /* グリッドレイアウトの中央に配置 */
+    margin: 2rem auto;
 }
-
 @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+    to { transform: rotate(360deg); }
 }
 
-/* フッター */
-footer {
-    text-align: center;
-    margin-top: 3rem;
-    padding-top: 1.5rem;
-    border-top: 1px solid var(--border-color);
-    font-size: 0.9rem;
-    color: #7f8c8d;
-}
-[data-theme="dark"] footer {
-    color: #95a5a6;
-}
-
-/* アクセシビリティ用 */
+/* 視覚的に隠す要素 */
 .visually-hidden {
     position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border: 0;
-}
-
-/* レスポンシブ対応 */
-@media (max-width: 768px) {
-    .container {
-        padding: 1rem;
-    }
-    header h1 {
-        font-size: 2rem;
-    }
-    .controls {
-        flex-direction: column;
-        align-items: stretch;
-    }
-    .search-box {
-        max-width: none;
-    }
+    left: -9999px;
 }
