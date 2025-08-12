@@ -1,6 +1,9 @@
 const username = "YaMac33";
 const repoName = "ai-comparison-test-site";
 
+const projectDetails = {
+};
+
 const apiUrl = `https://api.github.com/repos/${username}/${repoName}/contents/`;
 const container = document.getElementById("project-list-container");
 const searchBox = document.getElementById("search-box");
