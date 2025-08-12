@@ -136,3 +136,56 @@ footer {
     position: absolute;
     left: -9999px;
 }
+
+/* カードフェードイン */
+.fade-in {
+    opacity: 0;
+    transform: translateY(10px);
+    animation: fadeInUp 0.4s ease forwards;
+}
+@keyframes fadeInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* テーマ切替アニメ */
+.theme-transition {
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+/* カードのホバー演出強化 */
+.project-card {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    padding: 1rem;
+    border-radius: var(--border-radius);
+    background: var(--color-bg);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.project-card:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+}
+
+/* ダークテーマでカード色変化 */
+[data-theme="dark"] .project-card {
+    background: #2d3748;
+}
+
+/* ローダー改良 */
+.loader {
+    border: 4px solid rgba(0,0,0,0.1);
+    border-top: 4px solid var(--primary-color);
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+    margin: 2rem auto;
+}
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
