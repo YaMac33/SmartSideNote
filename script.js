@@ -8,7 +8,7 @@ var projectDetails = {
 };
 
 document.addEventListener("DOMContentLoaded", function () {
-    var container = document.getElementById("project-list");
+    var container = document.getElementById("project-list-container");
 
     for (var folder in projectDetails) {
         var project = projectDetails[folder];
