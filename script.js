@@ -2,6 +2,18 @@ const username = "YaMac33";
 const repoName = "ai-comparison-test-site";
 
 const projectDetails = {
+    "car-sharing": { title: "カーシェアリング料金比較", description: "複数のカーシェアリングサービスの料金をシミュレーション・比較するサイトです。" },
+    "owarai": { title: "日本漫才の「ウケる」構造分析", description: "日本漫才の「ウケる」構造を分析したページです。" },
+    "administration": { title: "AI駆動型ガバナンス", description: "日本の行政セクターにおけるAI活用の現状、課題、そして未来への戦略的青写真を探るページです。" },
+    "AI": { title: "人工知能の未来", description: "産業、社会、ガバナンスの変革について調査したページです。" },
+    "civil-servant": { title: "「副業」から、地域を支える『複業』へ。", description: "公務員の「副業」について調査したページです。" },
+    "law": { title: "生ける法：解釈の探求", description: "なぜ同じ法律で、解釈が分かれるのかについて調査したページです。" },
+    "national-and-local": { title: "司法が描く国と地方の境界線", description: "国と地方が対立する時、誰が最終判断を下すのかについて調査したページです。" },
+    "autonomous-enterprise": { title: "自律的企業(Autonomous Enterprise)", description: "次世代のビジネスモデルと組織構造について解説します。" },
+    "document": { title: "AI活用ドキュメント解説", description: "メール送信フォームをWebサイトに設置する方法" },
+    "RSS": { title: "RSS取得からのGAS自動化", description: "Google One AI Premiumを活用したGoogle Apps Script自動化について解説します。" },
+    "law-and-AI": { title: "アルゴリズムの天秤", description: "AIは法曹界の仕事をどう変え、司法の未来をどう描くか？" },
+    "CloudStorage": { title: "iCloud+ と Google One AI Pro 活用", description: "iCloud+ と Google One AI Pro の最適な使い分け戦略" }
 };
 
 const apiUrl = `https://api.github.com/repos/${username}/${repoName}/contents/`;
