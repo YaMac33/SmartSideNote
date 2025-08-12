@@ -1,59 +1,87 @@
 <!DOCTYPE html>
-<html lang="ja" data-theme="light">
+<html lang="ja">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ページ一覧 - AI比較テストサイト</title>
-    <meta name="description" content="AIを活用して作成されたウェブアプリケーションやテストページのプロジェクト一覧です。">
-    <meta name="keywords" content="AI, 比較, テスト, ウェブアプリ, プロジェクト, 一覧">
-    <meta name="author" content="YaMac33">
-
-    <!-- OGP -->
-    <meta property="og:title" content="ページ一覧 - AI比較テストサイト">
-    <meta property="og:description" content="AIを活用して作成されたウェブアプリケーションやテストページのプロジェクト一覧です。">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://yamac33.github.io/ai-comparison-test-site/">
-    <meta property="og:image" content="https://yamac33.github.io/ai-comparison-test-site/ogp-image.png">
-
-    <!-- Webフォント -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
-
-    <!-- CSS -->
-    <link rel="stylesheet" href="style.css">
+    <title>AI比較サイト</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        header {
+            background-color: #333;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+        }
+        main {
+            padding: 1rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+        .project-card {
+            background-color: white;
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.2s;
+        }
+        .project-card:hover {
+            transform: scale(1.03);
+        }
+        .loader {
+            margin: 2rem auto;
+            border: 6px solid #f3f3f3;
+            border-top: 6px solid #333;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
 </head>
 <body>
-
-<div class="container">
-    <header class="site-header">
-        <h1>📄 ページ一覧</h1>
-        <p class="subtitle">AIを活用したさまざまなテストページを掲載しています。</p>
+    <header>
+        <h1>AI比較サイト</h1>
     </header>
-
-    <section class="controls" aria-labelledby="controls-heading">
-        <h2 id="controls-heading" class="visually-hidden">ページ操作</h2>
-        
-        <div class="search-wrapper">
-            <label for="search-box" class="visually-hidden">ページ検索</label>
-            <input type="search" id="search-box" class="search-box" placeholder="🔍 ページを検索..." autocomplete="off">
-        </div>
-
-        <button class="theme-toggle" id="theme-toggle" aria-label="テーマ切り替え">
-            <span class="theme-icon-light">☀️</span>
-            <span class="theme-icon-dark">🌙</span>
-        </button>
-    </section>
-
-    <main id="project-list-container" class="project-list" aria-live="polite">
+    <main id="project-list-container" aria-live="polite">
         <div class="loader"></div>
     </main>
-    
-    <footer>
-        <p>© 2024 YaMac33. All Rights Reserved.</p>
-    </footer>
-</div>
 
-<script src="script.js" defer></script>
+    <script>
+        var username = "YaMac33";
+        var repoName = "ai-comparison-test-site";
+
+        var projectDetails = {
+            "car-sharing": { title: "カーシェアリング料金比較" },
+            "owarai": { title: "日本漫才の『ウケる』研究" },
+            "ai-tools": { title: "AIツール比較" }
+        };
+
+        var container = document.getElementById("project-list-container");
+
+        function loadProjects() {
+            container.innerHTML = "";
+            Object.keys(projectDetails).forEach(function(key) {
+                var card = document.createElement("div");
+                card.className = "project-card";
+                var title = document.createElement("h3");
+                title.textContent = projectDetails[key].title;
+                card.appendChild(title);
+                container.appendChild(card);
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", loadProjects);
+    </script>
 </body>
 </html>
