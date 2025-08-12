@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>noteとGitHub Pages、自由度が高いのはどっち？HTML埋め込みの観点から比較</title>
+    <style>
+        /* --- 全体のスタイル --- */
+        :root {
+            --primary-color: #333;
+            --secondary-color: #007bff;
+            --background-color: #f8f9fa;
+            --content-bg-color: #ffffff;
+            --border-color: #e9ecef;
+            --quote-bg-color: #f1f3f5;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--background-color);
+            color: var(--primary-color);
+            line-height: 1.7;
+            font-size: 16px;
+        }
+
+        /* --- レイアウト --- */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 20px;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 60px;
+            padding: 20px;
+            color: #6c757d;
+            border-top: 1px solid var(--border-color);
+            font-size: 0.9em;
+        }
+
+        /* --- タイポグラフィ --- */
+        h1 {
+            font-size: 2.2em;
+            color: var(--primary-color);
+            margin: 0;
+        }
+
+        h2 {
+            font-size: 1.8em;
+            border-bottom: 3px solid var(--secondary-color);
+            padding-bottom: 10px;
+            margin-top: 50px;
+            margin-bottom: 25px;
+        }
+
+        h3 {
+            font-size: 1.3em;
+            margin-top: 30px;
+            border-left: 5px solid var(--secondary-color);
+            padding-left: 15px;
+        }
+
+        p {
+            margin-bottom: 1.2em;
+        }
+        
+        a {
+            color: var(--secondary-color);
+            text-decoration: none;
+        }
+        
+        a:hover {
+            text-decoration: underline;
+        }
+
+        ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        li {
+            position: relative;
+            padding-left: 25px;
+            margin-bottom: 10px;
+        }
+
+        li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--secondary-color);
+            font-weight: bold;
+        }
+        
+        /* --- コンポーネント --- */
+        .blog-post {
+            background-color: var(--content-bg-color);
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        blockquote {
+            background-color: var(--quote-bg-color);
+            border-left: 5px solid var(--secondary-color);
+            margin: 30px 0;
+            padding: 20px 25px;
+            font-style: italic;
+            border-radius: 5px;
+        }
+        
+        blockquote p {
+            margin: 0;
+        }
+
+        /* --- JavaScript用スタイル --- */
+        .scroll-top-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 24px;
+            line-height: 50px;
+            text-align: center;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s, transform 0.3s;
+            transform: translateY(20px);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            z-index: 1000;
+        }
+        
+        .scroll-top-btn.is-visible {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        
+        .fade-in.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* --- レスポンシブ対応 --- */
+        @media (max-width: 768px) {
+            h1 { font-size: 1.8em; }
+            h2 { font-size: 1.5em; }
+            .blog-post { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>noteとGitHub Pages、自由度が高いのはどっち？</h1>
+            <p>HTML埋め込みの観点から徹底比較</p>
+        </header>
+
+        <main>
+            <article class="blog-post">
+                <p class="fade-in">ブログ投稿サイトで、「noteはHTMLを埋め込むことができないから自由度が低い」と感じることはありませんか？一方で、「GitHub PagesのほうがHTMLを埋め込めるから自由度が高い」という意見もよく聞きます。</p>
+                <p class="fade-in">あなたのその認識は概ね正しいです。ブログ投稿プラットフォームであるnoteと、静的サイトホスティングサービスであるGitHub Pagesは、それぞれ異なる目的と特性を持っているため、「自由度」という観点ではGitHub Pagesに軍配が上がります。</p>
+
+                <section>
+                    <h2 class="fade-in">noteの特徴と「自由度」の制約</h2>
+                    <p class="fade-in">noteは、誰でも簡単に文章や画像を投稿できることに特化したサービスです。そのため、プラットフォームとしての利便性を高めるために、以下のような制約が設けられています。</p>
+                    <ul class="fade-in">
+                        <li><strong>HTMLの直接編集は不可:</strong> noteの編集画面は、あらかじめ用意された機能（見出し、画像、動画の埋め込みなど）を使ってコンテンツを作成する仕組みです。ユーザーが直接HTMLタグを記述することはできません。これにより、セキュリティリスクの低減や、サイト全体の一貫したデザインを維持しています。</li>
+                        <li><strong>埋め込み（iframe）は可能:</strong> 特定の外部サービス（YouTube、Twitter、Spotifyなど）のコンテンツは、URLを貼り付けることで埋め込むことができます。しかし、これもnoteが許可したサービスに限られます。</li>
+                        <li><strong>目的:</strong> noteは「コンテンツを簡単に発信し、多くの人に届ける」ことに主眼を置いています。HTMLの知識がなくてもブログを始められる点が最大のメリットです。</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2 class="fade-in">GitHub Pagesの特徴と「自由度」の高さ</h2>
+                    <p class="fade-in">一方、GitHub Pagesは、GitHubのリポジトリに保存されたHTML、CSS、JavaScriptなどのファイルをそのままウェブサイトとして公開するサービスです。</p>
+                    <ul class="fade-in">
+                        <li><strong>HTMLを自由に記述可能:</strong> あなたが作成したHTMLファイルをそのまま公開できるため、レイアウト、デザイン、機能など、ウェブサイトのすべてを自由にカスタマイズできます。これが「自由度が高い」と感じる最大の理由です。</li>
+                        <li><strong>静的サイトのホスティング:</strong> GitHub Pagesは静的なウェブサイト（データベースやサーバーサイドの処理を必要としないサイト）の公開に特化しています。ブログ記事の更新も、HTMLファイルを更新してリポジトリにプッシュすれば完了です。</li>
+                        <li><strong>自動化が可能:</strong> GitHub Actionsを使えば、RSSフィードの取得や記事の自動生成など、さまざまなタスクを自動化できます。</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2 class="fade-in">どちらを選ぶべきか？</h2>
+                    <p class="fade-in">どちらが優れているかというよりは、あなたの目的によって使い分けるのが良いでしょう。</p>
+
+                    <h3 class="fade-in">noteがおすすめな人</h3>
+                    <ul class="fade-in">
+                        <li>手軽に文章を発信したい。</li>
+                        <li>HTMLやCSSの知識がない。</li>
+                        <li>noteのコミュニティ内で記事を読まれたい。</li>
+                        <li>有料コンテンツやメンバーシップ機能を利用したい。</li>
+                        <li>とにかく早くブログを始めたい。</li>
+                    </ul>
+
+                    <h3 class="fade-in">GitHub Pagesがおすすめな人</h3>
+                    <ul class="fade-in">
+                        <li>ウェブサイトの見た目や機能を徹底的にカスタマイズしたい。</li>
+                        <li>HTMLやCSS、JavaScriptの知識がある、またはこれから学びたい。</li>
+                        <li>ブログ記事の生成やデプロイを自動化したい。</li>
+                        <li>ブログを自分の技術ポートフォリオの一部として活用したい。</li>
+                    </ul>
+                </section>
+
+                <blockquote class="fade-in">
+                    <p><strong>結論として</strong>、HTMLを自由に埋め込みたい、またはウェブサイトの見た目や機能を完全にコントロールしたいのであれば、GitHub Pagesのほうが圧倒的に高い自由度を提供します。noteは手軽さが強みであり、その手軽さと引き換えに自由度が制限されている、という位置づけです。</p>
+                </blockquote>
+            </article>
+        </main>
+
+        <footer>
+            <p>&copy; 2025 あなたのブログ名. All Rights Reserved.</p>
+        </footer>
+    </div>
+
+    <a href="#" id="scrollTopButton" class="scroll-top-btn" aria-label="ページトップへ戻る">↑</a>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // --- 1. スクロールに応じたフェードインアニメーション ---
+            const targets = document.querySelectorAll('.fade-in');
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    // 要素がビューポートに入ったら is-visible クラスを付与
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        // 一度表示したら監視を停止してパフォーマンスを向上
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, {
+                rootMargin: '0px', // ビューポートの境界
+                threshold: 0.1     // 10%見えたらトリガー
+            });
+
+            // 各要素を監視対象に追加
+            targets.forEach(target => {
+                observer.observe(target);
+            });
+
+            // --- 2. ページトップへ戻るボタン ---
+            const scrollTopButton = document.getElementById('scrollTopButton');
+
+            // ある程度スクロールしたらボタンを表示
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 300) {
+                    scrollTopButton.classList.add('is-visible');
+                } else {
+                    scrollTopButton.classList.remove('is-visible');
+                }
+            });
+
+            // ボタンクリックでスムーズにトップへスクロール
+            scrollTopButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+
+        });
+    </script>
+
+</body>
+</html>
