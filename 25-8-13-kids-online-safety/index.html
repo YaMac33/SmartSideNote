@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>【備忘録】夏休みの子供のネットトラブルと親の役割</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Poppins:wght@600&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- CSS Reset --- */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* --- 基本スタイリング --- */
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            line-height: 1.8;
+            color: #333;
+            background-color: #f8f9fa; /* 少し柔らかい白 */
+            overflow-x: hidden; /* 横スクロールを防止 */
+        }
+
+        /* --- コンテナとレイアウト --- */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* --- ヘッダー --- */
+        .page-header {
+            text-align: center;
+            padding: 60px 20px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-bottom-left-radius: 20% 5%;
+            border-bottom-right-radius: 20% 5%;
+        }
+        .page-header h1 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        /* --- セクションと見出しのスタイル --- */
+        section {
+            margin-bottom: 60px;
+        }
+
+        h2 {
+            font-size: 2rem;
+            color: #3f51b5; /* アクセントカラー */
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+            display: inline-block;
+        }
+
+        p {
+            margin-bottom: 1.5em;
+            font-size: 1.1rem;
+        }
+
+        strong {
+            color: #d9534f; /* 強調したい部分の色 */
+        }
+
+        /* --- 3ステップのアコーディオン --- */
+        .steps-container {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        .step {
+            border-bottom: 1px solid #ddd;
+        }
+        .step:last-child {
+            border-bottom: none;
+        }
+        .step-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px;
+            cursor: pointer;
+            background-color: #fff;
+            transition: background-color 0.3s ease;
+        }
+        .step-header:hover {
+            background-color: #f1f3f5;
+        }
+        .step-header h3 {
+            font-size: 1.3rem;
+            color: #333;
+            display: flex;
+            align-items: center;
+        }
+        .step-header h3 .icon {
+            width: 30px;
+            height: 30px;
+            margin-right: 15px;
+            color: #667eea;
+        }
+        .step-header .arrow {
+            width: 24px;
+            height: 24px;
+            transition: transform 0.4s ease;
+        }
+
+        /* --- アコーディオンの開閉アニメーション --- */
+        .step-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out, padding 0.5s ease-in-out;
+            background-color: #fff;
+            padding: 0 20px;
+        }
+        .step-content ul {
+            list-style: none;
+            padding: 20px 0;
+        }
+        .step-content li {
+            padding: 10px 0 10px 25px;
+            position: relative;
+        }
+        .step-content li::before {
+            content: '✔';
+            position: absolute;
+            left: 0;
+            color: #28a745; /* チェックマークの色 */
+            font-weight: bold;
+        }
+
+        /* --- アコーディオンが開いた時のスタイル --- */
+        .step.active .step-header {
+            background-color: #e9ecef;
+        }
+        .step.active .arrow {
+            transform: rotate(180deg);
+        }
+        .step.active .step-content {
+            /* JavaScriptで高さを設定 */
+            padding: 10px 20px;
+        }
+        
+        /* --- フッター --- */
+        .page-footer {
+            text-align: center;
+            padding: 30px 20px;
+            background-color: #343a40;
+            color: #f8f9fa;
+        }
+        .page-footer p {
+            margin: 0;
+            font-size: 0.9rem;
+        }
+
+        /* --- スクロールアニメーション用クラス --- */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .animate-on-scroll.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- レスポンシブ対応 --- */
+        @media (max-width: 768px) {
+            .page-header h1 {
+                font-size: 2rem;
+            }
+            h2 {
+                font-size: 1.6rem;
+            }
+            p {
+                font-size: 1rem;
+            }
+            .step-header h3 {
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="page-header">
+        <div class="container">
+            <h1>【自分用メモ】<br>夏休みの子供のネットトラブルと親の役割</h1>
+        </div>
+    </header>
+
+    <main class="container">
+
+        <section class="intro-section animate-on-scroll">
+            <p>どうも、自分です。夏休みもいよいよ本番！子供たちが家にいる時間が増えて、スマホやゲームに夢中になる時間も自然と長くなるよね。友達とオンラインで繋がれるのはすごく良いことだけど、ふと<strong>「ネットの向こう側って、本当に安全なのかな？」</strong>って心配になる瞬間がある。</p>
+            <p>トラブルが起きてからじゃ遅いし、かといって頭ごなしに「ダメ！」って言うのも違う気がする。そこで今回は、専門家の意見や色々な記事を参考に、親としてどう向き合っていくべきか、自分なりに大事なポイントをまとめておこうと思う。未来の自分のための「備忘録」です。</p>
+        </section>
+
+        <section class="why-now-section animate-on-scroll">
+            <h2>なぜ「今」ネットの危険性を再確認するの？</h2>
+            <p>まず、なんでこのタイミングで？って話だけど、やっぱり夏休みは子供がネットに触れる時間が格段に増えるから。神戸大学の森井名誉教授も言ってたけど、ネットを完全に断つのはもう無理な時代。むしろ、現実の社会と同じように、ネットの世界でも色々な経験をしながら学んでいく必要があるんだよね。</p>
+            <p>ただ、大きな違いが一つ。それは、ネットの向こう側にいる相手が<strong>「どんな人か分からない」</strong>こと。悪意を持った大人が、子供のふりをして近づいてくる可能性だってゼロじゃない。子供の承認欲求をうまく利用して、危ないことに誘導するケースもあるみたい。だからこそ、親が「盾」になるための知識をアップデートしておくことが、すごく大事なんだなと。</p>
+        </section>
+
+        <section class="steps-section animate-on-scroll">
+            <h2>親ができる具体的な対策３ステップ</h2>
+            <p>じゃあ具体的に、親として何ができるんだろう？情報を整理してみたら、大きく3つのステップが見えてきた。</p>
+            <div class="steps-container">
+                <div class="step">
+                    <div class="step-header">
+                        <h3>
+                            <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" /></svg>
+                            ステップ1：まずは知ることから始めよう（知識武装編）
+                        </h3>
+                        <svg class="arrow" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
+                    </div>
+                    <div class="step-content">
+                        <p>とにかく、親が知らないことには始まらない。子供を守るための基本的な知識をインプットしておこう。</p>
+                        <ul>
+                            <li><strong>基本的な防御策を知る:</strong> まずは「フィルタリング」や「ペアレンタルコントロール」。有害なサイトをブロックしたり、利用時間を制限したりできる。どんな機能があるか、うちで使ってるスマホやゲーム機の設定を一度見直してみよう。</li>
+                            <li><strong>最新の脅威を知る:</strong> 最近は「生成AI」や「ディープフェイク」を使ったイジメなんていうのもあるらしい。「そんなの映画の話でしょ？」って思ってたら、あっという間に時代遅れになっちゃう。子供がどんな技術に触れているのか、親もアンテナを張っておく必要がありそうだね。</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-header">
+                        <h3>
+                            <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                            ステップ2：一方的な禁止はNG！親子でルールを作ろう（対話編）
+                        </h3>
+                        <svg class="arrow" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
+                    </div>
+                    <div class="step-content">
+                        <p>知識武装ができたら、次は子供とのコミュニケーション。これが一番難しくて、一番大事な部分かもしれない。</p>
+                        <p>セコムの記事にあった「子供自身にルールを考えさせる」っていうアプローチ、すごく良いなと思った。親が一方的に「〇時間はダメ！」って押し付けるんじゃなくて、「どうしてルールが必要だと思う？」「どんな時に危ないと感じる？」って、子供の考えを引き出してあげる。</p>
+                        <p>こども家庭庁のサイトには、年齢に合わせたルール作りのヒントとか、具体的なリーフレットもあるみたいだから、そういうのを参考にしながら、我が家だけのオリジナルルールを一緒に作ってみるのが良さそう。</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-header">
+                        <h3>
+                            <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.286zm0 13.036h.008v.008h-.008v-.008z" /></svg>
+                            ステップ3：「もしも」の時に慌てないために（備え編）
+                        </h3>
+                        <svg class="arrow" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
+                    </div>
+                    <div class="step-content">
+                        <p>どんなに気をつけていても、トラブルに巻き込まれる可能性はゼロじゃない。だからこそ、万が一の時のための準備も必要。</p>
+                        <p>日本ユニセフ協会のサイトに書いてあったけど、もしネットいじめにあったら、証拠（スクリーンショットとか）を残すことがすごく大事。そして、すぐに相談できる窓口を知っておくこと。学校の先生でもいいし、専門の相談窓口でもいい。「困った時は一人で抱え込まずに、必ずパパかママに言ってね。絶対にあなたの味方だから」って、日頃から伝えておくことが、何よりのセーフティネットになるんだろうな。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="balance-section animate-on-scroll">
+            <h2>大切なのは「見守り」と「対話」のバランス</h2>
+            <p>結局のところ、子供のネット利用を24時間監視するのは不可能だし、そんなことしちゃいけない。子供にもプライバシーがあるし、自分で考えて行動する力（自立心）を育ててあげたいから。</p>
+            <p>大事なのは、危ないことから守る「見守り」と、子供を信じて任せる部分の「バランス」。そして、そのバランスを取るために欠かせないのが、日頃からの「対話」なんだと思う。</p>
+            <p>「最近どんなゲームしてるの？」「SNSで面白い投稿あった？」なんていう何気ない会話から、子供が何に興味を持って、誰と繋がっているのか、少しでもいいから知っておきたい。そうやって信頼関係を築いておけば、いざという時に子供の方から「ねぇ、ちょっと聞いてほしいんだけど…」って、SOSを出してくれるかもしれないから。</p>
+        </section>
+
+        <section class="conclusion-section animate-on-scroll">
+            <p>よし、このメモを忘れずに、まずは子供と一緒にスマホのルールについて話す時間を作ってみようかな。</p>
+        </section>
+
+    </main>
+
+    <footer class="page-footer">
+        <p>&copy; 2025 自分用の備忘録</p>
+    </footer>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        
+        // --- スクロールアニメーション ---
+        // Intersection Observer APIを使用して、要素が画面内に入ったらクラスを付与する
+        const animatedElements = document.querySelectorAll('.animate-on-scroll');
+
+        // Observerのオプション
+        const observerOptions = {
+            root: null, // ビューポートをルートとする
+            rootMargin: '0px',
+            threshold: 0.1 // 10%見えたら発火
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                // isIntersectingプロパティで画面内に入ったか判定
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    // 一度表示されたら、監視を停止してパフォーマンスを向上
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        // 各要素の監視を開始
+        animatedElements.forEach(el => {
+            observer.observe(el);
+        });
+
+
+        // --- 3ステップのアコーディオン機能 ---
+        const steps = document.querySelectorAll('.step');
+
+        steps.forEach(step => {
+            const header = step.querySelector('.step-header');
+            const content = step.querySelector('.step-content');
+
+            header.addEventListener('click', () => {
+                // クリックされた要素の親（.step）に 'active' クラスをトグル
+                step.classList.toggle('active');
+
+                // 'active'クラスが付いているかチェック
+                if (step.classList.contains('active')) {
+                    // コンテンツの高さを設定してスライドアニメーションを実行
+                    // scrollHeightは要素のコンテンツ全体の高さを取得する
+                    content.style.maxHeight = content.scrollHeight + 'px';
+                } else {
+                    // コンテンツを閉じる
+                    content.style.maxHeight = '0px';
+                }
+            });
+        });
+
+    });
+    </script>
+
+</body>
+</html>
