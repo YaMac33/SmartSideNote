@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AIと法のインタラクティブ・ダッシュボード</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: "Calm Harmony" - A calming palette using warm neutrals (beige, off-white) with slate blue and gray for accents, designed to feel professional and reduce cognitive load. -->
+    <!-- Application Structure Plan: The application is designed as a single-page, tabbed dashboard. This structure was chosen over a linear document format to allow users to non-linearly explore the complex, multi-faceted information. Users can jump directly to their area of interest (e.g., "Global Regulations") without scrolling through unrelated content. Key interactions include tabbed navigation for high-level topics, accordions for drilling down into details (like sector-specific liability), and interactive charts for at-a-glance comparisons. This architecture enhances usability by breaking down dense information into manageable, thematically-grouped chunks, facilitating better understanding and retention. -->
+    <!-- Visualization & Content Choices: 
+        - Report Info: Comparing regulatory approaches of EU, US, Japan. -> Goal: Compare. -> Viz: Horizontal Bar Chart (Chart.js). -> Interaction: Tooltips on hover. -> Justification: A bar chart provides an immediate, powerful visual comparison of the differing regulatory philosophies ("hard law" vs. "soft law"), which is more impactful than a text-based table.
+        - Report Info: IP rights lifecycle (Development vs. Use). -> Goal: Organize/Explain Process. -> Viz: Two-column HTML/CSS layout with cards. -> Interaction: Hover effects on cards. -> Justification: This clearly visualizes the two distinct phases discussed in the report, making the complex legal distinctions easier to follow.
+        - Report Info: Liability issues (traditional law failure). -> Goal: Explain Process/Problem. -> Viz: Flowchart-style diagram (HTML/CSS). -> Interaction: None, static visual. -> Justification: A simple visual flow effectively illustrates the concept of the "liability gap" without needing complex libraries.
+        - Report Info: High-risk AI system obligations. -> Goal: Organize/Inform. -> Viz: Accordion component (HTML/JS). -> Interaction: Click to expand/collapse. -> Justification: An accordion neatly organizes the long list of obligations from the report, preventing information overload and allowing users to focus on one category at a time.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background-color: #FDFBF6;
+            color: #333;
+        }
+        .tab-active {
+            border-bottom: 2px solid #4A5568;
+            color: #2D3748;
+            font-weight: 600;
+        }
+        .tab-inactive {
+            color: #718096;
+        }
+        .content-section {
+            display: none;
+        }
+        .content-section.active {
+            display: block;
+        }
+        .card {
+            background-color: #FFFFFF;
+            border: 1px solid #E2E8F0;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            transition: all 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.07), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .accordion-header {
+            cursor: pointer;
+        }
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <header class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-800 tracking-tight">AIと法のインタラクティブ・ダッシュボード</h1>
+            <p class="mt-4 text-lg text-gray-600 max-w-3xl mx-auto">AIの急速な普及がもたらす法的課題と世界の規制動向を、対話的に探る</p>
+        </header>
+
+        <nav class="mb-8 border-b border-gray-200">
+            <ul class="flex flex-wrap -mb-px text-sm font-medium text-center">
+                <li class="mr-2">
+                    <button class="tab-btn inline-block p-4 rounded-t-lg tab-active" data-tab="home">概要</button>
+                </li>
+                <li class="mr-2">
+                    <button class="tab-btn inline-block p-4 rounded-t-lg tab-inactive" data-tab="issues">中核的法的課題</button>
+                </li>
+                <li class="mr-2">
+                    <button class="tab-btn inline-block p-4 rounded-t-lg tab-inactive" data-tab="regulations">世界の規制動向</button>
+                </li>
+                <li class="mr-2">
+                    <button class="tab-btn inline-block p-4 rounded-t-lg tab-inactive" data-tab="future">横断的・将来的課題</button>
+                </li>
+                <li>
+                    <button class="tab-btn inline-block p-4 rounded-t-lg tab-inactive" data-tab="strategy">事業者向け戦略</button>
+                </li>
+            </ul>
+        </nav>
+
+        <main>
+            <div id="home" class="content-section active">
+                <div class="bg-white p-8 rounded-xl shadow-md">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4">AIがもたらす法的パラダイムシフト</h2>
+                    <p class="text-gray-700 leading-relaxed mb-6">人工知能（AI）、特に生成AIの急速な社会実装は、単なる技術革新に留まらず、既存の法体系の根幹を揺るがすパラダイムシフトを引き起こしています。人間の行為や意図を前提に構築されてきた知的財産権、損害賠償責任、プライバシー保護などの法分野は、自律的に学習し、予測困難なアウトプットを生成するAIの登場によって、その解釈と適用の限界に直面しています。このダッシュボードでは、これらの複雑な課題を体系的に分析し、事業者が取るべき戦略を探ります。</p>
+                    
+                    <div class="grid md:grid-cols-3 gap-6 text-center">
+                        <div class="p-6 bg-blue-50 rounded-lg">
+                            <h3 class="font-bold text-xl text-blue-800 mb-2">💡 イノベーション促進</h3>
+                            <p class="text-sm text-blue-700">経済競争力を高めるため、技術の進歩を阻害しない柔軟なルールが求められます。</p>
+                        </div>
+                        <div class="p-6 bg-green-50 rounded-lg">
+                            <h3 class="font-bold text-xl text-green-800 mb-2">🛡️ 権利・安全の保護</h3>
+                            <p class="text-sm text-green-700">基本的人権、プライバシー、公共の安全を守るための厳格な規制が必要です。</p>
+                        </div>
+                        <div class="p-6 bg-yellow-50 rounded-lg">
+                            <h3 class="font-bold text-xl text-yellow-800 mb-2">🌍 国際的相互運用性</h3>
+                            <p class="text-sm text-yellow-700">国境を越えるデジタル経済において、各国の規制が連携できる仕組みが不可欠です。</p>
+                        </div>
+                    </div>
+                    <p class="text-center mt-4 text-gray-500 text-sm">世界の規制当局は、この「規制のトリレンマ」のバランスを取るという難題に直面しています。</p>
+                </div>
+            </div>
+
+            <div id="issues" class="content-section">
+                <div class="bg-white p-8 rounded-xl shadow-md">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-2">AIが提起する中核的法的課題</h2>
+                    <p class="text-gray-600 mb-8">AI技術は、伝統的な法解釈の枠組みでは捉えきれない新たな論点を数多く生み出しています。ここでは特に重要な「知的財産権」「責任の所在」「プライバシー」の3つの課題を掘り下げます。</p>
+                    
+                    <div class="space-y-8">
+                        <div class="card p-6">
+                            <h3 class="text-xl font-bold text-gray-800 mb-4">1. 知的財産権：創造性のフロンティア</h3>
+                            <p class="mb-4 text-gray-600">生成AIと著作権の問題は、AIのライフサイクルである「開発・学習段階」と「生成・利用段階」の2つのフェーズで考える必要があります。</p>
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div class="border-l-4 border-indigo-300 pl-4">
+                                    <h4 class="font-semibold text-lg">Phase 1: 開発・学習段階</h4>
+                                    <p class="text-sm text-gray-600 mt-2"><strong>論点:</strong> 学習データの利用は著作権侵害か？</p>
+                                    <p class="text-sm text-gray-600 mt-1"><strong>日本の法理:</strong> 著作権法30条の4により「非享受目的」の利用は原則適法。しかし「著作権者の利益を不当に害する場合」は例外。</p>
+                                </div>
+                                <div class="border-l-4 border-teal-300 pl-4">
+                                    <h4 class="font-semibold text-lg">Phase 2: 生成・利用段階</h4>
+                                    <p class="text-sm text-gray-600 mt-2"><strong>論点:</strong> AI生成物は既存の著作物を侵害するか？ / AI生成物自体に著作権は発生するか？</p>
+                                    <p class="text-sm text-gray-600 mt-1"><strong>判断基準:</strong> 「類似性」と「依拠性」で判断。アイデアや作風の類似は侵害ではない。人間の「創作的寄与」がなければ著作物性は認められない。</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card p-6">
+                            <h3 class="text-xl font-bold text-gray-800 mb-4">2. 責任の所在：自律システムが起こす損害</h3>
+                            <p class="mb-4 text-gray-600">AIが損害を与えた場合、誰が責任を負うのか。AIの「ブラックボックス問題」は、加害者の「過失」立証を困難にし、「責任の空白」を生むリスクがあります。</p>
+                            <div class="accordion-container space-y-2">
+                                <div class="accordion-item border rounded-lg">
+                                    <div class="accordion-header p-4 flex justify-between items-center">
+                                        <h4 class="font-semibold">自動運転 (レベル4)</h4>
+                                        <span class="transform transition-transform duration-300">▼</span>
+                                    </div>
+                                    <div class="accordion-content px-4 pb-4">
+                                        <p class="text-sm text-gray-600">従来の「運転者」に代わり「特定自動運行主任者」が新設。事故時には、主任者、所有者、製造業者、開発者など、複数の主体が責任を問われる可能性があり、責任関係が複雑化します。</p>
+                                    </div>
+                                </div>
+                                <div class="accordion-item border rounded-lg">
+                                    <div class="accordion-header p-4 flex justify-between items-center">
+                                        <h4 class="font-semibold">医療AI</h4>
+                                        <span class="transform transition-transform duration-300">▼</span>
+                                    </div>
+                                    <div class="accordion-content px-4 pb-4">
+                                        <p class="text-sm text-gray-600">現状ではAIは「支援ツール」の位置づけで、最終的な医療過誤責任は全面的に医師が負います。しかし将来、AIの診断に従わないことが「過失」と判断される可能性も指摘されています。</p>
+                                    </div>
+                                </div>
+                                <div class="accordion-item border rounded-lg">
+                                    <div class="accordion-header p-4 flex justify-between items-center">
+                                        <h4 class="font-semibold">金融AI (与信審査)</h4>
+                                        <span class="transform transition-transform duration-300">▼</span>
+                                    </div>
+                                    <div class="accordion-content px-4 pb-4">
+                                        <p class="text-sm text-gray-600">学習データから差別につながる「代理変数」をAIが見つけ出し、結果的に特定の集団に不利益な判断を下す「アルゴリズムによる差別」が大きなリスクとなっています。</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card p-6">
+                            <h3 class="text-xl font-bold text-gray-800 mb-4">3. プライバシーとデータ保護</h3>
+                            <p class="mb-4 text-gray-600">AIは性能向上のために膨大なデータを必要とし、これが個人のプライバシー権と緊張関係にあります。特に、従業員が機密情報や個人情報を外部AIサービスに入力してしまうリスクは深刻です。</p>
+                            <ul class="list-disc list-inside space-y-2 text-gray-700">
+                                <li><strong>利用目的の特定:</strong> 顧客サポートのために取得した個人情報を、目的外でAIモデルの性能向上のために利用することは原則として許されません。</li>
+                                <li><strong>第三者提供の制限:</strong> 入力データをAI提供事業者が自社のモデル改良に利用できる契約の場合、本人の同意が必要な「第三者提供」に該当する可能性があります。</li>
+                                <li><strong>委託先の監督:</strong> AI事業者が純粋にデータ処理を行う「委託」契約の場合、利用者には委託先に対する適切な監督義務が課されます。</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="regulations" class="content-section">
+                <div class="bg-white p-8 rounded-xl shadow-md">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-2">世界のAI規制動向</h2>
+                    <p class="text-gray-600 mb-8">AIへの向き合い方は国や地域で大きく異なり、「三速の世界」とも言える状況が生まれています。ここでは、EU、米国、日本のアプローチを比較します。</p>
+                    
+                    <div class="mb-8">
+                        <h3 class="text-xl font-bold text-center text-gray-800 mb-4">規制アプローチの比較</h3>
+                        <div class="chart-container">
+                            <canvas id="regulationsChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="grid md:grid-cols-3 gap-6">
+                        <div class="card p-6">
+                            <h3 class="font-semibold text-lg mb-2">🇪🇺 欧州連合</h3>
+                            <p class="text-sm text-gray-600"><strong>アプローチ:</strong> 「リスクベース」の包括的法規制（EU AI法）。基本的人権の保護を最優先する「ハードロー」。</p>
+                            <p class="text-sm text-gray-600 mt-2"><strong>特徴:</strong> AIをリスク別に4分類（許容不可、高、限定、最小）し、高リスクAIには市場投入前後の厳格な義務を課す。違反時の制裁金は非常に高額。</p>
+                        </div>
+                        <div class="card p-6">
+                            <h3 class="font-semibold text-lg mb-2">🇺🇸 米国</h3>
+                            <p class="text-sm text-gray-600"><strong>アプローチ:</strong> イノベーションを優先し、自主的なフレームワークとセクター別の事後的な法執行を組み合わせる「ソフトロー」。</p>
+                            <p class="text-sm text-gray-600 mt-2"><strong>特徴:</strong> NISTの「AIリスクマネジメントフレームワーク」が事実上の業界標準。FTCなどが既存法に基づき、AIによる差別や虚偽広告を摘発。</p>
+                        </div>
+                        <div class="card p-6">
+                            <h3 class="font-semibold text-lg mb-2">🇯🇵 日本</h3>
+                            <p class="text-sm text-gray-600"><strong>アプローチ:</strong> EUと米国の中間に位置し、官民協調による柔軟な「アジャイル・ガバナンス」を模索。</p>
+                            <p class="text-sm text-gray-600 mt-2"><strong>特徴:</strong> 法的拘束力のない「AI事業者ガイドライン」が中心。技術変化に迅速に対応できるが、実効性が課題となる可能性も。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="future" class="content-section">
+                <div class="bg-white p-8 rounded-xl shadow-md">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-2">横断的・将来的課題</h2>
+                    <p class="text-gray-600 mb-8">AIガバナンスは、個別の法分野を超えた、より横断的な課題にも直面しています。ここでは「説明可能性」「バイアス」「自律エージェント」の3つの未来の論点を探ります。</p>
+                    
+                    <div class="space-y-8">
+                        <div class="card p-6">
+                            <h3 class="text-xl font-bold text-gray-800 mb-3">1. 説明可能性 (XAI) と透明性</h3>
+                            <p class="text-gray-600 mb-4">AIの判断プロセスが「ブラックボックス」であることは、特に医療や金融など高リスク領域で深刻な問題となります。なぜその結論に至ったのかを説明できなければ、判断の公正さを検証できません。EU AI法では、高リスクAIシステムに対して、そのロジックを説明する義務を課しており、「説明責任」は倫理的な努力目標から法的な要請へと変化しています。</p>
+                        </div>
+
+                        <div class="card p-6">
+                            <h3 class="text-xl font-bold text-gray-800 mb-3">2. AIバイアスの統制と公平性</h3>
+                            <p class="text-gray-600 mb-4">AIは、学習データに潜む社会的な偏見や差別を意図せず学習し、増幅させるリスクがあります。過去の採用データに性別の偏りがあれば、AI採用ツールもその偏りを学習してしまいます。このようなAIによる差別は、倫理的な問題であると同時に、各国の差別禁止法に違反する明確な法的リスクです。「AI監査」を通じて、システムの公平性を技術的・手続き的に検証する取り組みが重要になっています。</p>
+                        </div>
+                        
+                        <div class="card p-6">
+                            <h3 class="text-xl font-bold text-gray-800 mb-3">3. 自律型AIエージェントの法的地位</h3>
+                            <p class="text-gray-600 mb-4">人間に代わって自律的に契約などを締結する「AIエージェント」の登場は、法学に根源的な問いを投げかけます。現在の法体系ではAIは「モノ」ですが、高度な自律性を持つエージェントに限定的な権利能力、すなわち「電子人格」を認めるべきかという議論も始まっています。より短期的には、AIエージェントが権限を逸脱した際の契約の効力や責任の所在が、電子商取引における新たな課題となります。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="strategy" class="content-section">
+                <div class="bg-white p-8 rounded-xl shadow-md">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-2">事業者が講じるべき戦略的法務・リスク管理</h2>
+                    <p class="text-gray-600 mb-8">AIを安全かつ効果的に活用するためには、技術の導入だけでなく、リスクを管理し社会的な信頼を確保するための包括的なガバナンス体制の構築が不可欠です。</p>
+                    
+                    <div class="space-y-6">
+                        <div class="p-6 border-l-4 border-green-500 bg-green-50">
+                            <h3 class="font-bold text-lg text-green-800">1. AIガバナンス体制の構築</h3>
+                            <p class="mt-2 text-green-700">法務、技術、倫理など部門横断的な「AIガバナンス委員会」を設置します。社内の全AIシステムを台帳管理し、リスクレベルを分類（例：EU AI法の高・中・低リスクモデルを参考）。リスクに応じた管理策（文書化、テスト、人間による監視等）を適用します。</p>
+                        </div>
+                        <div class="p-6 border-l-4 border-blue-500 bg-blue-50">
+                            <h3 class="font-bold text-lg text-blue-800">2. 契約実務における留意点</h3>
+                            <p class="mt-2 text-blue-700">外部AIサービスの利用規約を精査し、入力データの所有権、秘密保持、二次利用の可否、責任分界点を確認します。開発委託契約では、学習済みモデルの知財権帰属や学習データの適法性に関する保証を盛り込みます。</p>
+                        </div>
+                        <div class="p-6 border-l-4 border-yellow-500 bg-yellow-50">
+                            <h3 class="font-bold text-lg text-yellow-800">3. 社内規定の策定と従業員教育</h3>
+                            <p class="mt-2 text-yellow-700">機密情報や個人情報を外部の生成AIに入力することを禁止する明確な社内規定を策定・周知します。全従業員を対象に、著作権リスク、情報漏洩リスク、フェイク情報へのリテラシー向上など、責任あるAI利用に関する研修を実施します。</p>
+                        </div>
+                         <div class="p-6 border-l-4 border-purple-500 bg-purple-50">
+                            <h3 class="font-bold text-lg text-purple-800">4. 国際的なコンプライアンス戦略</h3>
+                            <p class="mt-2 text-purple-700">グローバルに事業を展開する場合、最も厳格な規制（例：EU AI法）を基準に自社のガバナンス体制を構築する「ハイウォーターマーク」アプローチが有効です。これにより、コンプライアンスレベルの平準化とリスク低減が期待できます。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const tabs = document.querySelectorAll('.tab-btn');
+            const contentSections = document.querySelectorAll('.content-section');
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const target = tab.getAttribute('data-tab');
+
+                    tabs.forEach(t => {
+                        t.classList.remove('tab-active');
+                        t.classList.add('tab-inactive');
+                    });
+                    tab.classList.add('tab-active');
+                    tab.classList.remove('tab-inactive');
+
+                    contentSections.forEach(section => {
+                        if (section.id === target) {
+                            section.classList.add('active');
+                        } else {
+                            section.classList.remove('active');
+                        }
+                    });
+                });
+            });
+
+            const accordions = document.querySelectorAll('.accordion-item');
+            accordions.forEach(accordion => {
+                const header = accordion.querySelector('.accordion-header');
+                const content = accordion.querySelector('.accordion-content');
+                const icon = header.querySelector('span');
+
+                header.addEventListener('click', () => {
+                    if (content.style.maxHeight) {
+                        content.style.maxHeight = null;
+                        icon.style.transform = 'rotate(0deg)';
+                    } else {
+                        content.style.maxHeight = content.scrollHeight + "px";
+                        icon.style.transform = 'rotate(180deg)';
+                    }
+                });
+            });
+
+            const ctx = document.getElementById('regulationsChart');
+            if (ctx) {
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['欧州連合 (EU)', '米国 (US)', '日本 (JP)'],
+                        datasets: [{
+                            label: '規制の強度・拘束力',
+                            data: [90, 40, 60],
+                            backgroundColor: [
+                                'rgba(59, 130, 246, 0.7)',
+                                'rgba(16, 185, 129, 0.7)',
+                                'rgba(239, 68, 68, 0.7)'
+                            ],
+                            borderColor: [
+                                'rgba(59, 130, 246, 1)',
+                                'rgba(16, 185, 129, 1)',
+                                'rgba(239, 68, 68, 1)'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        indexAxis: 'y',
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        let value = context.raw;
+                                        let label = '';
+                                        if (value > 80) label = 'ハードロー (包括的・事前規制)';
+                                        else if (value > 50) label = '中間的アプローチ (官民協調)';
+                                        else label = 'ソフトロー (自主規制・事後執行)';
+                                        return label;
+                                    }
+                                }
+                            },
+                            title: {
+                                display: true,
+                                text: '主要国・地域のAI規制アプローチ'
+                            }
+                        },
+                        scales: {
+                            x: {
+                                beginAtZero: true,
+                                max: 100,
+                                ticks: {
+                                    callback: function(value) {
+                                        if (value === 0) return 'ソフト';
+                                        if (value === 100) return 'ハード';
+                                        return '';
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
