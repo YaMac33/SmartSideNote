@@ -1,7 +1,7 @@
-var username = "YaMac33";
-var repoName = "ai-comparison-test-site";
+const username = "YaMac33";
+const repoName = "ai-comparison-test-site";
 
-var projectDetails = {
+const projectDetails = {
     "car-sharing": { title: "カーシェアリング料金比較", description: "複数のカーシェアリングサービスの料金をシミュレーション・比較するサイトです。" },
     "owarai": { title: "日本漫才の「ウケる」構造分析", description: "日本漫才の「ウケる」構造を分析したページです。" },
     "administration": { title: "AI駆動型ガバナンス", description: "日本の行政セクターにおけるAI活用の現状、課題、そして未来への戦略的青写真を探るページです。" },
@@ -16,71 +16,72 @@ var projectDetails = {
     "CloudStorage": { title: "iCloud+ と Google One AI Pro 活用", description: "iCloud+ と Google One AI Pro の最適な使い分け戦略" }
 };
 
-var apiUrl = 'https://api.github.com/repos/' + username + '/' + repoName + '/contents/';
-var container = document.getElementById('project-list-container');
-var searchBox = document.getElementById('search-box');
+const apiUrl = `https://api.github.com/repos/${username}/${repoName}/contents/`;
+const container = document.getElementById("project-list-container");
+const searchBox = document.getElementById("search-box");
+const themeToggle = document.getElementById("theme-toggle");
 
 let allProjects = [];
 
-fetch(apiUrl)
-    .then(response => {
-        if (!response.ok) throw new Error('リポジトリ情報の取得に失敗しました。');
-        return response.json();
-    })
-    .then(data => {
-        container.innerHTML = ''; 
-        var dirs = data.filter(item => item.type === 'dir' && !item.name.startsWith('.'));
-        if (dirs.length === 0) {
-            container.innerHTML = '<p>プロジェクトが見つかりませんでした。</p>';
-            return;
-        }
+// 初期化
+init();
 
-        allProjects = dirs.map(dir => {
-            var details = projectDetails[dir.name] || {
-                title: dir.name,
-                description: "説明文がまだ登録されていません。"
-            };
-            return {
-                name: dir.name,
-                title: details.title,
-                description: details.description
-            };
-        });
-
+async function init() {
+    showLoader();
+    try {
+        const data = await fetchData(apiUrl);
+        allProjects = extractProjects(data);
         renderProjects(allProjects);
-    })
-    .catch(error => {
-        console.error('エラー:', error);
-        container.innerHTML = '<p style="text-align: center; color: red;">エラーが発生しました。一覧を読み込めません。</p>';
-    });
+    } catch (err) {
+        console.error(err);
+        showError("エラーが発生しました。一覧を読み込めません。");
+    }
+}
 
+// APIからデータ取得
+async function fetchData(url) {
+    const res = await fetch(url);
+    if (!res.ok) throw new Error("リポジトリ情報の取得に失敗しました。");
+    return res.json();
+}
+
+// ディレクトリ情報からプロジェクト配列生成
+function extractProjects(data) {
+    const dirs = data.filter(item => item.type === "dir" && !item.name.startsWith("."));
+    return dirs.map(dir => {
+        const details = projectDetails[dir.name] || {
+            title: dir.name,
+            description: "説明文がまだ登録されていません。"
+        };
+        return { name: dir.name, ...details };
+    });
+}
+
+// カード描画
 function renderProjects(projects) {
-    container.innerHTML = '';
+    container.innerHTML = "";
     if (projects.length === 0) {
-        container.innerHTML = '<p>該当するページが見つかりません。</p>';
+        showMessage("該当するページが見つかりません。");
         return;
     }
-    projects.forEach(proj => {
-        var card = document.createElement('a');
-        card.href = './' + proj.name + '/';
-        card.className = 'project-card';
+    projects.forEach((proj, index) => {
+        const card = document.createElement("a");
+        card.href = `./${proj.name}/`;
+        card.className = "project-card fade-in";
+        card.style.animationDelay = `${index * 0.05}s`;
 
-        var title = document.createElement('h2');
-        title.textContent = proj.title;
-
-        var description = document.createElement('p');
-        description.textContent = proj.description;
-
-        card.appendChild(title);
-        card.appendChild(description);
+        card.innerHTML = `
+            <h2>${proj.title}</h2>
+            <p>${proj.description}</p>
+        `;
         container.appendChild(card);
     });
 }
 
 // 検索機能
-searchBox.addEventListener('input', () => {
-    var query = searchBox.value.toLowerCase();
-    var filtered = allProjects.filter(p => 
+searchBox.addEventListener("input", () => {
+    const query = searchBox.value.toLowerCase();
+    const filtered = allProjects.filter(p =>
         p.title.toLowerCase().includes(query) ||
         p.description.toLowerCase().includes(query) ||
         p.name.toLowerCase().includes(query)
@@ -88,7 +89,22 @@ searchBox.addEventListener('input', () => {
     renderProjects(filtered);
 });
 
-// ダークモード切替
-document.getElementById('theme-toggle').addEventListener('click', () => {
-    document.body.classList.toggle('dark');
+// テーマ切替（アニメーション付き）
+themeToggle.addEventListener("click", () => {
+    const html = document.documentElement;
+    const currentTheme = html.getAttribute("data-theme");
+    html.setAttribute("data-theme", currentTheme === "light" ? "dark" : "light");
+    html.classList.add("theme-transition");
+    setTimeout(() => html.classList.remove("theme-transition"), 300);
 });
+
+// 共通UI関数
+function showLoader() {
+    container.innerHTML = `<div class="loader"></div>`;
+}
+function showError(msg) {
+    container.innerHTML = `<p style="text-align:center; color:red;">${msg}</p>`;
+}
+function showMessage(msg) {
+    container.innerHTML = `<p style="text-align:center;">${msg}</p>`;
+}
