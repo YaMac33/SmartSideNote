@@ -22,15 +22,11 @@
 
     <!-- CSS -->
     <link rel="stylesheet" href="style.css">
-
-    <!-- PWA準備 -->
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#ffffff">
 </head>
 <body>
 
 <div class="container">
-    <header class="site-header" role="banner">
+    <header class="site-header">
         <h1>📄 ページ一覧</h1>
         <p class="subtitle">AIを活用したさまざまなテストページを掲載しています。</p>
     </header>
@@ -40,31 +36,24 @@
         
         <div class="search-wrapper">
             <label for="search-box" class="visually-hidden">ページ検索</label>
-            <input type="search" 
-                   id="search-box" 
-                   class="search-box" 
-                   placeholder="🔍 ページを検索..."
-                   aria-label="ページ検索"
-                   autocomplete="off">
+            <input type="search" id="search-box" class="search-box" placeholder="🔍 ページを検索..." autocomplete="off">
         </div>
 
-        <button class="theme-toggle" id="theme-toggle" 
-                aria-label="テーマ切り替え（ライト・ダーク）">
-            <span class="theme-icon-light" aria-hidden="true">☀️</span>
-            <span class="theme-icon-dark" aria-hidden="true">🌙</span>
+        <button class="theme-toggle" id="theme-toggle" aria-label="テーマ切り替え">
+            <span class="theme-icon-light">☀️</span>
+            <span class="theme-icon-dark">🌙</span>
         </button>
     </section>
 
-    <main id="project-list-container" class="project-list" aria-live="polite" role="main">
-        <div class="loader" aria-hidden="true"></div>
+    <main id="project-list-container" class="project-list" aria-live="polite">
+        <div class="loader"></div>
     </main>
     
-    <footer role="contentinfo">
+    <footer>
         <p>© 2024 YaMac33. All Rights Reserved.</p>
     </footer>
 </div>
 
-<!-- JSは遅延読み込み -->
 <script src="script.js" defer></script>
 </body>
 </html>
