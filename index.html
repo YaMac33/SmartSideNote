@@ -73,7 +73,8 @@
                 .then(response => response.json())
                 .then(data => {
                     container.innerHTML = ""; // ローダーを削除
-                    // 取得したデータからディレクトリのみをフィルタリングして表示
+                    data.reverse(); // ★ この行を追加して配列を逆順にする
+                        // 取得したデータからディレクトリのみをフィルタリングして表示
                     data.forEach(item => {
                         // アイテムがディレクトリの場合のみカードを作成
                         if (item.type === "dir") {
