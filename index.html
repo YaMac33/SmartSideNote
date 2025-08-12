@@ -3,45 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI比較サイト</title>
+    <title>プロジェクト一覧</title>
     <style>
         body {
             font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
             margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
+            padding: 20px;
         }
-        header {
-            background-color: #333;
-            color: white;
-            padding: 1rem;
+        h1 {
             text-align: center;
+            margin-bottom: 30px;
         }
-        main {
-            padding: 1rem;
+        .project-list {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1rem;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
         }
         .project-card {
-            background-color: white;
-            padding: 1rem;
+            background-color: #fff;
             border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            text-align: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            overflow: hidden;
             transition: transform 0.2s;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
         }
         .project-card:hover {
-            transform: scale(1.03);
+            transform: translateY(-5px);
+        }
+        .project-card h3 {
+            font-size: 1.2em;
+            margin: 16px;
         }
         .loader {
-            margin: 2rem auto;
-            border: 6px solid #f3f3f3;
-            border-top: 6px solid #333;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
             border-radius: 50%;
             width: 40px;
             height: 40px;
             animation: spin 1s linear infinite;
+            margin: 100px auto;
         }
         @keyframes spin {
             0% { transform: rotate(0deg); }
@@ -50,10 +53,9 @@
     </style>
 </head>
 <body>
-    <header>
-        <h1>AI比較サイト</h1>
-    </header>
-    <main id="project-list-container" aria-live="polite">
+
+    <h1>プロジェクト一覧</h1>
+    <main id="project-list-container" class="project-list" aria-live="polite">
         <div class="loader"></div>
     </main>
 
@@ -63,25 +65,34 @@
 
         var projectDetails = {
             "car-sharing": { title: "カーシェアリング料金比較" },
-            "owarai": { title: "日本漫才の『ウケる』研究" },
-            "ai-tools": { title: "AIツール比較" }
+            "owarai": { title: "日本漫才の『ウケる』分析" },
+            "tech-blog": { title: "技術ブログまとめ" }
         };
 
-        var container = document.getElementById("project-list-container");
+        document.addEventListener("DOMContentLoaded", function () {
+            var container = document.getElementById("project-list-container");
+            container.innerHTML = '<div class="loader"></div>';
 
-        function loadProjects() {
-            container.innerHTML = "";
-            Object.keys(projectDetails).forEach(function(key) {
-                var card = document.createElement("div");
-                card.className = "project-card";
-                var title = document.createElement("h3");
-                title.textContent = projectDetails[key].title;
-                card.appendChild(title);
-                container.appendChild(card);
-            });
-        }
-
-        document.addEventListener("DOMContentLoaded", loadProjects);
+            fetch(`https://api.github.com/repos/${username}/${repoName}/contents/`)
+                .then(response => response.json())
+                .then(data => {
+                    container.innerHTML = "";
+                    data.forEach(item => {
+                        if (item.type === "dir" && projectDetails[item.name]) {
+                            var card = document.createElement("a");
+                            card.href = `./${item.name}/`;
+                            card.className = "project-card";
+                            card.innerHTML = `<h3>${projectDetails[item.name].title}</h3>`;
+                            container.appendChild(card);
+                        }
+                    });
+                })
+                .catch(error => {
+                    container.innerHTML = "<p>データの読み込みに失敗しました。</p>";
+                    console.error(error);
+                });
+        });
     </script>
+
 </body>
 </html>
