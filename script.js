@@ -41,7 +41,7 @@ function extractProjects(data) {
         .filter(item => item.type === "dir" && !item.name.startsWith("."))
         .map(dir => ({
             name: dir.name,
-            ...(projectDetails[dir.name] || { title: dir.name, description: "説明文未登録" })
+            ...(projectDetails[dir.name] || { title: dir.name})
         }));
 }
 
