@@ -60,36 +60,35 @@
     </main>
 
     <script>
+        // GitHubのリポジトリ情報を設定
         var username = "YaMac33";
         var repoName = "ai-comparison-test-site";
-
-        var projectDetails = {
-            "car-sharing": { title: "カーシェアリング料金比較" },
-            "owarai": { title: "日本漫才の『ウケる』分析" },
-            "tech-blog": { title: "技術ブログまとめ" }
-        };
 
         document.addEventListener("DOMContentLoaded", function () {
             var container = document.getElementById("project-list-container");
             container.innerHTML = '<div class="loader"></div>';
 
+            // GitHub APIからリポジトリのコンテンツを取得
             fetch(`https://api.github.com/repos/${username}/${repoName}/contents/`)
                 .then(response => response.json())
                 .then(data => {
-                    container.innerHTML = "";
+                    container.innerHTML = ""; // ローダーを削除
+                    // 取得したデータからディレクトリのみをフィルタリングして表示
                     data.forEach(item => {
-                        if (item.type === "dir" && projectDetails[item.name]) {
+                        // アイテムがディレクトリの場合のみカードを作成
+                        if (item.type === "dir") {
                             var card = document.createElement("a");
-                            card.href = `./${item.name}/`;
+                            card.href = `./${item.name}/`; // ディレクトリへのリンクを設定
                             card.className = "project-card";
-                            card.innerHTML = `<h3>${projectDetails[item.name].title}</h3>`;
+                            // カードのタイトルにはディレクトリ名を使用
+                            card.innerHTML = `<h3>${item.name}</h3>`;
                             container.appendChild(card);
                         }
                     });
                 })
                 .catch(error => {
                     container.innerHTML = "<p>データの読み込みに失敗しました。</p>";
-                    console.error(error);
+                    console.error("Error fetching repository contents:", error);
                 });
         });
     </script>
