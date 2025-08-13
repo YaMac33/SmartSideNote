@@ -14,14 +14,15 @@
     gtag('config', 'G-MQ9ZB4LYWP');
   </script>
 
-  <link rel="stylesheet" href="style.css"> <!-- ページ共通スタイル（必要に応じて） -->
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
   <!-- 共通ヘッダー -->
   <div id="header-placeholder"></div>
   <script>
-    fetch('header.html')
+    // ページ階層に合わせて header.html のパスを調整
+    fetch('header.html') 
       .then(res => res.text())
       .then(data => {
         document.getElementById('header-placeholder').innerHTML = data;
