@@ -11,373 +11,149 @@
       padding: 0;
       box-sizing: border-box;
     }
-    
-    :root {
-      --primary: #6366f1;
-      --primary-dark: #4f46e5;
-      --secondary: #f472b6;
-      --accent: #06b6d4;
-      --bg-dark: #0f0f23;
-      --bg-card: rgba(15, 15, 35, 0.8);
-      --text-primary: #e2e8f0;
-      --text-secondary: #94a3b8;
-      --border: rgba(148, 163, 184, 0.2);
-      --glass: rgba(255, 255, 255, 0.05);
-    }
-
     body {
-      font-family: 'Inter', 'Segoe UI', 'Hiragino Sans', sans-serif;
-      background: var(--bg-dark);
-      background-image: 
-        radial-gradient(circle at 25% 25%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
-        radial-gradient(circle at 75% 75%, rgba(244, 114, 182, 0.1) 0%, transparent 50%),
-        radial-gradient(circle at 50% 0%, rgba(6, 182, 212, 0.1) 0%, transparent 50%);
-      background-attachment: fixed;
-      color: var(--text-primary);
-      line-height: 1.7;
+      font-family: 'Segoe UI', 'Hiragino Kaku Gothic ProN', Meiryo, sans-serif;
+      background: linear-gradient(to bottom right, #ffffff, #f5f7fa);
+      color: #333;
+      line-height: 1.8;
       padding: 20px;
-      min-height: 100vh;
-      position: relative;
-      overflow-x: hidden;
-    }
-
-    body::before {
-      content: '';
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: linear-gradient(45deg, transparent 0%, rgba(99, 102, 241, 0.02) 50%, transparent 100%);
-      animation: shimmer 8s ease-in-out infinite alternate;
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    @keyframes shimmer {
-      0% { transform: translateX(-100px) rotateZ(45deg); opacity: 0.3; }
-      100% { transform: translateX(100px) rotateZ(45deg); opacity: 0.7; }
-    }
-
-    /* === グローバル動的背景 === */
-    .floating-shapes {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 1;
-      overflow: hidden;
-    }
-
-    .shape {
-      position: absolute;
-      border-radius: 50%;
-      background: linear-gradient(45deg, rgba(99, 102, 241, 0.1), rgba(244, 114, 182, 0.1));
-      animation: float 20s infinite linear;
-      filter: blur(1px);
-    }
-
-    .shape:nth-child(1) {
-      width: 80px;
-      height: 80px;
-      top: 20%;
-      left: -100px;
-      animation-duration: 25s;
-    }
-
-    .shape:nth-child(2) {
-      width: 120px;
-      height: 120px;
-      top: 60%;
-      left: -150px;
-      animation-duration: 30s;
-      animation-delay: -10s;
-    }
-
-    .shape:nth-child(3) {
-      width: 60px;
-      height: 60px;
-      top: 80%;
-      left: -80px;
-      animation-duration: 35s;
-      animation-delay: -20s;
-    }
-
-    @keyframes float {
-      0% { transform: translateX(-100px) translateY(0px); }
-      100% { transform: translateX(calc(100vw + 100px)) translateY(-50px); }
     }
 
     /* === レイアウト === */
     main {
-      max-width: 1000px;
+      max-width: 900px;
       margin: 0 auto;
-      padding: 60px 40px;
-      background: var(--bg-card);
-      backdrop-filter: blur(20px);
-      border-radius: 24px;
-      border: 1px solid var(--border);
-      box-shadow: 
-        0 25px 50px rgba(0, 0, 0, 0.25),
-        inset 0 1px 0 rgba(255, 255, 255, 0.1);
-      position: relative;
-      z-index: 10;
+      padding: 40px 20px;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+      animation: fadeIn 1s ease-out;
     }
 
-    main::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 200px;
-      background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(244, 114, 182, 0.05) 100%);
-      border-radius: 24px 24px 0 0;
-      z-index: -1;
-    }
-
-    h1 {
-      font-size: 3.2rem;
-      font-weight: 800;
-      text-align: center;
-      margin-bottom: 60px;
-      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 50%, var(--accent) 100%);
-      background-size: 200% 200%;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      animation: gradientShift 4s ease-in-out infinite alternate, titleFade 1.2s ease-out forwards;
-      line-height: 1.2;
-    }
-
-    @keyframes gradientShift {
-      0% { background-position: 0% 50%; }
-      100% { background-position: 100% 50%; }
-    }
-
-    @keyframes titleFade {
-      from { opacity: 0; transform: translateY(-50px); }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
-    h2 {
-      font-size: 1.8rem;
-      font-weight: 700;
-      margin: 50px 0 25px 0;
-      color: var(--primary);
+    h1, h2 {
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      color: #222;
+      text-align: center;
+      margin-bottom: 50px;
       position: relative;
-      padding-left: 20px;
-      opacity: 0;
-      transform: translateX(-30px);
-      transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     }
-
-    h2::before {
-      content: '';
+    h1::after {
+      content: "✨";
       position: absolute;
-      left: 0;
-      top: 50%;
-      width: 4px;
-      height: 100%;
-      background: linear-gradient(135deg, var(--primary), var(--accent));
-      border-radius: 2px;
-      transform: translateY(-50%) scaleY(0);
-      transition: transform 0.6s ease;
+      right: -30px;
+      animation: sparkle 1.5s infinite ease-in-out;
+    }
+    @keyframes sparkle {
+      0%,100% { transform: rotate(0deg) scale(1); opacity: 0.8; }
+      50% { transform: rotate(20deg) scale(1.2); opacity: 1; }
     }
 
-    h2.visible {
-      opacity: 1;
-      transform: translateX(0);
-    }
-
-    h2.visible::before {
-      transform: translateY(-50%) scaleY(1);
-    }
-
-    p, ul, table {
-      margin-bottom: 30px;
+    h2 {
+      font-size: 1.6rem;
+      color: #2980b9;
       opacity: 0;
       transform: translateY(30px);
-      transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      transition: all 0.7s ease-out;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
-
-    .content-visible {
+    h2.visible {
       opacity: 1;
       transform: translateY(0);
     }
 
     p {
-      color: var(--text-secondary);
-      font-size: 1.1rem;
-      line-height: 1.8;
+      margin-bottom: 1em;
     }
 
     ul {
-      margin-left: 0;
-    }
-
-    li {
-      margin-bottom: 15px;
+      margin-left: 1.2em;
+      margin-bottom: 1.5em;
       list-style: none;
-      position: relative;
-      padding: 15px 20px 15px 50px;
-      background: var(--glass);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      transition: all 0.3s ease;
-      backdrop-filter: blur(10px);
     }
 
     li::before {
-      content: "✨";
-      position: absolute;
-      left: 18px;
-      top: 15px;
-      font-size: 1.2rem;
-      animation: sparkle 2s ease-in-out infinite;
-    }
-
-    li:hover {
-      background: rgba(99, 102, 241, 0.1);
-      transform: translateX(8px);
-      border-color: rgba(99, 102, 241, 0.3);
-    }
-
-    @keyframes sparkle {
-      0%, 100% { opacity: 0.7; transform: scale(1); }
-      50% { opacity: 1; transform: scale(1.1); }
-    }
-
-    /* === テーブルスタイル === */
-    .table-container {
-      background: var(--glass);
-      border-radius: 16px;
-      padding: 20px;
-      border: 1px solid var(--border);
-      backdrop-filter: blur(10px);
-      overflow-x: auto;
+      content: "👉 ";
     }
 
     table {
       width: 100%;
-      border-collapse: separate;
-      border-spacing: 0;
-      margin-bottom: 0;
-      border-radius: 12px;
+      border-collapse: collapse;
+      margin-bottom: 1.5em;
+      border-radius: 8px;
       overflow: hidden;
+      animation: fadeUp 1s ease-out;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     th, td {
-      padding: 18px 20px;
-      text-align: left;
-      border-bottom: 1px solid var(--border);
-      transition: all 0.3s ease;
+      border: 1px solid #eee;
+      padding: 14px;
+      text-align: center;
+      transition: background 0.3s;
     }
 
     th {
-      background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(244, 114, 182, 0.1));
-      color: var(--text-primary);
-      font-weight: 600;
-      font-size: 1rem;
-      letter-spacing: 0.5px;
-    }
-
-    td {
-      color: var(--text-secondary);
+      background-color: #f0f6fb;
     }
 
     tr:hover td {
-      background: rgba(99, 102, 241, 0.08);
-      color: var(--text-primary);
+      background: #fafcff;
     }
 
-    tr:last-child td {
-      border-bottom: none;
-    }
-
-    /* === ページトップボタン === */
+    /* === ボタンとリンク === */
     .button {
-      position: fixed;
-      bottom: 40px;
-      right: 40px;
-      width: 60px;
-      height: 60px;
-      background: linear-gradient(135deg, var(--primary), var(--accent));
+      display: inline-block;
+      background-color: #2980b9;
       color: #fff;
-      border-radius: 50%;
+      padding: 12px 24px;
+      margin-top: 30px;
+      border-radius: 30px;
       text-decoration: none;
-      font-size: 1.5rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 10px 25px rgba(99, 102, 241, 0.3);
-      transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-      z-index: 1000;
-      border: 2px solid transparent;
+      transition: all 0.4s ease;
+      font-weight: bold;
+      position: relative;
+      overflow: hidden;
     }
-
+    .button::after {
+      content: "⬆️";
+      position: absolute;
+      right: -40px;
+      opacity: 0;
+      transition: right 0.4s ease, opacity 0.4s ease;
+    }
     .button:hover {
-      transform: scale(1.1) rotate(360deg);
-      box-shadow: 0 15px 35px rgba(99, 102, 241, 0.4);
-      border-color: rgba(255, 255, 255, 0.2);
+      background-color: #3498db;
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+    }
+    .button:hover::after {
+      right: 12px;
+      opacity: 1;
     }
 
     /* === レスポンシブ対応 === */
-    @media (max-width: 768px) {
-      main {
-        padding: 40px 20px;
-      }
-      
-      h1 {
-        font-size: 2.2rem;
-      }
-      
-      h2 {
-        font-size: 1.5rem;
-      }
-      
-      li {
-        padding: 12px 15px 12px 40px;
-      }
-      
-      th, td {
-        padding: 12px 10px;
-        font-size: 0.9rem;
-      }
-      
-      .button {
-        width: 50px;
-        height: 50px;
-        bottom: 20px;
-        right: 20px;
-      }
-    }
-
-    /* === スクロール進捗バー === */
-    .progress-bar {
-      position: fixed;
-      top: 0;
-      left: 0;
-      height: 4px;
-      background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
-      z-index: 1001;
-      transform-origin: left;
-      transform: scaleX(0);
-      transition: transform 0.1s ease;
+    @media (max-width: 600px) {
+      h1 { font-size: 1.8rem; }
+      h2 { font-size: 1.3rem; }
+      table, th, td { font-size: 0.9rem; }
     }
   </style>
 </head>
 <body>
-  <div class="floating-shapes">
-    <div class="shape"></div>
-    <div class="shape"></div>
-    <div class="shape"></div>
-  </div>
-
-  <div class="progress-bar"></div>
-
   <main>
     <h1>📓 NoteBookLMって実際どうなの？使ってみたいと思って調べた話</h1>
 
@@ -392,23 +168,21 @@
 
     <h2 class="fade-section">🤔 ChatGPTやGeminiと何が違うの？</h2>
     <p>どちらも要約ができるAIですが、仕組みや使い勝手に違いがあります。</p>
-    <div class="table-container">
-      <table>
-        <thead>
-          <tr>
-            <th>比較項目</th>
-            <th>NoteBookLM</th>
-            <th>ChatGPT / Gemini</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr><td>情報の扱い方</td><td>アップロード文書全体を解析</td><td>貼り付けたテキストだけ処理</td></tr>
-          <tr><td>引用元</td><td>段落や出典を明示</td><td>根拠が不明な場合も</td></tr>
-          <tr><td>資料間の比較</td><td>複数ドキュメント横断可能</td><td>1件ずつ処理が基本</td></tr>
-          <tr><td>目的</td><td>学習・ノート用途特化</td><td>汎用チャットAI</td></tr>
-        </tbody>
-      </table>
-    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>比較項目</th>
+          <th>NoteBookLM</th>
+          <th>ChatGPT / Gemini</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>情報の扱い方</td><td>アップロード文書全体を解析</td><td>貼り付けたテキストだけ処理</td></tr>
+        <tr><td>引用元</td><td>段落や出典を明示</td><td>根拠が不明な場合も</td></tr>
+        <tr><td>資料間の比較</td><td>複数ドキュメント横断可能</td><td>1件ずつ処理が基本</td></tr>
+        <tr><td>目的</td><td>学習・ノート用途特化</td><td>汎用チャットAI</td></tr>
+      </tbody>
+    </table>
 
     <h2 class="fade-section">🛠️ 使い方の具体例</h2>
     <p>例えば、「法律の改正があったときに、内容を要約し、スライドと音声解説を作る」という用途にぴったり。</p>
@@ -443,55 +217,26 @@
     </ul>
 
     <p>📘 今後も使ってみたらレポートします！</p>
+    <a class="button" href="#">ページのトップへ戻る</a>
   </main>
 
-  <a class="button" href="#">⬆️</a>
-
   <script>
-    // === スクロール進捗バー ===
-    const progressBar = document.querySelector('.progress-bar');
-    
-    function updateProgressBar() {
-      const scrollTop = window.pageYOffset;
-      const docHeight = document.body.offsetHeight - window.innerHeight;
-      const progress = scrollTop / docHeight;
-      progressBar.style.transform = `scaleX(${progress})`;
-    }
-    
-    window.addEventListener('scroll', updateProgressBar);
-
-    // === セクションフェードイン（改良版） ===
+    // === フェードインアニメーション ===
     const sections = document.querySelectorAll('.fade-section');
-    const contentElements = document.querySelectorAll('p, ul, table, .table-container');
-    
     const observer = new IntersectionObserver(entries => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           entry.target.classList.add('visible');
-          
-          // 次の要素（p, ul, table）にvisibleクラスを追加
-          let nextElement = entry.target.nextElementSibling;
-          while (nextElement && (nextElement.tagName === 'P' || nextElement.tagName === 'UL' || nextElement.tagName === 'TABLE' || nextElement.classList.contains('table-container'))) {
-            setTimeout(() => {
-              nextElement.classList.add('content-visible');
-            }, 200);
-            nextElement = nextElement.nextElementSibling;
-            if (nextElement && nextElement.tagName === 'H2') break;
-          }
         }
       });
-    }, { threshold: 0.1 });
-    
+    }, { threshold: 0.2 });
     sections.forEach(section => observer.observe(section));
 
-    // === ページトップに戻る ===
-    document.querySelector('.button').addEventListener('click', e => {
+    // === ページトップに戻るスムーズスクロール ===
+    document.querySelector('.button').addEventListener('click', (e) => {
       e.preventDefault();
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
-
-    // === 初期化時にプログレスバーを更新 ===
-    updateProgressBar();
   </script>
 </body>
 </html>
