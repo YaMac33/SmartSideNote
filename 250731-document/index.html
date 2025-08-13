@@ -111,7 +111,14 @@
     </style>
 </head>
 <body>
-
+<div id="header-placeholder"></div>
+<script>
+    fetch('header.html')
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById('header-placeholder').innerHTML = data;
+        });
+</script>
     <header class="fade-in">
         <h1>メッセージ送信方法のまとめ</h1>
     </header>
@@ -128,7 +135,7 @@
     </main>
 
     <footer class="fade-in">
-        <p>&copy; 2025 Your Name</p>
+        <p>&copy; 2025 YaMac33</p>
     </footer>
 
     <script>
