@@ -27,7 +27,7 @@
 
     <script>
         // ヘッダーを先に読み込む
-        fetch('_header.html')
+        fetch('header.html')
             .then(response => response.text())
             .then(data => {
                 document.getElementById('header-placeholder').innerHTML = data;
