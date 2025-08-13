@@ -3,403 +3,724 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>AI文字起こし＆音声合成サービスまとめと使い方【備忘録】</title>
+  <title>🤖 AI文字起こし＆音声合成サービスまとめ ✨</title>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    
     /* Reset & base */
     * {
       box-sizing: border-box;
     }
+    
     body {
       margin: 0;
-      font-family: "Yu Gothic", "Hiragino Kaku Gothic Pro", Meiryo, sans-serif;
-      background-color: #f9fafb;
-      color: #333;
-      line-height: 1.6;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #f8fafc 0%, #ffffff 50%, #f1f5f9 100%);
+      color: #1e293b;
+      line-height: 1.7;
       scroll-behavior: smooth;
       min-height: 100vh;
+      overflow-x: hidden;
     }
-    a {
-      color: #0066cc;
-      text-decoration: none;
-      transition: color 0.3s ease, transform 0.2s ease;
-      cursor: pointer;
+    
+    /* Animated background particles */
+    .bg-particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
     }
-    a:hover, a:focus {
-      color: #004999;
-      outline: none;
-      transform: scale(1.05);
+    
+    .particle {
+      position: absolute;
+      background: radial-gradient(circle, rgba(148, 163, 184, 0.1) 0%, transparent 70%);
+      border-radius: 50%;
+      animation: float 20s infinite linear;
     }
+    
+    @keyframes float {
+      0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+      10% { opacity: 1; }
+      90% { opacity: 1; }
+      100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+    }
+    
     /* Container */
     .container {
-      max-width: 900px;
+      max-width: 1000px;
       margin: 0 auto;
-      padding: 20px 15px 60px;
+      padding: 40px 20px 80px;
+      position: relative;
     }
-    /* Heading styles */
-    h1, h2, h3 {
-      font-weight: 700;
-      color: #222;
-      margin-top: 2.5em;
-      margin-bottom: 0.5em;
+    
+    /* Header with floating animation */
+    .header-container {
+      text-align: center;
+      margin-bottom: 60px;
       opacity: 0;
-      transform: translateY(40px);
-      transition: opacity 0.7s ease, transform 0.7s ease;
+      animation: slideInDown 1s ease-out 0.5s forwards;
     }
-    h1.visible, h2.visible, h3.visible {
-      opacity: 1;
-      transform: translateY(0);
+    
+    @keyframes slideInDown {
+      from { opacity: 0; transform: translateY(-50px); }
+      to { opacity: 1; transform: translateY(0); }
     }
+    
     h1 {
-      font-size: 2.5rem;
-      border-bottom: 3px solid #2a7ae2; /* アクセントカラー */
-      padding-bottom: 0.3em;
+      font-size: 3.5rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin: 0 0 20px 0;
+      position: relative;
+      animation: glow 2s ease-in-out infinite alternate;
     }
+    
+    @keyframes glow {
+      from { filter: drop-shadow(0 0 5px rgba(102, 126, 234, 0.3)); }
+      to { filter: drop-shadow(0 0 20px rgba(102, 126, 234, 0.6)); }
+    }
+    
+    .subtitle {
+      font-size: 1.2rem;
+      color: #64748b;
+      max-width: 800px;
+      margin: 0 auto;
+      opacity: 0;
+      animation: fadeInUp 1s ease-out 1s forwards;
+    }
+    
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    /* Cards with glassmorphism effect */
+    .section-card {
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 24px;
+      padding: 40px;
+      margin-bottom: 40px;
+      box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.1),
+        0 0 0 1px rgba(255, 255, 255, 0.05);
+      transform: translateY(50px);
+      opacity: 0;
+      transition: all 0.6s cubic-bezier(0.4, 0.0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .section-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      transition: left 0.8s;
+    }
+    
+    .section-card:hover::before {
+      left: 100%;
+    }
+    
+    .section-card.visible {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    
+    .section-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 
+        0 20px 40px rgba(0, 0, 0, 0.15),
+        0 0 0 1px rgba(255, 255, 255, 0.1);
+    }
+    
+    /* Headings with emoji animations */
     h2 {
-      font-size: 1.8rem;
-      border-left: 6px solid #2a7ae2;
-      padding-left: 12px;
-      background-color: #e8f0fe;
-      border-radius: 4px;
+      font-size: 2rem;
+      font-weight: 600;
+      color: #1e293b;
+      margin: 0 0 24px 0;
+      display: flex;
+      align-items: center;
+      gap: 12px;
     }
+    
+    h2 .emoji {
+      font-size: 2.5rem;
+      display: inline-block;
+      animation: bounce 2s infinite;
+    }
+    
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+      40% { transform: translateY(-10px); }
+      60% { transform: translateY(-5px); }
+    }
+    
     h3 {
       font-size: 1.4rem;
-      color: #444;
-      margin-top: 1.8em;
-    }
-    /* Paragraph */
-    p {
-      margin-bottom: 1em;
-      font-size: 1.1rem;
-    }
-    /* Lists */
-    ul {
-      margin-left: 1.4em;
-      margin-bottom: 1.2em;
-      color: #444;
-    }
-    li {
-      margin-bottom: 0.4em;
-      font-size: 1.05rem;
-    }
-    strong {
-      color: #2a7ae2;
-    }
-    /* Separator */
-    hr {
-      border: none;
-      height: 1px;
-      background: #ddd;
-      margin: 3em 0 2em;
-    }
-    /* Button style for modal triggers */
-    .btn {
-      display: inline-block;
-      background-color: #2a7ae2;
-      color: white;
-      padding: 0.5em 1.3em;
-      border-radius: 4px;
       font-weight: 600;
-      user-select: none;
-      transition: background-color 0.3s ease, transform 0.2s ease;
-      margin-top: 0.5em;
-      cursor: pointer;
-      border: none;
-    }
-    .btn:hover, .btn:focus {
-      background-color: #174ea6;
-      transform: scale(1.05);
-      outline: none;
-    }
-    /* Responsive image */
-    img.responsive {
-      max-width: 100%;
-      height: auto;
-      border-radius: 6px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-      margin: 1em 0;
-    }
-    /* Footer */
-    footer {
-      text-align: center;
-      margin-top: 4em;
-      font-size: 0.9rem;
-      color: #666;
-      user-select: none;
-      padding-bottom: 30px;
-    }
-    /* Modal styles */
-    .modal-overlay {
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0,0,0,0.5);
-      display: none;
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
-      padding: 20px;
-    }
-    .modal-overlay.active {
-      display: flex;
-    }
-    .modal {
-      background: white;
-      border-radius: 8px;
-      max-width: 500px;
-      width: 100%;
-      padding: 20px 30px;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+      color: #374151;
+      margin: 32px 0 16px 0;
       position: relative;
-      transform: translateY(-30px);
-      opacity: 0;
-      transition: opacity 0.3s ease, transform 0.3s ease;
+      padding-left: 20px;
     }
-    .modal.active {
-      opacity: 1;
-      transform: translateY(0);
-    }
-    .modal-close {
+    
+    h3::before {
+      content: '✨';
       position: absolute;
-      top: 12px;
-      right: 12px;
-      background: transparent;
-      border: none;
-      font-size: 1.5rem;
+      left: -5px;
+      animation: twinkle 1.5s infinite alternate;
+    }
+    
+    @keyframes twinkle {
+      from { transform: scale(1) rotate(0deg); }
+      to { transform: scale(1.2) rotate(15deg); }
+    }
+    
+    /* Text styles */
+    p {
+      margin-bottom: 20px;
+      font-size: 1.1rem;
+      color: #475569;
+      line-height: 1.8;
+    }
+    
+    /* Interactive lists */
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 24px 0;
+    }
+    
+    li {
+      position: relative;
+      margin-bottom: 16px;
+      padding: 16px 20px 16px 60px;
+      background: rgba(255, 255, 255, 0.6);
+      border-radius: 16px;
+      border: 1px solid rgba(148, 163, 184, 0.1);
+      transition: all 0.3s ease;
       cursor: pointer;
-      color: #999;
-      transition: color 0.3s ease;
+      font-size: 1.05rem;
+      color: #334155;
     }
-    .modal-close:hover {
-      color: #333;
+    
+    li::before {
+      content: '🚀';
+      position: absolute;
+      left: 20px;
+      top: 16px;
+      font-size: 1.5rem;
+      transition: all 0.3s ease;
     }
-    /* Scroll-to-top button */
+    
+    li:hover {
+      transform: translateX(10px);
+      background: rgba(255, 255, 255, 0.9);
+      border-color: rgba(102, 126, 234, 0.3);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    }
+    
+    li:hover::before {
+      transform: scale(1.3) rotate(15deg);
+    }
+    
+    li:nth-child(2n)::before { content: '⚡'; }
+    li:nth-child(3n)::before { content: '🎯'; }
+    li:nth-child(4n)::before { content: '💫'; }
+    li:nth-child(5n)::before { content: '🔥'; }
+    
+    /* Ordered lists with special styling */
+    ol {
+      list-style: none;
+      counter-reset: step-counter;
+      padding: 0;
+      margin: 24px 0;
+    }
+    
+    ol li {
+      counter-increment: step-counter;
+      padding-left: 70px;
+    }
+    
+    ol li::before {
+      content: counter(step-counter) '✨';
+      position: absolute;
+      left: 20px;
+      top: 16px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 0.9rem;
+      animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.7); }
+      70% { box-shadow: 0 0 0 10px rgba(102, 126, 234, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(102, 126, 234, 0); }
+    }
+    
+    /* Strong text with gradient */
+    strong {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-weight: 600;
+    }
+    
+    /* Separators */
+    hr {
+      display: none; /* Remove as we're using cards now */
+    }
+    
+    /* Buttons with advanced hover effects */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 14px 28px;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 1rem;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      margin: 16px 0;
+    }
+    
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.5s;
+    }
+    
+    .btn:hover::before {
+      left: 100%;
+    }
+    
+    .btn:hover {
+      transform: translateY(-2px) scale(1.05);
+      box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+    }
+    
+    /* Floating scroll-to-top button */
     #scrollTopBtn {
       position: fixed;
-      right: 20px;
-      bottom: 40px;
-      background: #2a7ae2;
+      right: 30px;
+      bottom: 30px;
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       color: white;
       border: none;
       border-radius: 50%;
-      width: 44px;
-      height: 44px;
-      font-size: 24px;
+      font-size: 1.5rem;
       cursor: pointer;
-      box-shadow: 0 3px 8px rgba(42,122,226,0.5);
       opacity: 0;
       visibility: hidden;
-      transition: opacity 0.3s ease, visibility 0.3s ease;
-      z-index: 1100;
-      user-select: none;
+      transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+      z-index: 1000;
+      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
     }
+    
     #scrollTopBtn.show {
       opacity: 1;
       visibility: visible;
+      animation: floatUp 3s infinite ease-in-out;
     }
+    
     #scrollTopBtn:hover {
-      background: #174ea6;
-      transform: scale(1.1);
+      transform: scale(1.1) rotate(15deg);
+      box-shadow: 0 12px 30px rgba(102, 126, 234, 0.5);
     }
-    /* Responsive typography */
-    @media (max-width: 600px) {
-      h1 {
-        font-size: 2rem;
+    
+    @keyframes floatUp {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    
+    /* Warning/Alert boxes */
+    .alert {
+      background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+      border: 1px solid #f59e0b;
+      border-radius: 16px;
+      padding: 24px;
+      margin: 24px 0;
+      position: relative;
+      animation: slideInRight 0.6s ease-out;
+    }
+    
+    .alert::before {
+      content: '⚠️';
+      position: absolute;
+      top: -10px;
+      left: 20px;
+      background: #f59e0b;
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+    }
+    
+    @keyframes slideInRight {
+      from { opacity: 0; transform: translateX(50px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    
+    /* Success boxes */
+    .success {
+      background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+      border: 1px solid #10b981;
+      border-radius: 16px;
+      padding: 24px;
+      margin: 24px 0;
+      position: relative;
+      animation: slideInLeft 0.6s ease-out;
+    }
+    
+    .success::before {
+      content: '✅';
+      position: absolute;
+      top: -10px;
+      left: 20px;
+      background: #10b981;
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+    }
+    
+    @keyframes slideInLeft {
+      from { opacity: 0; transform: translateX(-50px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    
+    /* Footer */
+    footer {
+      text-align: center;
+      margin-top: 80px;
+      padding: 40px 20px;
+      background: rgba(255, 255, 255, 0.6);
+      backdrop-filter: blur(10px);
+      border-radius: 24px 24px 0 0;
+      border-top: 1px solid rgba(148, 163, 184, 0.1);
+    }
+    
+    footer p {
+      font-size: 1.1rem;
+      color: #64748b;
+      margin-bottom: 20px;
+    }
+    
+    .footer-emoji {
+      font-size: 2rem;
+      animation: wave 2s infinite;
+    }
+    
+    @keyframes wave {
+      0%, 100% { transform: rotate(0deg); }
+      25% { transform: rotate(20deg); }
+      75% { transform: rotate(-20deg); }
+    }
+    
+    /* Responsive design */
+    @media (max-width: 768px) {
+      h1 { font-size: 2.5rem; }
+      h2 { font-size: 1.6rem; }
+      .section-card { 
+        padding: 24px;
+        margin-bottom: 24px;
       }
-      h2 {
-        font-size: 1.4rem;
-      }
-      p, li {
-        font-size: 1rem;
-      }
-      .container {
-        padding: 15px 10px 50px;
-      }
+      .container { padding: 20px 15px 60px; }
+      li { padding-left: 50px; }
+      ol li { padding-left: 60px; }
+    }
+    
+    /* Tooltip system */
+    [data-tooltip] {
+      position: relative;
+      cursor: help;
+    }
+    
+    [data-tooltip]:hover::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      bottom: 125%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #1e293b;
+      color: white;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      white-space: nowrap;
+      z-index: 1001;
+      animation: tooltipFade 0.3s ease-out;
+    }
+    
+    @keyframes tooltipFade {
+      from { opacity: 0; transform: translateX(-50%) translateY(10px); }
+      to { opacity: 1; transform: translateX(-50%) translateY(0); }
     }
   </style>
 </head>
 <body>
-
+  <!-- Animated background particles -->
+  <div class="bg-particles"></div>
+  
   <div class="container">
-    <h1>🤖 AI文字起こし＆音声合成サービスまとめと使い方【備忘録】</h1>
-    <p>「会議録作成の効率化」「AIによるテキスト読み上げ」「GoogleのText-to-Speech APIの使い方」など、これまでのやりとりを備忘録としてまとめてみます。<br>
-    自分用のメモも兼ねて、わかりやすく具体例を交えながら書いてみました。もしあなたも同じようなことを考えているなら、ぜひ参考にしてみてくださいね。</p>
-    <hr />
+    <!-- Header -->
+    <div class="header-container">
+      <h1>🤖 AI文字起こし＆音声合成サービス ✨</h1>
+      <p class="subtitle">
+        効率的な会議録作成からAIテキスト読み上げまで 📝🎵<br>
+        スタイリッシュにまとめた実用的な備忘録です 🚀💡
+      </p>
+    </div>
 
-    <h2>人気の文字起こしツールってどんなのがある？ 🔍</h2>
-    <p>まず、会議録や打ち合わせの文字起こしを効率的にしたいときに人気のツールを教えてほしいと聞かれました。今話題の代表的なものは</p>
-    <ul>
-      <li><strong>LINE Works AI Note</strong></li>
-      <li><strong>Ami Voice Scribe Assist</strong></li>
-      <li><strong>GoogleのSpeech-to-Text</strong></li>
-      <li><strong>Otter.aiやScribieなど海外のサービス</strong></li>
-    </ul>
-    <p>などがあります。</p>
-    <p>特に<strong>Ami Voice Scribe Assist</strong>は日本語対応が強く、医療現場や企業の会議録作成で評判が良いです。<br>
-    またGoogleの<strong>Speech-to-Text</strong>は多言語対応で高精度ですが、使うにはAPIの設定など少し技術が必要になることもあります。</p>
-    <hr />
+    <!-- Popular Tools Section -->
+    <div class="section-card">
+      <h2><span class="emoji">🔍</span>人気の文字起こしツール</h2>
+      <p>会議録や打ち合わせの効率化に役立つ、今話題の代表的なツールをご紹介 📊✨</p>
+      <ul>
+        <li><strong>LINE Works AI Note</strong> 💼 - ビジネス特化の高精度文字起こし</li>
+        <li><strong>Ami Voice Scribe Assist</strong> 🎯 - 日本語に強い医療・企業向け</li>
+        <li><strong>Google Speech-to-Text</strong> 🌐 - 多言語対応の高性能API</li>
+        <li><strong>Otter.ai / Scribbie</strong> 🌟 - 海外発の人気サービス</li>
+      </ul>
+      <div class="success">
+        <p><strong>特におすすめ！</strong> Ami Voice Scribe Assistは日本語対応が抜群で、医療現場や企業の会議録作成で高評価を獲得中 🏆</p>
+      </div>
+    </div>
 
-    <h2>Googleの文字起こし・読み上げサービスまとめ 🛠️</h2>
-    <p>Googleが提供しているサービスは幅広いです。文字起こし（Speech-to-Text）はもちろん、読み上げ（Text-to-Speech）もあります。</p>
+    <!-- Google Services Section -->
+    <div class="section-card">
+      <h2><span class="emoji">🛠️</span>Googleの音声サービス完全ガイド</h2>
+      <p>Googleが提供する文字起こしから読み上げまでの包括的なソリューション 🔊📱</p>
+      
+      <h3>🎤 文字起こしサービス</h3>
+      <ul>
+        <li><strong>Google Cloud Speech-to-Text</strong> - リアルタイム対応＆多言語サポート</li>
+      </ul>
+      
+      <h3>🗣️ 読み上げサービス</h3>
+      <ul>
+        <li><strong>Google Cloud Text-to-Speech</strong> - WaveNet技術による自然な音声生成</li>
+        <li>MP3/WAVファイル出力対応 🎵</li>
+        <li>Neural2による超高品質音声 ✨</li>
+      </ul>
+    </div>
 
-    <h3>文字起こしサービス</h3>
-    <ul>
-      <li><strong>Google Cloud Speech-to-Text</strong><br>多言語対応でリアルタイム文字起こしも可能。API経由で使えるため、自分のシステムに組み込みやすい。</li>
-    </ul>
+    <!-- Presentation Audio Section -->
+    <div class="section-card">
+      <h2><span class="emoji">🎤</span>プレゼン資料のAI読み上げ</h2>
+      <p>スライド原稿をAIが自然に読み上げ、高品質な音声ファイルを生成 📊🎧</p>
+      
+      <ul>
+        <li data-tooltip="Amazonの高品質音声合成"><strong>Amazon Polly</strong> - 豊富な音声オプション</li>
+        <li data-tooltip="Microsoftの企業向けソリューション"><strong>Azure Speech Service</strong> - 企業レベルの安定性</li>
+        <li data-tooltip="感情表現が得意な日本製"><strong>CeVIO AI Talk</strong> - 感情豊かな読み上げ</li>
+        <li data-tooltip="簡単操作でブラウザ完結"><strong>NaturalReader / Play.ht</strong> - オンライン完結型</li>
+      </ul>
+      
+      <div class="success">
+        <p>💡 <strong>初心者におすすめ</strong><br>
+        Google Cloud Text-to-SpeechのウェブUIなら、iPadのブラウザからでも簡単に音声作成が可能！</p>
+      </div>
+    </div>
 
-    <h3>読み上げサービス</h3>
-    <ul>
-      <li><strong>Google Cloud Text-to-Speech</strong><br>テキストを自然な音声に変換し、MP3やWAVファイルとして保存できる。WaveNetやNeural2など最新技術を活用し、高品質な音声を生成します。</li>
-    </ul>
-    <hr />
+    <!-- Google AI Studio Section -->
+    <div class="section-card">
+      <h2><span class="emoji">🧑‍💻</span>Google AI Studio活用術</h2>
+      <p>GUIから直感的にテキスト→音声変換ができる最強ツール 🎨⚡</p>
+      
+      <h3>🚀 利用の流れ</h3>
+      <ol>
+        <li>Google Cloudアカウントでログイン 🔐</li>
+        <li>プロジェクト作成＆Text-to-Speech API有効化 ⚙️</li>
+        <li>AI Studioでテキスト入力 📝</li>
+        <li>音声モデル選択（WaveNetなど）＆パラメータ調整 🎛️</li>
+        <li>プレビュー確認後、MP3でダウンロード 💾</li>
+      </ol>
+      
+      <h3>💰 料金体系</h3>
+      <div class="success">
+        <p><strong>WaveNet音声</strong><br>
+        📊 月500,000文字まで無料<br>
+        💸 超過分: 約$16／100万文字の従量課金<br>
+        🎯 プレゼン原稿レベルなら無料枠で十分！</p>
+      </div>
+    </div>
 
-    <h2>プレゼン資料の読み上げをAIにやらせたいなら？ 🎤</h2>
-    <p>「プレゼン用のスライド資料があって、そこに読み上げ原稿もある。AIに読み上げさせて音声ファイル（MP3など）で欲しい」というニーズもありました。</p>
-    <p>対応できるサービスとしては、Google Cloud Text-to-Speechのほか、</p>
-    <ul>
-      <li><strong>Amazon Polly</strong></li>
-      <li><strong>Microsoft Azure Speech Service</strong></li>
-      <li><strong>CeVIO AI Talk</strong>（買い切り型で感情表現豊か）</li>
-      <li><strong>NaturalReaderやPlay.ht</strong>（オンラインで簡単操作）</li>
-    </ul>
-    <p>などがあります。</p>
-    <p>たとえばGoogle Cloud Text-to-Speechなら、テキストを入力して、音声速度やピッチを調整し、MP3ファイルとして出力可能です。<br>
-    初心者ならウェブUIから簡単に使えるので、iPadなどのブラウザでも操作できますよ。</p>
-    <hr />
+    <!-- SDK vs Web UI Section -->
+    <div class="section-card">
+      <h2><span class="emoji">💻</span>Google Cloud SDK vs ウェブUI</h2>
+      <p>開発者向けツールとブラウザ版の使い分けガイド 🔄📱</p>
+      
+      <div class="alert">
+        <p><strong>Google Cloud SDK</strong><br>
+        💻 PC専用のコマンドラインツール<br>
+        ❌ iPadブラウザでは使用不可</p>
+      </div>
+      
+      <div class="success">
+        <p><strong>Google AI Studio ウェブUI</strong><br>
+        🌐 iPadブラウザでも完全対応<br>
+        ✅ SDKなしでもフル機能利用可能<br>
+        🎯 テキスト読み上げ→MP3出力まで一貫作業</p>
+      </div>
+    </div>
 
-    <h2>Google AI StudioでのText-to-Speech活用法 🧑‍💻</h2>
-    <p>Google AI Studioには、Google Cloud Text-to-Speechの機能が統合されていて、GUIから簡単にテキスト→音声変換ができます。</p>
+    <!-- Security Warning Section -->
+    <div class="section-card">
+      <h2><span class="emoji">⚠️</span>APIキーのセキュリティ</h2>
+      
+      <div class="alert">
+        <p><strong>絶対NG！HTMLに直接埋め込み</strong> 🚨<br>
+        APIキーの漏洩により以下のリスクが発生：</p>
+        <ul>
+          <li>悪用による大量課金 💸</li>
+          <li>サービス停止 ⛔</li>
+          <li>セキュリティ侵害 🔓</li>
+        </ul>
+      </div>
+      
+      <div class="success">
+        <p><strong>正しい実装方法</strong> 🛡️<br>
+        必ずサーバーサイドでAPI呼び出しを実装しましょう！</p>
+      </div>
+    </div>
 
-    <h3>利用の流れ</h3>
-    <ol>
-      <li>Google Cloudアカウントでログイン。</li>
-      <li>プロジェクトを作成し、「Text-to-Speech API」を有効化。</li>
-      <li>AI Studioのテキスト読み上げ画面でテキスト入力。</li>
-      <li>音声モデル（WaveNetなど）を選び、速度やピッチも調整。</li>
-      <li>プレビュー再生し、問題なければMP3でダウンロード。</li>
-    </ol>
+    <!-- Server Implementation Section -->
+    <div class="section-card">
+      <h2><span class="emoji">🎧</span>安全なWebサイト実装</h2>
+      <p>サーバー経由で安全かつ実用的な音声生成システム 🔒✨</p>
+      
+      <h3>🏗️ 推奨システム構成</h3>
+      <ol>
+        <li>ブラウザからテキストデータを送信 📤</li>
+        <li>サーバーがText-to-Speech APIを安全に呼び出し 🔄</li>
+        <li>生成されたMP3ファイルをクライアントに返送 📥</li>
+        <li>ブラウザで再生・ダウンロード可能に 🎵</li>
+      </ol>
+      
+      <div class="success">
+        <p>🛡️ <strong>この構成なら完璧！</strong><br>
+        セキュリティ確保＋実用性を両立した理想的なシステム</p>
+      </div>
+    </div>
 
-    <h3>料金は？</h3>
-    <p>WaveNet音声の場合、月500,000文字までは無料。超過分は約$16／100万文字の従量課金です。<br>
-    プレゼン原稿程度なら無料枠内で十分利用可能なケースが多いです。</p>
-    <hr />
-
-    <h2>Google Cloud SDKって何？iPadで使える？ 💻📱</h2>
-    <p>Google Cloud SDKは、Google Cloudサービスをコマンドラインから操作するツールセットです。<br>
-    ただしこれはPC向けで、<strong>iPadのブラウザでは使えません。</strong></p>
-    <p>でも、<strong>Google AI StudioのウェブUIはiPadのブラウザでも使える</strong>ので、SDKを使わなくてもテキスト読み上げからMP3出力まで可能です。</p>
-    <hr />
-
-    <h2>APIキーをHTMLに直接埋め込んで使える？ ⚠️</h2>
-    <p>結論：<br>
-    <strong>絶対におすすめしません。危険です。</strong></p>
-    <p>APIキーは外部に漏れると悪用され、大量課金やサービス停止のリスクがあるため、必ず<strong>サーバー側でAPIを呼び出す仕組みを作りましょう。</strong></p>
-    <hr />
-
-    <h2>サーバー側で組み込めば、ホームページで読み上げもMP3作成もできる！ 🎧</h2>
-    <p>具体的には、</p>
-    <ul>
-      <li>ブラウザ側でテキストを送信。</li>
-      <li>サーバーがGoogleのText-to-Speech APIを呼んで音声ファイルを作成。</li>
-      <li>生成したMP3ファイルを返してブラウザで再生やダウンロード可能にする。</li>
-    </ul>
-    <p>これが安全で実用的な構成です。</p>
-    <hr />
-
-    <h2>まとめ 📝</h2>
-    <ul>
-      <li>会議の文字起こしには日本語特化の「Ami Voice Scribe Assist」やGoogle Speech-to-Textがおすすめ。</li>
-      <li>プレゼンの読み上げ音声はGoogle Cloud Text-to-SpeechやAmazon PollyなどのAI音声合成が便利。</li>
-      <li>Google AI StudioのウェブUIならiPadでも気軽に使える。</li>
-      <li>APIキーは絶対にクライアント側に直接置かず、サーバー経由で安全に使うのが鉄則。</li>
-    </ul>
-    <p>これまでのやりとりをざっとまとめてみましたが、何か疑問やさらに深掘りしたい点があればまた教えてくださいね！<br>
-    AI文字起こしや音声合成はこれからも進化が早いので、備忘録を時々アップデートしていくといいですよ。</p>
-    <p>では、また！👋</p>
-  </div>
-
-  <!-- Scroll to Top Button -->
-  <button id="scrollTopBtn" aria-label="トップに戻る">⬆️</button>
-
-  <!-- Modal Example (can be triggered by buttons if needed) -->
-  <div id="modalOverlay" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle" tabindex="-1">
-    <div class="modal" role="document">
-      <button class="modal-close" aria-label="閉じる">&times;</button>
-      <h2 id="modalTitle">モーダルタイトル</h2>
-      <p>ここにモーダルの内容を入れます。必要に応じてカスタマイズしてください。</p>
+    <!-- Summary Section -->
+    <div class="section-card">
+      <h2><span class="emoji">📝</span>まとめ ＆ 重要ポイント</h2>
+      
+      <ul>
+        <li><strong>文字起こし</strong> 🎯 - Ami Voice Scribe AssistやGoogle Speech-to-Text推奨</li>
+        <li><strong>音声合成</strong> 🗣️ - Google Cloud Text-to-SpeechやAmazon Pollyが便利</li>
+        <li><strong>モバイル対応</strong> 📱 - Google AI StudioウェブUIならiPadでも快適</li>
+        <li><strong>セキュリティ</strong> 🛡️ - APIキーは絶対にサーバーサイドで管理</li>
+      </ul>
+      
+      <div class="success">
+        <p>🚀 <strong>今後の展望</strong><br>
+        AI文字起こし・音声合成技術は急速に進化中！定期的な情報アップデートをお忘れなく 📈✨</p>
+      </div>
     </div>
   </div>
 
+  <!-- Footer -->
+  <footer>
+    <p>このメモがお役に立てれば嬉しいです！🌟<br>
+    ご質問や追加情報があれば、いつでもお声がけください 💬✨</p>
+    <div class="footer-emoji">👋</div>
+  </footer>
+
+  <!-- Scroll to Top Button -->
+  <button id="scrollTopBtn" aria-label="トップに戻る">🚀</button>
+
   <script>
-    // Fade and slide in animation for headings on scroll
     document.addEventListener('DOMContentLoaded', () => {
-      const fadeElems = document.querySelectorAll('h1, h2, h3');
-
-      // Check if element is in viewport
-      function isInViewport(el) {
-        const rect = el.getBoundingClientRect();
-        return (
-          rect.top <= (window.innerHeight || document.documentElement.clientHeight) - 100
-          && rect.bottom >= 0
-        );
+      // Create floating particles
+      function createParticles() {
+        const container = document.querySelector('.bg-particles');
+        for (let i = 0; i < 15; i++) {
+          const particle = document.createElement('div');
+          particle.className = 'particle';
+          particle.style.left = Math.random() * 100 + '%';
+          particle.style.width = particle.style.height = Math.random() * 4 + 2 + 'px';
+          particle.style.animationDelay = Math.random() * 20 + 's';
+          particle.style.animationDuration = (Math.random() * 10 + 15) + 's';
+          container.appendChild(particle);
+        }
       }
+      createParticles();
 
-      function showOnScroll() {
-        fadeElems.forEach(el => {
-          if (isInViewport(el)) {
-            el.classList.add('visible');
+      // Intersection Observer for card animations
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
           }
         });
-      }
+      }, { threshold: 0.2, rootMargin: '0px 0px -50px 0px' });
 
-      // Initial check and on scroll
-      showOnScroll();
-      window.addEventListener('scroll', showOnScroll);
+      document.querySelectorAll('.section-card').forEach(card => {
+        observer.observe(card);
+      });
 
-      // Scroll-to-top button functionality
+      // Enhanced scroll-to-top functionality
       const scrollBtn = document.getElementById('scrollTopBtn');
+      let lastScrollY = 0;
+
       window.addEventListener('scroll', () => {
-        if (window.scrollY > 300) {
+        const currentScrollY = window.scrollY;
+        
+        if (currentScrollY > 400) {
           scrollBtn.classList.add('show');
         } else {
           scrollBtn.classList.remove('show');
         }
-      });
-      scrollBtn.addEventListener('click', () => {
-        window.scrollTo({top: 0, behavior: 'smooth'});
-      });
 
-      // Modal handling (example, not used directly in current content)
-      const modalOverlay = document.getElementById('modalOverlay');
-      const modalCloseBtn = modalOverlay.querySelector('.modal-close');
-
-      // Function to open modal with content (can be extended)
-      function openModal(title, content) {
-        modalOverlay.querySelector('#modalTitle').textContent = title;
-        modalOverlay.querySelector('p').textContent = content;
-        modalOverlay.classList.add('active');
-        modalOverlay.querySelector('.modal').classList.add('active');
-        modalOverlay.focus();
-      }
-
-      function closeModal() {
-        modalOverlay.classList.remove('active');
-        modalOverlay.querySelector('.modal').classList.remove('active');
-      }
-
-      modalCloseBtn.addEventListener('click', closeModal);
-      modalOverlay.addEventListener('click', (e) => {
-        if (e.target === modalOverlay) closeModal();
-      });
-      document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && modalOverlay.classList.contains('active')) {
-          closeModal();
+        // Add rotation based on scroll direction
+        if (currentScrollY > lastScrollY) {
+          scrollBtn.style.transform = 'rotate(180deg)';
+        } else {
+          scrollBtn.style.transform = 'rotate(0deg)';
         }
-      });
-
-      // Example: You can add event listeners to buttons to open modal if needed
-      // document.querySelector('.btn.some-trigger').addEventListener('click', () => {
-      //   openModal('タイトル', 'モーダルの内容');
-      // });
-    });
-  </script>
-</body>
-</html>
