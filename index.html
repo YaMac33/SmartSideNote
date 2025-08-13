@@ -1,188 +1,68 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>記事一覧</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>記事一覧 - SmartSideNote</title>
 
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-MQ9ZB4LYWP"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MQ9ZB4LYWP"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-MQ9ZB4LYWP');
+  </script>
 
-      gtag('config', 'G-MQ9ZB4LYWP');
-    </script>
-    <style>
-        /* 元の記事一覧ページのスタイル */
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f8f9fa;
-            margin: 0;
-            /* ヘッダー下の余白を調整 */
-            padding: 20px;
-        }
-        h1 {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        .project-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 20px;
-        }
-        .project-card {
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            overflow: hidden;
-            transition: transform 0.2s;
-            cursor: pointer;
-            text-decoration: none;
-            color: inherit;
-        }
-        .project-card:hover {
-            transform: translateY(-5px);
-        }
-        .project-card h3 {
-            font-size: 1.2em;
-            margin: 16px;
-        }
-        .loader {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #3498db;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 100px auto;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* ▼▼▼ ここからヘッダーのスタイルを追加しました ▼▼▼ */
-        a {
-            text-decoration: none;
-            color: inherit;
-        }
-        .site-header {
-            background-color: #222;
-            color: #fff;
-            padding: 20px 0;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-            /* bodyのpaddingと重複しないように調整 */
-            padding-left: 20px;
-            padding-right: 20px;
-        }
-        .header-container {
-            width: 100%;
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .logo {
-            font-size: 28px;
-            font-weight: bold;
-            letter-spacing: 1.5px;
-            transition: color 0.3s;
-        }
-        .logo:hover {
-            color: #00aaff;
-        }
-        .main-nav ul {
-            margin: 0;
-            padding: 0;
-            list-style: none;
-            display: flex;
-        }
-        .main-nav li {
-            margin-left: 30px;
-        }
-        .main-nav a {
-            font-size: 16px;
-            padding: 5px;
-            position: relative;
-            transition: color 0.3s;
-        }
-        .main-nav a:hover {
-            color: #00aaff;
-        }
-        .main-nav a::after {
-            content: '';
-            position: absolute;
-            width: 100%;
-            height: 2px;
-            background-color: #00aaff;
-            bottom: -5px;
-            left: 0;
-            transform: scaleX(0);
-            transition: transform 0.3s;
-        }
-        .main-nav a:hover::after {
-            transform: scaleX(1);
-        }
-        /* ▲▲▲ ここまでヘッダーのスタイル ▲▲▲ */
-    </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <header class="site-header">
-        <div class="header-container">
-            <a href="/" class="logo">SmartSideNote</a>
-            <nav class="main-nav">
-                <ul>
-                    <li><a href="/">トップ</a></li>
-                    <li><a href="#">記事一覧</a></li> 
-                    <li><a href="/service.html">サービス</a></li>
-                    <li><a href="/contact.html">お問い合わせ</a></li>
-                </ul>
-            </nav>
-        </div>
-    </header>
-    <h1>記事一覧</h1>
-    <main id="project-list-container" class="project-list" aria-live="polite">
-        <div class="loader"></div>
-    </main>
+  <!-- 共通ヘッダー -->
+  <div id="header-placeholder"></div>
+  <script>
+    // ページ階層に合わせて header.html のパスを調整
+    fetch('header.html') 
+      .then(res => res.text())
+      .then(data => {
+        document.getElementById('header-placeholder').innerHTML = data;
+      });
+  </script>
 
-    <script>
-        // GitHubのリポジトリ情報を設定
-        var username = "YaMac33";
-        var repoName = "ai-comparison-test-site";
+  <!-- ページ本文 -->
+  <h1>記事一覧</h1>
+  <main id="project-list-container">
+    <div class="loader"></div>
+  </main>
 
-        document.addEventListener("DOMContentLoaded", function () {
-            var container = document.getElementById("project-list-container");
-            container.innerHTML = '<div class="loader"></div>';
+  <script>
+    const username = "YaMac33";
+    const repoName = "ai-comparison-test-site";
 
-            // GitHub APIからリポジトリのコンテンツを取得
-            fetch(`https://api.github.com/repos/${username}/${repoName}/contents/`)
-                .then(response => response.json())
-                .then(data => {
-                    container.innerHTML = ""; // ローダーを削除
-                    data.reverse(); // 配列を逆順にする
-                        // 取得したデータからディレクトリのみをフィルタリングして表示
-                    data.forEach(item => {
-                        // アイテムがディレクトリの場合のみカードを作成
-                        if (item.type === "dir") {
-                            var card = document.createElement("a");
-                            card.href = `./${item.name}/`; // ディレクトリへのリンクを設定
-                            card.className = "project-card";
-                            // カードのタイトルにはディレクトリ名を使用
-                            card.innerHTML = `<h3>${item.name}</h3>`;
-                            container.appendChild(card);
-                        }
-                    });
-                })
-                .catch(error => {
-                    container.innerHTML = "<p>データの読み込みに失敗しました。</p>";
-                    console.error("Error fetching repository contents:", error);
-                });
+    document.addEventListener("DOMContentLoaded", function () {
+      const container = document.getElementById("project-list-container");
+      container.innerHTML = '<div class="loader"></div>';
+
+      fetch(`https://api.github.com/repos/${username}/${repoName}/contents/`)
+        .then(res => res.json())
+        .then(data => {
+          container.innerHTML = "";
+          data.filter(item => item.type === "dir")
+            .sort((a,b) => b.name.localeCompare(a.name))
+            .forEach(item => {
+              const card = document.createElement("a");
+              card.href = `./${item.name}/`;
+              card.className = "project-card";
+              card.innerHTML = `<h3>${item.name}</h3>`;
+              container.appendChild(card);
+            });
+        })
+        .catch(err => {
+          container.innerHTML = "<p>データの読み込みに失敗しました。</p>";
+          console.error(err);
         });
-    </script>
+    });
+  </script>
 
 </body>
 </html>
-
