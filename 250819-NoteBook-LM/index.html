@@ -13,10 +13,18 @@
     }
     body {
       font-family: 'Segoe UI', 'Hiragino Kaku Gothic ProN', Meiryo, sans-serif;
-      background-color: #f9f9fa;
+      background-color: #ffffff;
+      background-image: radial-gradient(circle at 20% 20%, #f5f5f5 0%, transparent 30%),
+                        radial-gradient(circle at 80% 80%, #f9f9f9 0%, transparent 30%);
+      background-size: 400px 400px;
       color: #333;
       line-height: 1.8;
       padding: 20px;
+      animation: bgMove 20s linear infinite;
+    }
+    @keyframes bgMove {
+      0% { background-position: 0 0, 0 0; }
+      100% { background-position: 400px 400px, -400px -400px; }
     }
 
     /* === レイアウト === */
@@ -25,92 +33,117 @@
       margin: 0 auto;
       padding: 40px 20px;
       background: #fff;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-    }
-
-    h1, h2 {
-      margin-bottom: 20px;
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+      position: relative;
+      overflow: hidden;
     }
 
     h1 {
-      font-size: 2rem;
-      color: #2c3e50;
+      font-size: 2.4rem;
       text-align: center;
-      margin-bottom: 40px;
+      margin-bottom: 50px;
+      color: #222;
+      animation: titleFade 1s ease-out forwards;
+    }
+    @keyframes titleFade {
+      from {opacity: 0; transform: translateY(-30px);}
+      to {opacity: 1; transform: translateY(0);}
     }
 
     h2 {
-      font-size: 1.5rem;
-      color: #2980b9;
+      font-size: 1.6rem;
+      margin-bottom: 20px;
       opacity: 0;
-      transform: translateY(30px);
+      transform: scale(0.9);
       transition: all 0.6s ease-out;
     }
-
     h2.visible {
       opacity: 1;
-      transform: translateY(0);
+      transform: scale(1);
     }
 
-    p {
-      margin-bottom: 1em;
+    p, ul, table {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.6s ease-out;
+    }
+    .fade-section.visible + p,
+    .fade-section.visible + ul,
+    .fade-section.visible + table {
+      opacity: 1;
+      transform: translateY(0);
+      transition-delay: 0.2s;
     }
 
     ul {
       margin-left: 1.2em;
       margin-bottom: 1.5em;
     }
-
     li {
       margin-bottom: 0.5em;
+      list-style: none;
+      position: relative;
+      padding-left: 1.5em;
+    }
+    li::before {
+      content: "✨";
+      position: absolute;
+      left: 0;
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
       margin-bottom: 1.5em;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
     }
-
     th, td {
-      border: 1px solid #ddd;
+      border: 1px solid #eee;
       padding: 12px;
       text-align: center;
     }
-
     th {
-      background-color: #f0f6fb;
+      background-color: #fafafa;
+      font-weight: bold;
+    }
+    tr:hover td {
+      background: #fefefe;
+      transition: background 0.3s;
     }
 
-    /* === ボタンとリンク === */
+    /* === ページトップボタン === */
     .button {
-      display: inline-block;
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
       background-color: #2980b9;
       color: #fff;
-      padding: 10px 20px;
-      margin-top: 20px;
-      border-radius: 6px;
+      padding: 14px 18px;
+      border-radius: 50%;
       text-decoration: none;
-      transition: all 0.3s ease;
+      font-size: 1.2rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      transition: all 0.4s ease;
+      z-index: 999;
     }
-
     .button:hover {
       background-color: #3498db;
-      transform: scale(1.05);
+      transform: rotate(360deg) scale(1.1);
     }
 
     /* === レスポンシブ対応 === */
     @media (max-width: 600px) {
       h1 {
-        font-size: 1.6rem;
+        font-size: 1.8rem;
       }
-
       h2 {
-        font-size: 1.2rem;
+        font-size: 1.3rem;
       }
-
       table, th, td {
-        font-size: 0.9rem;
+        font-size: 0.85rem;
       }
     }
   </style>
@@ -139,26 +172,10 @@
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td>情報の扱い方</td>
-          <td>アップロード文書全体を解析</td>
-          <td>貼り付けたテキストだけ処理</td>
-        </tr>
-        <tr>
-          <td>引用元</td>
-          <td>段落や出典を明示</td>
-          <td>根拠が不明な場合も</td>
-        </tr>
-        <tr>
-          <td>資料間の比較</td>
-          <td>複数ドキュメント横断可能</td>
-          <td>1件ずつ処理が基本</td>
-        </tr>
-        <tr>
-          <td>目的</td>
-          <td>学習・ノート用途特化</td>
-          <td>汎用チャットAI</td>
-        </tr>
+        <tr><td>情報の扱い方</td><td>アップロード文書全体を解析</td><td>貼り付けたテキストだけ処理</td></tr>
+        <tr><td>引用元</td><td>段落や出典を明示</td><td>根拠が不明な場合も</td></tr>
+        <tr><td>資料間の比較</td><td>複数ドキュメント横断可能</td><td>1件ずつ処理が基本</td></tr>
+        <tr><td>目的</td><td>学習・ノート用途特化</td><td>汎用チャットAI</td></tr>
       </tbody>
     </table>
 
@@ -195,11 +212,12 @@
     </ul>
 
     <p>📘 今後も使ってみたらレポートします！</p>
-    <a class="button" href="#">⬆️ ページのトップへ戻る</a>
   </main>
 
+  <a class="button" href="#">⬆️</a>
+
   <script>
-    // === フェードインアニメーション ===
+    // === セクションフェードイン ===
     const sections = document.querySelectorAll('.fade-section');
     const observer = new IntersectionObserver(entries => {
       entries.forEach(entry => {
@@ -207,21 +225,13 @@
           entry.target.classList.add('visible');
         }
       });
-    }, {
-      threshold: 0.2
-    });
+    }, { threshold: 0.2 });
+    sections.forEach(section => observer.observe(section));
 
-    sections.forEach(section => {
-      observer.observe(section);
-    });
-
-    // === ページトップに戻るスムーズスクロール ===
-    document.querySelector('.button').addEventListener('click', (e) => {
+    // === ページトップに戻る ===
+    document.querySelector('.button').addEventListener('click', e => {
       e.preventDefault();
-      window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-      });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     });
   </script>
 </body>
