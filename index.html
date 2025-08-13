@@ -3,14 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>記事一覧</title
+    <title>記事一覧 - SmartSideNote</title>
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-MQ9ZB4LYWP"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-MQ9ZB4LYWP');
+    </script>
+    <!-- /Google Analytics -->
 
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- ヘッダー読み込み -->
+    <!-- 共通ヘッダー -->
     <div id="header-placeholder"></div>
+    <script>
+        fetch('header.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('header-placeholder').innerHTML = data;
+            });
+    </script>
 
     <h1>記事一覧</h1>
     <main id="project-list-container" class="project-list" aria-live="polite">
@@ -18,24 +35,21 @@
     </main>
 
     <script>
-        // ヘッダーを先に読み込む
-        fetch('header.html')
-            .then(response => response.text())
-            .then(data => {
-                document.getElementById('header-placeholder').innerHTML = data;
-            });
+        var username = "YaMac33";
+        var repoName = "ai-comparison-test-site";
 
-        // 記事一覧を取得して表示
         document.addEventListener("DOMContentLoaded", function () {
             var container = document.getElementById("project-list-container");
             container.innerHTML = '<div class="loader"></div>';
-            fetch(`https://api.github.com/repos/YaMac33/ai-comparison-test-site/contents/`)
+
+            fetch(`https://api.github.com/repos/${username}/${repoName}/contents/`)
                 .then(response => response.json())
                 .then(data => {
                     container.innerHTML = "";
-                    // ディレクトリのみ抽出して名前順にソート
+
+                    // ディレクトリのみ抽出して名前順にソート（降順）
                     data.filter(item => item.type === "dir")
-                        .sort((a, b) => b.name.localeCompare(a.name)) // 降順にしたい場合
+                        .sort((a, b) => b.name.localeCompare(a.name))
                         .forEach(item => {
                             var card = document.createElement("a");
                             card.href = `./${item.name}/`;
