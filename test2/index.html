@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>備忘録：GitHub PagesとCloudflare Pages、静的サイトと動的サイトの違いまとめ 🚀</title>
+
+  <!-- Google Fonts: 読みやすいフォント -->
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP&family=Roboto&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ====== ベーススタイル ====== */
+    body {
+      font-family: 'Noto Sans JP', 'Roboto', sans-serif;
+      background: #f9fafb;
+      color: #333;
+      margin: 0;
+      line-height: 1.6;
+      scroll-behavior: smooth;
+    }
+
+    a {
+      color: #0077cc;
+      text-decoration: none;
+      transition: color 0.3s ease, transform 0.2s ease;
+      cursor: pointer;
+    }
+    a:hover,
+    a:focus {
+      color: #005999;
+      transform: scale(1.05);
+      outline: none;
+    }
+
+    h1, h2, h3 {
+      color: #222;
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    /* フェードイン・スライドイン済みの見出し */
+    .visible {
+      opacity: 1 !important;
+      transform: translateY(0) !important;
+    }
+
+    h1 {
+      font-size: 2.8rem;
+      font-weight: 700;
+      border-bottom: 3px solid #0077cc;
+      padding-bottom: 0.3rem;
+    }
+    h2 {
+      font-size: 1.8rem;
+      border-left: 6px solid #0077cc;
+      padding-left: 0.6rem;
+    }
+
+    p {
+      margin-bottom: 1rem;
+      font-size: 1.1rem;
+      max-width: 800px;
+    }
+
+    ul {
+      max-width: 800px;
+      margin-bottom: 1.5rem;
+      padding-left: 1.2rem;
+    }
+    li {
+      margin-bottom: 0.6rem;
+      font-size: 1.1rem;
+    }
+
+    /* ボタンスタイル */
+    .btn {
+      display: inline-block;
+      background-color: #0077cc;
+      color: white;
+      padding: 0.5rem 1.2rem;
+      border-radius: 4px;
+      border: none;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+      user-select: none;
+      margin-top: 1rem;
+    }
+    .btn:hover,
+    .btn:focus {
+      background-color: #005999;
+      transform: scale(1.05);
+      outline: none;
+    }
+
+    /* コンテナ幅制限と中央配置 */
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 1rem 1.5rem 3rem;
+    }
+
+    /* リンクリストのアクセントカラー */
+    .links a {
+      display: inline-block;
+      margin-right: 1rem;
+      margin-bottom: 1rem;
+      background: #e6f0ff;
+      color: #0077cc;
+      padding: 0.4rem 0.8rem;
+      border-radius: 3px;
+      font-size: 0.95rem;
+      transition: background-color 0.3s ease;
+    }
+    .links a:hover {
+      background: #cce0ff;
+    }
+
+    /* モーダル用スタイル */
+    .modal-bg {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    .modal-bg.active {
+      display: flex;
+    }
+    .modal {
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      max-width: 600px;
+      max-height: 80vh;
+      overflow-y: auto;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      position: relative;
+    }
+    .modal-close {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      font-size: 1.5rem;
+      color: #999;
+      cursor: pointer;
+      transition: color 0.3s ease;
+      user-select: none;
+    }
+    .modal-close:hover {
+      color: #333;
+    }
+
+    /* レスポンシブ */
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 2rem;
+      }
+      h2 {
+        font-size: 1.4rem;
+      }
+      p, li {
+        font-size: 1rem;
+      }
+      .container {
+        padding: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- ページタイトル -->
+    <h1>備忘録：GitHub PagesとCloudflare Pages、静的サイトと動的サイトの違いまとめ 🚀</h1>
+
+    <p>こんにちは！今回は自分用の備忘録として、GitHub PagesやCloudflare Pagesを使った静的サイトホスティングの違いや、Markdownでのサイト作成、そして個人運営サイトにおける静的・動的サイトの使い分けについて、わかりやすくまとめてみました。</p>
+
+    <!-- 見出しと本文 -->
+    <h2>GitHub PagesとCloudflare Pagesって何が違うの？ 🤔</h2>
+    <p>まずは、よく話題に上がるGitHub PagesとCloudflare Pagesの違いから。どちらも無料で使える静的サイトホスティングサービスですが、特徴や使い勝手が結構違います。</p>
+
+    <h3>GitHub Pagesの特徴</h3>
+    <ul>
+      <li>GitHubのリポジトリにある静的ファイルをそのまま公開できるサービス。</li>
+      <li>Jekyllという静的サイトジェネレーター（SSG）に対応していて、Markdownで書いた記事を自動でHTMLに変換してくれる。</li>
+      <li>初心者でも比較的簡単に使いやすく、日本語の情報も多いのが嬉しいポイント。</li>
+      <li><a href="https://pages.github.com/" target="_blank" rel="noopener noreferrer">GitHub Pages公式</a></li>
+    </ul>
+
+    <h3>Cloudflare Pagesの特徴</h3>
+    <ul>
+      <li>Cloudflareの高速グローバルCDNを使った静的サイトホスティングサービス。</li>
+      <li>GitHubのほかGitLabやBitbucketなど複数のGitリポジトリと連携可能。</li>
+      <li>Node.js環境で自由にビルドツールを使えるので、Next.jsやGatsby、Nuxt.jsなどモダンなフレームワークもラクラク対応。</li>
+      <li>プルリクエストごとにプレビュー環境が自動生成され、チーム開発に便利。</li>
+      <li>Cloudflare Workersというサーバーレス機能も連携できて、動的な処理も拡張できる。</li>
+      <li>ただし、管理画面やドキュメントは英語がメインで、日本語情報はまだ少なめ。</li>
+      <li><a href="https://developers.cloudflare.com/pages/" target="_blank" rel="noopener noreferrer">Cloudflare Pages公式</a></li>
+    </ul>
+
+    <h2>ざっくり比較表 📊</h2>
+    <table style="max-width: 800px; width: 100%; border-collapse: collapse; margin-bottom: 2rem;">
+      <thead>
+        <tr style="background:#0077cc; color: white;">
+          <th style="padding: 0.6rem; border: 1px solid #ccc;">項目</th>
+          <th style="padding: 0.6rem; border: 1px solid #ccc;">GitHub Pages</th>
+          <th style="padding: 0.6rem; border: 1px solid #ccc;">Cloudflare Pages</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="background: #f0f8ff;">
+          <td style="padding: 0.6rem; border: 1px solid #ccc;">連携リポジトリ</td>
+          <td style="padding: 0.6rem; border: 1px solid #ccc;">GitHubのみ</td>
+          <td style="padding: 0.6rem; border: 1px solid #ccc;">GitHub, GitLab, Bitbucket対応</td>
+        </tr>
+        <tr>
+          <td style="padding: 0.6rem; border: 1px solid #ccc;">ビルド環境</td>
+          <td style="padding: 0.6rem; border: 1px solid #ccc;">Jekyll標準、他は自分で設定</td>
+          <td style="padding: 0.6rem; border: 1px solid #ccc;">Node.jsで自由に設定可能</td>
+        </tr>
+        <tr style="background: #f0f8ff;">
+          <td style="padding: 0.6rem; border: 1px solid #ccc;">CDN</td>
+          <td style="padding: 0.6rem; border: 1px solid #ccc;">GitHub独自CDN</td>
+          <td style="padding: 0.6rem; border: 1px solid #ccc;">Cloudflareの超高速CDN</td>
+        </tr>
+        <tr>
+          <td style="padding: 0.6rem; border: 1px solid #ccc;">プレビュー機能</td>
+          <td style="padding: 0.6rem; border: 1px solid #ccc;">基本なし</td>
+          <td style="padding: 0.6rem; border: 1px solid #ccc;">プルリクエスト毎に自動生成</td>
+        </tr>
+        <tr style="background: #f0f8ff;">
+          <td style="padding: 0.6rem; border: 1px solid #ccc;">動的処理</td>
+          <td style="padding: 0.6rem; border: 1px solid #ccc;">不可</td>
+          <td style="padding: 0.6rem; border: 1px solid #ccc;">Cloudflare Workersで可能</td>
+        </tr>
+        <tr>
+          <td style="padding: 0.6rem; border: 1px solid #ccc;">日本語情報</td>
+          <td style="padding: 0.6rem; border: 1px solid #ccc;">豊富</td>
+          <td style="padding: 0.6rem; border: 1px solid #ccc;">少なめ</td>
+        </tr>
+        <tr style="background: #f0f8ff;">
+          <td style="padding: 0.6rem; border: 1px solid #ccc;">初心者向け</td>
+          <td style="padding: 0.6rem; border: 1px solid #ccc;">◎</td>
+          <td style="padding: 0.6rem; border: 1px solid #ccc;">△</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>Markdownで作る静的サイトの自由度って？ 📝</h2>
+    <p>「Markdownで書くなら自由度が低いのでは？」と思うかもしれませんが、実はそうでもありません。Markdownは文章を書くのに便利でシンプルな記法ですが、Markdown内にHTMLタグを直接書くことも可能です。さらに、<code>&lt;style&gt;</code>タグや<code>&lt;script&gt;</code>タグも埋め込めます（環境によって制限はありますが）。</p>
+
+    <p>以下はMarkdown内にHTMLとJavaScriptを埋め込んだ簡単なサンプルコードです。</p>
+
+    <!-- コードサンプル表示 -->
+    <pre style="background:#272822; color:#f8f8f2; padding:1rem; border-radius:6px; overflow-x:auto; max-width:800px;">
+<span style="color:#f92672;"># はじめてのブログ記事</span>
+
+こんにちは！これはMarkdownで書いた記事です。
+
+&lt;button onclick="alert('こんにちは！')"&gt;クリックしてね&lt;/button&gt;
+
+&lt;style&gt;
+button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  cursor: pointer;
+}
+&lt;/style&gt;
+    </pre>
+
+    <p>このコードのポイント：</p>
+    <ul>
+      <li>普通にMarkdownでタイトルや文章を書きつつ、</li>
+      <li><code>&lt;button&gt;</code>タグを使ってボタンを設置し、JavaScriptの<code>onclick</code>イベントでメッセージを表示。</li>
+      <li><code>&lt;style&gt;</code>タグでボタンの見た目をカスタマイズ。</li>
+      <li>GitHub PagesのJekyllやCloudflare PagesのようなSSGでは、MarkdownをHTMLに変換するときにこうしたHTMLやスクリプトも一緒に組み込めます。</li>
+    </ul>
+
+    <h2>静的サイトと動的サイト、どっちが必要？ ⚖️</h2>
+
+    <h3>静的サイトが向いているケース</h3>
+    <ul>
+      <li>ブログや技術メモ、写真ギャラリーなどのコンテンツを主に公開する。</li>
+      <li>更新は手動で行い、アクセス速度やセキュリティを重視したい。</li>
+      <li>GitHub PagesやCloudflare Pagesのような静的ホスティングサービスで安価に運用したい。</li>
+    </ul>
+
+    <h3>動的サイトが必要になるケース</h3>
+    <ul>
+      <li>ユーザーごとのログインやマイページがある。</li>
+      <li>コメント投稿や掲示板などユーザーの書き込みをリアルタイムで反映したい。</li>
+      <li>複雑な検索や予約管理など動的なデータ処理が必要。</li>
+    </ul>
+
+    <h2>動的機能を静的サイトに追加するなら？ 🛠️</h2>
+    <p>静的サイトに動的要素を組み込みたい場合は、外部サービスを組み合わせる方法がおすすめです。</p>
+
+    <h3>例1：コメント機能（Disqus）</h3>
+    <p>Disqusは簡単にコメント欄を設置できるサービスです。以下のコードをHTMLに埋め込むだけで使えます。</p>
+    <pre style="background:#272822; color:#f8f8f2; padding:1rem; border-radius:6px; max-width:800px; overflow-x:auto;">
+&lt;div id="disqus_thread"&gt;&lt;/div&gt;
+&lt;script&gt;
+  var disqus_config = function () {
+    this.page.url = window.location.href;  
+    this.page.identifier = 'your-page-identifier'; 
+  };
+  (function() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://your-disqus-shortname.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+  })();
+&lt;/script&gt;
+    </pre>
+    <p>公式はこちら → <a href="https://disqus.com/" target="_blank" rel="noopener noreferrer">Disqus</a></p>
+
+    <h3>例2：問い合わせフォーム（Formspree）</h3>
+    <p>Formspreeはサーバー不要でメールフォームが作れるサービスです。以下のHTMLを使います。</p>
+    <pre style="background:#272822; color:#f8f8f2; padding:1rem; border-radius:6px; max-width:800px; overflow-x:auto;">
+&lt;form action="https://formspree.io/f/your-form-id" method="POST"&gt;
+  &lt;label&gt;名前: &lt;input type="text" name="name" required&gt;&lt;/label&gt;&lt;br&gt;
+  &lt;label&gt;メール: &lt;input type="email" name="_replyto" required&gt;&lt;/label&gt;&lt;br&gt;
+  &lt;label&gt;メッセージ: &lt;textarea name="message" required&gt;&lt;/textarea&gt;&lt;/label&gt;&lt;br&gt;
+  &lt;button type="submit"&gt;送信&lt;/button&gt;
+&lt;/form&gt;
+    </pre>
+    <p>公式はこちら → <a href="https://formspree.io/" target="_blank" rel="noopener noreferrer">Formspree</a></p>
+
+    <h2>図解イメージ 📈</h2>
+    <p>以下の流れで静的サイトが生成・配信されます。</p>
+    <pre style="background:#e6f0ff; padding:1rem; border-radius:6px; max-width:800px; overflow-x:auto; font-family: monospace;">
+MarkdownやHTMLファイル  →  静的サイトジェネレーター（Jekyll, Next.jsなど）
+       ↓
+生成されたHTML, CSS, JSファイル
+       ↓
+GitHub/Cloudflare Pagesにデプロイ
+       ↓
+CDNを通じて高速配信
+    </pre>
+
+    <h2>まとめ 🌟</h2>
+    <ul>
+      <li>GitHub Pagesは初心者向けで、JekyllでMarkdownがすぐ使える。</li>
+      <li>Cloudflare Pagesはモダンなフレームワーク対応で柔軟かつ高速。</li>
+      <li>Markdown内でHTMLやJavaScriptを埋め込めるので、自由度は思ったより高い。</li>
+      <li>静的サイトはセキュリティと速度重視、動的機能は外部サービスやサーバーレスで補うのがベター。</li>
+    </ul>
+
+    <p>もし詳しい実装やコードの相談があればいつでも聞いてくださいね！😊</p>
+  </div>
+</body>
+</html>
