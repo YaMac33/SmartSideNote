@@ -3,13 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SmartSideNote Blog</title>
+    <title>記事一覧</title>
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-MQ9ZB4LYWP"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-MQ9ZB4LYWP');
+    </script>
+
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <div id="header-placeholder"></div>
 
-    <h1>SmartSideNote Blog</h1>
+    <h1>記事一覧</h1>
     <main id="project-list-container" class="project-list" aria-live="polite">
         <div class="loader"></div>
     </main>
@@ -46,7 +56,7 @@
         fetch('_header.html')
             .then(response => response.text())
             .then(data => {
-                document.head.insertAdjacentHTML('beforeend', data);
+                document.getElementById('header-placeholder').innerHTML = data;
             });
     </script>
 </body>
