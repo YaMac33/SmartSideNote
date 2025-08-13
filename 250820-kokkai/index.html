@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>備忘録：国会の仕組みと流れをざっくり理解するまとめ 🏛️</title>
+  <!-- Google Fonts: Noto Sans JP for Japanese readability -->
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap" rel="stylesheet" />
+  <style>
+    /* Reset & base */
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0; padding: 0;
+      font-family: 'Noto Sans JP', sans-serif;
+      background-color: #f7f9fc;
+      color: #333;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    a {
+      color: #007acc;
+      text-decoration: none;
+      transition: color 0.3s ease, transform 0.3s ease;
+      cursor: pointer;
+    }
+    a:hover, a:focus {
+      color: #005fa3;
+      transform: scale(1.05);
+      outline: none;
+    }
+    /* Container */
+    .container {
+      max-width: 900px;
+      margin: 2rem auto 4rem;
+      padding: 0 1rem;
+    }
+    /* Header */
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      color: #1a2a6c;
+      text-align: center;
+      letter-spacing: 0.05em;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    /* Section headings */
+    h2 {
+      font-size: 1.8rem;
+      margin-top: 3rem;
+      margin-bottom: 1rem;
+      border-left: 5px solid #007acc;
+      padding-left: 0.75rem;
+      color: #004a99;
+      cursor: pointer;
+      user-select: none;
+      opacity: 0;
+      transform: translateX(-20px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    h2:hover {
+      color: #002f66;
+    }
+    /* Paragraph */
+    p {
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    /* Lists */
+    ul {
+      margin: 1rem 0 2rem 1.2rem;
+      padding-left: 0;
+      list-style-type: disc;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    li {
+      margin-bottom: 0.5rem;
+      font-size: 1.1rem;
+    }
+    /* Accent colors */
+    .highlight {
+      color: #d9534f;
+      font-weight: 600;
+    }
+    /* Button styles */
+    .btn {
+      display: inline-block;
+      background-color: #007acc;
+      color: #fff;
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
+      font-weight: 600;
+      user-select: none;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+      margin-top: 1rem;
+    }
+    .btn:hover, .btn:focus {
+      background-color: #005fa3;
+      transform: scale(1.05);
+      outline: none;
+    }
+    /* Responsive images */
+    img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+      margin: 1rem 0;
+    }
+    /* Fade & slide in visible class */
+    .visible {
+      opacity: 1 !important;
+      transform: translate(0, 0) !important;
+    }
+    /* Modal styles */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.6);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      z-index: 1000;
+    }
+    .modal-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .modal-content {
+      background: white;
+      padding: 2rem;
+      max-width: 600px;
+      width: 90%;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      position: relative;
+    }
+    .modal-close {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: transparent;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #777;
+      transition: color 0.2s ease;
+    }
+    .modal-close:hover {
+      color: #000;
+    }
+    /* Toggle icon for sections */
+    .toggle-icon {
+      float: right;
+      font-weight: bold;
+      font-size: 1.2rem;
+      user-select: none;
+      transition: transform 0.3s ease;
+    }
+    .collapsed .toggle-icon {
+      transform: rotate(-90deg);
+    }
+    /* Responsive */
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 2rem;
+      }
+      h2 {
+        font-size: 1.4rem;
+      }
+      p, li {
+        font-size: 1rem;
+      }
+      .btn {
+        width: 100%;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 id="page-title">備忘録：国会の仕組みと流れをざっくり理解するまとめ 🏛️</h1>
+
+    <p>こんにちは！今回は、僕たちがこれまで話してきた「国会の流れ」「委員会の役割」「再可決の仕組み」などについて、わかりやすく整理した備忘録を作ってみました。<br>
+    国会の話って専門用語が多くてややこしいけど、ざっくりつかめばニュースもぐっと身近になります。ぜひ最後まで読んでくださいね。</p>
+
+    <!-- Section 1 -->
+    <section>
+      <h2 class="collapsible">1. 国会の流れとスケジュールの基本 <span class="toggle-icon">▼</span></h2>
+      <div class="content" style="display:none;">
+        <p>まず国会は、大きく「通常国会」「臨時国会」「特別国会」「会期延長」などに分かれています。<br>
+        代表的なのは「通常国会」で、毎年1月中旬に始まって150日間ほど開かれます。ざっくりいうと、</p>
+        <ul>
+          <li><span class="highlight">通常国会（1～6月ごろ）</span>：年度の予算案や重要法案を審議</li>
+          <li><span class="highlight">臨時国会</span>：必要に応じて開かれる</li>
+          <li><span class="highlight">特別国会</span>：内閣総理大臣の指名を目的に総選挙後に開く</li>
+        </ul>
+        <p>法案の審議の流れも大体決まっています</p>
+        <ul>
+          <li>衆議院または参議院で法案提出</li>
+          <li>委員会で専門的に審議（ここが具体的に議論される場所）</li>
+          <li>本会議で採決</li>
+          <li>片方の院で可決された法案は、もう一方の院で審議・採決</li>
+          <li>もし参議院が否決したら、衆議院が再可決できる（3分の2以上の賛成が必要）</li>
+          <li>再可決されれば成立。そうでなければ廃案</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Section 2 -->
+    <section>
+      <h2 class="collapsible">2. 委員会の種類とメンバー構成 <span class="toggle-icon">▼</span></h2>
+      <div class="content" style="display:none;">
+        <p>国会には色んな委員会があって、だいたい以下の2種類に分かれます。</p>
+        <ul>
+          <li><span class="highlight">常設委員会</span>：常にある委員会。例えば「予算委員会」「外交防衛委員会」「法務委員会」など。</li>
+          <li><span class="highlight">特別委員会</span>：特定の課題や時期だけ設置される委員会。例えば「災害対策特別委員会」など。</li>
+        </ul>
+        <p><strong>議員の委員会所属は？</strong><br>
+        基本的には、議員は1つの常設委員会に所属します。<br>
+        ただし、複数の委員会に所属することもあり得ます。特に特別委員会は並行して所属するケースが多いです。<br>
+        会議日程が重なった場合は、議員は調整や優先順位をつけて対応しています。</p>
+      </div>
+    </section>
+
+    <!-- Section 3 -->
+    <section>
+      <h2 class="collapsible">3. 国会議員の人数と委員の定数 <span class="toggle-icon">▼</span></h2>
+      <div class="content" style="display:none;">
+        <ul>
+          <li><span class="highlight">衆議院議員</span>は465名</li>
+          <li><span class="highlight">参議院議員</span>は248名（2025年現在）</li>
+        </ul>
+        <p>委員会ごとの定数は法令や国会規則で決まっており、委員数は法案や審議の重要性に応じて異なります。<br>
+        例えば、予算委員会は約50名程度の委員が所属することが多いです。</p>
+      </div>
+    </section>
+
+    <!-- Section 4 -->
+    <section>
+      <h2 class="collapsible">4. 衆議院と参議院の違いと本会議の流れ <span class="toggle-icon">▼</span></h2>
+      <div class="content" style="display:none;">
+        <p>衆議院と参議院は別々の院なので、基本的に本会議も別々の日に開催されます。<br>
+本会議では、</p>
+<ul>
+  <li>議長の司会で進行</li>
+  <li>法案の提案者、各会派代表や委員長が発言</li>
+  <li>採決が行われる</li>
+</ul>
+<p>委員会で細かく審議された内容を本会議で報告し、議員全員で議論や採決が行われます。</p>
+</div>
+</section>
+
+<!-- Section 5 -->
+<section>
+  <h2 class="collapsible">5. 再可決の仕組みと実際の使われ方 <span class="toggle-icon">▼</span></h2>
+  <div class="content" style="display:none;">
+    <p>国会の大きな特徴のひとつに、衆議院の「再可決権」があります。これは、参議院が法案を否決・修正した場合でも、衆議院が出席議員の3分の2以上の賛成を得て再可決すれば法案が成立するという仕組み。</p>
+    <p><strong>実際の再可決事例</strong></p>
+    <ul>
+      <li>1952年の選挙法改正案</li>
+      <li>1960年代の日米安全保障条約関連法案</li>
+      <li>1999年の国民投票法改正案</li>
+    </ul>
+    <p>ただし、近年は与党が参議院で過半数を持つことが多く、再可決が実際に使われるケースは非常に少なくなっています。</p>
+  </div>
+</section>
+
+<!-- Section 6 -->
+<section>
+  <h2 class="collapsible">6. 参議院否決後の国会運営と両院協議会 <span class="toggle-icon">▼</span></h2>
+  <div class="content" style="display:none;">
+    <p>参議院が法案を否決したら、</p>
+    <ul>
+      <li>法案は衆議院に戻されます。</li>
+      <li>衆議院は再可決か、修正案を受け入れるか判断。</li>
+      <li>意見の違いが大きい場合は「両院協議会」が開かれて、折衷案や合意を目指します。</li>
+    </ul>
+    <p><strong>両院協議会の開催頻度とタイミング</strong></p>
+    <ul>
+      <li>通常国会では1～3回程度が多い</li>
+      <li>会期末直前や重要法案での衝突時に開かれることが多い</li>
+      <li>両院議長が指名した議員がメンバーで、非公開の協議をします</li>
+    </ul>
+  </div>
+</section>
+
+<!-- Section 7 -->
+<section>
+  <h2 class="collapsible">7. 国会会議録の検索のコツ 🔍 <span class="toggle-icon">▼</span></h2>
+  <div class="content" style="display:none;">
+    <p>「国会で何が話されているのか知りたいけど、会議録が膨大で探せない！」という人は多いですよね。そんな時は、</p>
+    <ul>
+      <li>調べたいテーマやキーワードをまずはっきりさせる（例：「消費税」「教育改革」）</li>
+      <li>国会会議録検索システムを活用 → 
+        <a href="https://kokkai.ndl.go.jp/" target="_blank" rel="noopener noreferrer">https://kokkai.ndl.go.jp/</a>
+      </li>
+      <li>会議の種類（本会議or委員会）や期間で絞る</li>
+      <li>発言者名や政党名で絞り込みも可能</li>
+      <li>ニュースや解説記事のキーワードを利用するのも有効</li>
+    </ul>
+    <p>国会の大まかなスケジュールや流れを理解しておくと、検索期間を絞れてさらに効率的です。</p>
+  </div>
+</section>
+
+<!-- Summary -->
+<section>
+  <h2 class="collapsible">まとめ ✍️ <span class="toggle-icon">▼</span></h2>
+  <div class="content" style="display:none;">
+    <ul>
+      <li>国会の仕組みや流れは複雑ですが、ポイントを押さえれば理解はグッと楽になります。</li>
+      <li>委員会で専門的に審議し、両院で法案をやり取りする</li>
+      <li>参議院が否決しても、衆議院が再可決できる強い権限がある</li>
+      <li>両院協議会は調整の場として重要だが、頻繁には開かれない</li>
+      <li>会議録を調べるにはキーワードと期間を絞るのがコツ</li>
+    </ul>
+    <p>こんな感じで国会を知っておくと、ニュースももっと身近に感じられますよ！<br>
+    またわからないことや調べたいテーマがあれば気軽に聞いてくださいね。</p>
+    <p>以上、「備忘録」としてこれまでのやりとりをまとめてみました。読んでくれてありがとう！🎉</p>
+  </div>
+</section>
+
+<!-- Modal for Extra Info (Example) -->
+<div class="modal-overlay" id="modal">
+  <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-describedby="modalDesc">
+    <button class="modal-close" id="modalClose" aria-label="閉じる">&times;</button>
+    <h3 id="modalTitle">国会会議録検索システムについて</h3>
+    <p id="modalDesc">国会会議録検索システムは、国会での議事録をオンラインで検索できる公式サービスです。キーワードや日付、会議の種類を指定して探せるので便利ですよ！</p>
+  </div>
+</div>
+
+<!-- Button to open Modal -->
+<button class="btn" id="openModalBtn" aria-haspopup="dialog" aria-controls="modal">国会会議録検索システムとは？</button>
+
+<script>
+  // Scroll animation for headings and paragraphs: fade and slide in when visible in viewport
+  const faders = document.querySelectorAll('h1, h2, p, ul');
+  const appearOptions = {
+    threshold: 0.2,
+    rootMargin: "0px 0px -50px 0px"
+  };
+  const appearOnScroll = new IntersectionObserver(function(entries, appearOnScroll) {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add('visible');
+      appearOnScroll.unobserve(entry.target);
+    });
+  }, appearOptions);
+  faders.forEach(fader => {
+    appearOnScroll.observe(fader);
+  });
+
+  // Collapsible sections toggle
+  document.querySelectorAll('h2.collapsible').forEach(header => {
+    header.addEventListener('click', () => {
+      const content = header.nextElementSibling;
+      const isVisible = content.style.display === 'block';
+      if (isVisible) {
+        content.style.display = 'none';
+        header.classList.add('collapsed');
+      } else {
+        content.style.display = 'block';
+        header.classList.remove('collapsed');
+      }
+    });
+  });
+
+  // Modal functionality
+  const modal = document.getElementById('modal');
+  const openModalBtn = document.getElementById('openModalBtn');
+  const closeModalBtn = document.getElementById('modalClose');
+
+  openModalBtn.addEventListener('click', () => {
+    modal.classList.add('active');
+    // Focus modal for accessibility
+    modal.querySelector('.modal-content').focus();
+  });
+
+  closeModalBtn.addEventListener('click', () => {
+    modal.classList.remove('active');
+    openModalBtn.focus();
+  });
+
+  // Close modal on overlay click
+  modal.addEventListener('click', (e) => {
+    if(e.target === modal){
+      modal.classList.remove('active');
+      openModalBtn.focus();
+    }
+  });
+
+  // Close modal on Escape key
+  document.addEventListener('keydown', (e) => {
+    if(e.key === "Escape" && modal.classList.contains('active')){
+      modal.classList.remove('active');
+      openModalBtn.focus();
+    }
+  });
+</script>
+</body>
+</html>
