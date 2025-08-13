@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GitHubでブログ全文検索インデックスを自動生成する方法とJSON・GitHubブランチの基礎</title>
+  <!-- Google Fonts: Noto Sans JP for Japanese readability -->
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap" rel="stylesheet" />
+  <style>
+    /* Reset & base */
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Noto Sans JP', sans-serif;
+      background-color: #f5f7fa;
+      color: #333;
+      margin: 0;
+      line-height: 1.6;
+      padding: 20px;
+      min-height: 100vh;
+      scroll-behavior: smooth;
+    }
+    a {
+      color: #007acc;
+      text-decoration: none;
+      transition: color 0.3s ease, transform 0.2s ease;
+      cursor: pointer;
+    }
+    a:hover, a:focus {
+      color: #005f99;
+      transform: scale(1.05);
+      outline: none;
+    }
+    h1, h2, h3 {
+      color: #222;
+      margin-top: 1.5em;
+      margin-bottom: 0.5em;
+      opacity: 0;
+      transform: translateX(-30px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    h1.visible, h2.visible, h3.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    h1 {
+      font-size: 2.4rem;
+      border-bottom: 3px solid #007acc;
+      padding-bottom: 0.3em;
+    }
+    h2 {
+      font-size: 1.8rem;
+      border-left: 5px solid #007acc;
+      padding-left: 0.5em;
+      margin-top: 2em;
+    }
+    p {
+      margin: 0.8em 0;
+      font-size: 1.1rem;
+    }
+    ul {
+      padding-left: 1.4em;
+      margin: 1em 0;
+    }
+    li {
+      margin-bottom: 0.4em;
+      font-size: 1.05rem;
+    }
+
+    /* Buttons and interactive links */
+    .btn {
+      display: inline-block;
+      background-color: #007acc;
+      color: #fff;
+      padding: 0.6em 1.2em;
+      margin: 1em 0;
+      border-radius: 5px;
+      font-weight: 600;
+      user-select: none;
+      transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+      border: none;
+      cursor: pointer;
+      text-align: center;
+    }
+    .btn:hover, .btn:focus {
+      background-color: #005f99;
+      transform: scale(1.05);
+      box-shadow: 0 4px 10px rgba(0, 95, 153, 0.4);
+      outline: none;
+    }
+
+    /* Responsive images */
+    img.responsive {
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+      margin: 1em 0;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease;
+      cursor: pointer;
+    }
+    img.responsive:hover {
+      transform: scale(1.03);
+      box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+    }
+
+    /* Container and layout */
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      background-color: #fff;
+      padding: 30px 40px;
+      border-radius: 10px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+    }
+
+    /* Modal styling */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background-color: rgba(0,0,0,0.5);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+    .modal-overlay.active {
+      display: flex;
+    }
+    .modal {
+      background: white;
+      padding: 2em 2.5em;
+      border-radius: 12px;
+      max-width: 400px;
+      width: 90%;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      position: relative;
+      text-align: center;
+    }
+    .modal h3 {
+      margin-top: 0;
+      font-size: 1.5rem;
+      margin-bottom: 1em;
+    }
+    .modal button.close-btn {
+      background-color: #007acc;
+      color: white;
+      border: none;
+      padding: 0.5em 1em;
+      font-weight: 600;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      margin-top: 1em;
+    }
+    .modal button.close-btn:hover, .modal button.close-btn:focus {
+      background-color: #005f99;
+      outline: none;
+    }
+
+    /* Responsive typography */
+    @media screen and (max-width: 600px) {
+      body {
+        padding: 15px 10px;
+      }
+      .container {
+        padding: 20px 20px;
+      }
+      h1 {
+        font-size: 1.8rem;
+      }
+      h2 {
+        font-size: 1.4rem;
+      }
+      p, li {
+        font-size: 1rem;
+      }
+    }
+
+    /* Navigation for "目次" */
+    nav#toc {
+      margin-bottom: 2em;
+      padding: 1em;
+      background: #e9f2fb;
+      border-radius: 8px;
+      box-shadow: inset 0 0 5px rgba(0,0,0,0.05);
+    }
+    nav#toc h2 {
+      margin-top: 0;
+      font-weight: 700;
+      color: #004e7c;
+    }
+    nav#toc ul {
+      list-style-type: none;
+      padding-left: 0;
+      margin: 0;
+    }
+    nav#toc ul li {
+      margin-bottom: 0.6em;
+    }
+    nav#toc a {
+      color: #007acc;
+      font-weight: 600;
+      font-size: 1rem;
+      transition: color 0.3s ease;
+    }
+    nav#toc a:hover, nav#toc a:focus {
+      color: #005f99;
+      text-decoration: underline;
+      outline: none;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="container" role="main">
+    <header>
+      <h1>📚 GitHubでブログ全文検索インデックスを自動生成する方法とJSON・GitHubブランチの基礎</h1>
+      <p>こんにちは！今回は僕自身の備忘録も兼ねて、GitHubで運用しているブログに全文検索機能をつけるときのポイントや、基本的な疑問までわかりやすくまとめました。</p>
+    </header>
+
+    <!-- 目次 -->
+    <nav id="toc" aria-label="目次">
+      <h2>📖 目次</h2>
+      <ul>
+        <li><a href="#search-implementation">全文検索機能をブログに実装する方法の概要</a></li>
+        <li><a href="#json-index">JSON形式とは？検索インデックスは何をしているの？</a></li>
+        <li><a href="#github-actions">GitHub Actionsで検索用JSONを自動生成する具体例</a></li>
+        <li><a href="#ipad-branch">iPadのブラウザでGitHubに新しいブランチを作る方法</a></li>
+        <li><a href="#directory-pattern">記事ディレクトリ名のパターン変更も対応可能</a></li>
+        <li><a href="#html-extraction">タイトル・本文の抽出はHTMLタグで判断する</a></li>
+        <li><a href="#structure-variation">記事ごとのHTML構造がバラバラでも対策はある</a></li>
+        <li><a href="#summary">まとめと今後の相談について</a></li>
+      </ul>
+    </nav>
+
+    <!-- 各セクション -->
+    <section id="search-implementation">
+      <h2>🔍 全文検索機能をブログに実装する方法の概要</h2>
+      <p>国会の会議録などのサイトでは、サイト全体を横断して全文検索ができる仕組みがあります。これを自分のブログやホームページでも実装したい場合、大きく分けて2種類の方法があります。</p>
+      <ul>
+        <li><strong>サーバー側全文検索：</strong>Elasticsearchなどを使い、サーバー上で強力な全文検索を実現する。ただしセットアップや運用コストが高く、費用もほぼ確実に発生します。</li>
+        <li><strong>ブラウザ側全文検索（JavaScript）：</strong>Lunr.jsやFuse.jsなどのライブラリを使い、あらかじめ作成した記事のデータ（JSON形式）をブラウザで読み込み、検索処理をブラウザで完結させる方法です。</li>
+      </ul>
+      <h3>Lunr.jsとFuse.jsの違い</h3>
+      <ul>
+        <li><strong>Lunr.js：</strong>単語を分割して「インデックス」を自動作成し、高速な全文検索ができる。</li>
+        <li><strong>Fuse.js：</strong>あいまい検索に強くて、部分一致やスペルミスにも対応しやすい。</li>
+      </ul>
+      <p><strong>「インデックス」とは？</strong><br>「インデックス」という言葉は、例えば図書館のカードみたいに、検索に便利になるようにテキストの中身を分析し、データ構造を作る作業です。手動で設定するのではなく、Lunr.jsやFuse.jsが自動的に単語ごとにインデックスを作成してくれます。</p>
+    </section>
+
+    <section id="json-index">
+      <h2>📄 JSON形式とは？検索インデックスは何をしているの？</h2>
+      <p>JSON（JavaScript Object Notation）はデータをテキストで整理して保存・送受信する軽量フォーマットです。たとえば記事のタイトルや本文をキーと値の組み合わせでまとめたものがJSONです。</p>
+      <pre><code>{
+  "title": "ブログ記事のタイトル",
+  "url": "/2025-08-13/",
+  "content": "記事の本文のテキスト..."
+}
+</code></pre>
+      <p>これを検索インデックスとして使うことで、JavaScriptが読み込んで検索処理を行えるようになります。つまり、全文検索用のテキストの「箱」みたいなものですね。</p>
+    </section>
+
+    <section id="github-actions">
+      <h2>⚙️ GitHub Actionsで検索用JSONを自動生成する具体例</h2>
+      <p>自分のブログ記事ディレクトリ（例：2025-08-13/）内のHTMLファイルを読み込み、記事タイトル・本文を抽出してJSONファイルを自動で生成し、それをGitHubリポジトリに自動でコミット＆プッシュすることもできます。</p>
+      <h3>具体的な流れ</h3>
+      <ul>
+        <li>GitHub Actionsがmainブランチにpushされるたびに起動。</li>
+        <li>Node.jsスクリプト（create-search-index.js）が記事フォルダのindex.htmlを読み込む。</li>
+        <li>タイトルや本文を抽出し、JSON配列にまとめる。</li>
+        <li>まとめたJSONをsearch-index.jsonとして保存。</li>
+        <li>search-index.jsonをGitHubに自動コミット＆プッシュ。</li>
+      </ul>
+      <h3>例：Node.jsでのタイトルと本文抽出</h3>
+      <pre><code>const fs = require('fs');
+const path = require('path');
+const jsdom = require('jsdom');
+const { JSDOM } = jsdom;
+
+const rootDir = './';
+
+async function createIndex() {
+  const entries = fs.readdirSync(rootDir, { withFileTypes: true });
+  const articles = [];
+
+  for (const entry of entries) {
+    if (entry.isDirectory() && /^\d{4}-\d{2}-\d{2}$/.test(entry.name)) {
+      const indexPath = path.join(rootDir, entry.name, 'index.html');
+      if (fs.existsSync(indexPath)) {
+        const html = fs.readFileSync(indexPath, 'utf-8');
+        const dom = new JSDOM(html);
+        const title = dom.window.document.querySelector('title')?.textContent || '';
+        const bodyText = dom.window.document.body.textContent.replace(/\s+/g, ' ').trim();
+
+        articles.push({
+          url: `/${entry.name}/`,
+          title,
+          content: bodyText,
+        });
+      }
+    }
+  }
+
+  fs.writeFileSync('search-index.json', JSON.stringify(articles, null, 2));
+  console.log('search-index.json created!');
+}
+
+createIndex();
+</code></pre>
+    </section>
+
+    <section id="ipad-branch">
+      <h2>📱 iPadのブラウザでGitHubに新しいブランチを作る方法</h2>
+      <p>PCがなくても、iPadのChromeブラウザからGitHubで新しいブランチを作ることはできます。</p>
+      <h3>手順</h3>
+      <ol>
+        <li>GitHubのリポジトリページを開く。</li>
+        <li>上部にある現在のブランチ名（例：main）をタップ。</li>
+        <li>「Find or create a branch」欄に新しいブランチ名を入力。</li>
+        <li>「Create branch: 新しいブランチ名」をタップすると新規作成される。</li>
+      </ol>
+    </section>
+
+    <section id="directory-pattern">
+      <h2>🔄 記事ディレクトリ名のパターン変更も対応可能</h2>
+      <p>ブログ記事ディレクトリの名前が「250813-〇〇（半角英数字）」のような形でも、GitHub Actionsのスクリプトのディレクトリ判定の正規表現を書き換えれば対応できます。</p>
+      <pre><code>if (entry.isDirectory() && /^\d{6}-[a-zA-Z0-9]+$/.test(entry.name)) {
+  // 処理
+}
+</code></pre>
+    </section>
+
+    <section id="html-extraction">
+      <h2>🔎 タイトル・本文の抽出はHTMLタグで判断する</h2>
+      <p>HTMLのどのタグの中身を「タイトル」や「本文」とみなすかは、基本的に以下のタグを参照します。</p>
+      <ul>
+        <li>タイトルは <code>&lt;title&gt;</code>タグや<code>&lt;h1&gt;</code>タグ</li>
+        <li>本文は <code>&lt;article&gt;</code>タグや<code>&lt;body&gt;</code>タグのテキスト部分</li>
+      </ul>
+      <p>jsdomなどを使うと、プログラムでタグを指定して中身を抽出できます。</p>
+    </section>
+
+    <section id="structure-variation">
+      <h2>🧩 記事ごとのHTML構造がバラバラでも対策はある</h2>
+      <p>もしGeminiなどで記事HTMLが毎回違う構造で生成されるなら、トップページのHTMLだけを頼りにするのは難しいです。</p>
+      <p>各記事のHTMLを個別に解析してタイトル・本文を抽出し、それらをまとめて1つの検索インデックスJSONにする方法が望ましいです。</p>
+      <p>または、タイトルや要約などのメタ情報を別途JSONなどで管理しておき、それを検索用に使う方法もあります。</p>
+    </section>
+
+    <section id="summary">
+      <h2>📝 まとめと今後の相談について</h2>
+      <p>この記事では、</p>
+      <ul>
+        <li>ブログ全文検索を実装する際のJSONインデックスの役割や生成方法</li>
+        <li>GitHub Actionsを使った自動化の具体例</li>
+        <li>iPadブラウザでのGitHubブランチ作成方法</li>
+        <li>HTMLタグからのタイトル・本文抽出のポイント</li>
+        <li>記事ディレクトリ名の変更にも柔軟に対応できること</li>
+      </ul>
+      <p>などをお伝えしました。</p>
+      <p>もし具体的な記事HTMLのサンプルがあれば、それに合わせた抽出ロジックもご提案できます。実装時に困ったら、ぜひまたChatGPTやGeminiに相談してみてくださいね！</p>
+      <p>最後まで読んでいただきありがとうございました😊</p>
+    </section>
+  </div>
+
+  <script>
+    // アニメーションで見出しを順次フェードイン
+    document.addEventListener('DOMContentLoaded', () => {
+      const headers = document.querySelectorAll('h1, h2, h3');
+      headers.forEach((header, i) => {
+        setTimeout(() => {
+          header.classList.add('visible');
+        }, i * 300);
+      });
+    });
+  </script>
+</body>
+</html>
