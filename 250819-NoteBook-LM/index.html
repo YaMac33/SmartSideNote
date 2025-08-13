@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>📓 NoteBookLMって実際どうなの？使ってみたいと思って調べた話</title>
+  <style>
+    /* === リセット＆基本設定 === */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Segoe UI', 'Hiragino Kaku Gothic ProN', Meiryo, sans-serif;
+      background-color: #f9f9fa;
+      color: #333;
+      line-height: 1.8;
+      padding: 20px;
+    }
+
+    /* === レイアウト === */
+    main {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+
+    h1, h2 {
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      font-size: 2rem;
+      color: #2c3e50;
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      color: #2980b9;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.6s ease-out;
+    }
+
+    h2.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    p {
+      margin-bottom: 1em;
+    }
+
+    ul {
+      margin-left: 1.2em;
+      margin-bottom: 1.5em;
+    }
+
+    li {
+      margin-bottom: 0.5em;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 1.5em;
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 12px;
+      text-align: center;
+    }
+
+    th {
+      background-color: #f0f6fb;
+    }
+
+    /* === ボタンとリンク === */
+    .button {
+      display: inline-block;
+      background-color: #2980b9;
+      color: #fff;
+      padding: 10px 20px;
+      margin-top: 20px;
+      border-radius: 6px;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .button:hover {
+      background-color: #3498db;
+      transform: scale(1.05);
+    }
+
+    /* === レスポンシブ対応 === */
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 1.6rem;
+      }
+
+      h2 {
+        font-size: 1.2rem;
+      }
+
+      table, th, td {
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>📓 NoteBookLMって実際どうなの？使ってみたいと思って調べた話</h1>
+
+    <h2 class="fade-section">🔍 NoteBookLMってそもそも何？</h2>
+    <p>NoteBookLMは、Googleが提供しているAIノートツールです。GoogleドキュメントやPDFをアップロードすると、その内容をAIが読み取り、要約や解説、質問応答をしてくれます。</p>
+    <ul>
+      <li>📄 文書をAIが読み込んで要約</li>
+      <li>❓ 質問に回答（引用付き）</li>
+      <li>📊 プレゼン資料の構成を自動作成</li>
+      <li>🎤 ナレーション原稿まで自動生成</li>
+    </ul>
+
+    <h2 class="fade-section">🤔 ChatGPTやGeminiと何が違うの？</h2>
+    <p>どちらも要約ができるAIですが、仕組みや使い勝手に違いがあります。</p>
+    <table>
+      <thead>
+        <tr>
+          <th>比較項目</th>
+          <th>NoteBookLM</th>
+          <th>ChatGPT / Gemini</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>情報の扱い方</td>
+          <td>アップロード文書全体を解析</td>
+          <td>貼り付けたテキストだけ処理</td>
+        </tr>
+        <tr>
+          <td>引用元</td>
+          <td>段落や出典を明示</td>
+          <td>根拠が不明な場合も</td>
+        </tr>
+        <tr>
+          <td>資料間の比較</td>
+          <td>複数ドキュメント横断可能</td>
+          <td>1件ずつ処理が基本</td>
+        </tr>
+        <tr>
+          <td>目的</td>
+          <td>学習・ノート用途特化</td>
+          <td>汎用チャットAI</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2 class="fade-section">🛠️ 使い方の具体例</h2>
+    <p>例えば、「法律の改正があったときに、内容を要約し、スライドと音声解説を作る」という用途にぴったり。</p>
+    <ul>
+      <li>📥 改正法や旧法の資料をアップロード</li>
+      <li>📝 改正前後を比較して要点を整理</li>
+      <li>📽 スライド構成をAIが作成</li>
+      <li>🎙 ナレーション原稿も自動生成</li>
+    </ul>
+
+    <h2 class="fade-section">🔐 Googleアカウントが必須</h2>
+    <p>NoteBookLMを利用するには、Googleアカウントでログインが必要です。アカウントがないと何も操作できません。</p>
+
+    <h2 class="fade-section">💡 Webページに埋め込める？</h2>
+    <p>残念ながら、NoteBookLMにはAPIや埋め込みウィジェットがないため、自分のWebサイトに直接組み込むことはできません。</p>
+
+    <h2 class="fade-section">✅ 代替案は？</h2>
+    <p>似たようなことをしたい場合は、以下の方法が考えられます：</p>
+    <ul>
+      <li>🤖 OpenAI API（ChatGPT）で自作</li>
+      <li>📎 Claude / Gemini のAPI利用</li>
+      <li>🧠 LangChainやLlamaIndexでQ&A構築</li>
+    </ul>
+
+    <h2 class="fade-section">🗒️ 最後に：自分用まとめ</h2>
+    <ul>
+      <li>NoteBookLMはGoogle製のAIノートツール</li>
+      <li>法改正、論文、講義ノートの要約に最適</li>
+      <li>スライド構成・ナレーション原稿も作成可能</li>
+      <li>Googleアカウントが必須</li>
+      <li>類似機能はOpenAI APIやLangChainでも再現可能</li>
+    </ul>
+
+    <p>📘 今後も使ってみたらレポートします！</p>
+    <a class="button" href="#">⬆️ ページのトップへ戻る</a>
+  </main>
+
+  <script>
+    // === フェードインアニメーション ===
+    const sections = document.querySelectorAll('.fade-section');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, {
+      threshold: 0.2
+    });
+
+    sections.forEach(section => {
+      observer.observe(section);
+    });
+
+    // === ページトップに戻るスムーズスクロール ===
+    document.querySelector('.button').addEventListener('click', (e) => {
+      e.preventDefault();
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
+  </script>
+</body>
+</html>
