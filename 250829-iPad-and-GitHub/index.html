@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>📘iPad mini × GitHub 開発備忘録</title>
+  <style>
+    /* ===== フォントとベーススタイル ===== */
+    body {
+      margin: 0;
+      font-family: "Helvetica Neue", sans-serif;
+      line-height: 1.8;
+      background-color: #f4f7fa;
+      color: #333;
+      scroll-behavior: smooth;
+    }
+
+    header {
+      background: linear-gradient(135deg, #6a11cb, #2575fc);
+      color: white;
+      padding: 2rem 1rem;
+      text-align: center;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    header h1 {
+      font-size: 1.8rem;
+    }
+
+    main {
+      max-width: 960px;
+      margin: auto;
+      padding: 2rem 1rem;
+    }
+
+    section {
+      margin-bottom: 3rem;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.6s ease;
+    }
+
+    section.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    h2 {
+      color: #2575fc;
+      font-size: 1.5rem;
+      margin-top: 2rem;
+      border-left: 6px solid #2575fc;
+      padding-left: 0.5rem;
+    }
+
+    h3 {
+      color: #444;
+      margin-top: 1rem;
+    }
+
+    p {
+      margin: 0.5rem 0;
+    }
+
+    ul {
+      padding-left: 1.5rem;
+    }
+
+    li {
+      margin-bottom: 0.5rem;
+    }
+
+    code {
+      background-color: #eee;
+      padding: 2px 4px;
+      border-radius: 4px;
+      font-family: "Courier New", monospace;
+    }
+
+    blockquote {
+      background-color: #fff7e6;
+      border-left: 5px solid #ffc107;
+      padding: 1rem;
+      margin: 1rem 0;
+    }
+
+    footer {
+      background: #222;
+      color: #aaa;
+      text-align: center;
+      padding: 2rem 1rem;
+      font-size: 0.9rem;
+    }
+
+    a {
+      color: #2575fc;
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+
+    a:hover {
+      text-decoration: underline;
+      color: #1a4ecb;
+    }
+
+    /* ===== アニメーションボタン（例）===== */
+    .btn {
+      display: inline-block;
+      padding: 0.6rem 1.2rem;
+      background-color: #2575fc;
+      color: white;
+      border-radius: 8px;
+      transition: transform 0.2s ease, background-color 0.3s ease;
+      text-decoration: none;
+      margin-top: 1rem;
+    }
+
+    .btn:hover {
+      transform: scale(1.05);
+      background-color: #1a4ecb;
+    }
+
+    /* ===== レスポンシブ ===== */
+    @media (max-width: 600px) {
+      header h1 {
+        font-size: 1.4rem;
+      }
+
+      h2 {
+        font-size: 1.3rem;
+      }
+
+      main {
+        padding: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ヘッダー -->
+  <header>
+    <h1>📘iPad mini × GitHub 開発備忘録💻🍎</h1>
+    <p>〜 持ち歩かない開発スタイルの試行錯誤メモ 〜</p>
+  </header>
+
+  <!-- メインコンテンツ -->
+  <main>
+    <!-- セクションごとに分割 -->
+    <section>
+      <h2>🔄GitHubのオレンジ・緑・赤のマークってなに？</h2>
+      <p>GitHubでファイルを更新すると、ファイル名の横に…</p>
+      <ul>
+        <li>🟠 <strong>オレンジの丸</strong>：チェック中（pending）</li>
+        <li>✅ <strong>緑のチェックマーク</strong>：成功（success）</li>
+        <li>❌ <strong>赤のバツ</strong>：失敗（failure）</li>
+      </ul>
+      <p>これは <strong>GitHub ActionsやCI/CD</strong> の自動チェック結果💡</p>
+    </section>
+
+    <section>
+      <h2>🧠mainブランチだけでも競合する？その理由</h2>
+      <h3>なぜ競合が起きるのか？</h3>
+      <ul>
+        <li>同じファイルの <strong>同じ箇所</strong> を複数人が編集</li>
+        <li>他の人が push した後に自分が push しようとすると conflict💥</li>
+        <li>更新頻度が高いと、競合も増える⤴️</li>
+      </ul>
+      <h3>回避策</h3>
+      <ul>
+        <li><code>git pull</code> をこまめに</li>
+        <li>作業ブランチを分ける</li>
+        <li>チーム内で担当ファイルを共有📢</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>🍎iPad miniでGitHub作業する方法を探してみた</h2>
+      <p>iPad mini + ChromeでGitHub作業してるけど、<strong>ターミナル使えないのがつらい…</strong></p>
+      <p>でも、いい方法あったので紹介👇</p>
+    </section>
+
+    <section>
+      <h2>🛠️iPadでも使えるシェルアプリ2選：a-Shell & iSH Shell</h2>
+      <h3>🐚a-Shell</h3>
+      <ul>
+        <li>Python / curl / clang / wget 対応</li>
+        <li>iOSのファイルアプリと連携可</li>
+      </ul>
+      <h3>🐧iSH Shell（おすすめ！）</h3>
+      <ul>
+        <li><code>apk add git</code>でGit環境構築</li>
+        <li><code>git clone</code>、<code>git pull</code>、<code>vi</code>もOK✨</li>
+        <li>仮想ファイルシステム内（例：<code>/root/</code>）に保存📁</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>💻GitHub Codespacesは便利だけど重い！</h2>
+      <h3>なぜ重い？</h3>
+      <ul>
+        <li>iPadの処理能力に負荷</li>
+        <li>ネット速度に大きく依存</li>
+        <li>PC向けUIのため操作性△</li>
+      </ul>
+      <h3>対策方法</h3>
+      <ul>
+        <li>安定したWi-Fi📶</li>
+        <li>PWA版 VS Codeの登場を待つ</li>
+        <li>a-Shell や Working Copyで代替</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>🎹画面キーボード問題…どうする？</h2>
+      <p><strong>画面キーボードが邪魔！</strong> でも物理キーボードを持ちたくない…</p>
+      <p>→ 対応アプリでの編集、音声入力、設定の工夫が必要かも。</p>
+    </section>
+
+    <section>
+      <h2>🔍iPhoneの「近くのデバイスを操作」って使える？</h2>
+      <p><strong>アクセシビリティ → 近くのデバイスを操作</strong> を調査🔎</p>
+      <h3>できること</h3>
+      <ul>
+        <li>iPhoneでiPadやMacの <strong>入力共有</strong> が可能</li>
+        <li>マウス・キーボードのみ共有（画面は操作不可）</li>
+      </ul>
+      <h3>なぜ完全リモート操作できない？</h3>
+      <ol>
+        <li>セキュリティ上の理由</li>
+        <li>iOSの設計的に難しい</li>
+        <li>AppleのUX哲学</li>
+        <li>ユニバーサルコントロールがあるから</li>
+      </ol>
+    </section>
+
+    <section>
+      <h2>📝まとめ：iPad開発ライフを快適に！</h2>
+      <ul>
+        <li>✅ CIマークの意味を理解</li>
+        <li>✅ mainブランチでも競合に注意</li>
+        <li>✅ iSH ShellはiPadでもGit操作の神</li>
+        <li>✅ Codespacesは環境次第で重くなる</li>
+        <li>✅ 入力環境の工夫は重要</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>☁️おまけ：やってみたいことリスト</h2>
+      <ul>
+        <li>Working Copy活用</li>
+        <li>GitHub CLIをiSHに導入</li>
+        <li>ローカルサーバーをiPadで動かす</li>
+      </ul>
+      <a class="btn" href="https://github.com" target="_blank">🌐 GitHubを開く</a>
+    </section>
+  </main>
+
+  <!-- フッター -->
+  <footer>
+    © 2025 iPad Dev Log ✍️ Powered by 自分
+  </footer>
+
+  <!-- JavaScript：スクロール時にアニメーション -->
+  <script>
+    const sections = document.querySelectorAll("section");
+    const options = {
+      threshold: 0.1
+    };
+
+    const observer = new IntersectionObserver(function(entries, observer) {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("visible");
+        }
+      });
+    }, options);
+
+    sections.forEach(section => {
+      observer.observe(section);
+    });
+  </script>
+</body>
+</html>
