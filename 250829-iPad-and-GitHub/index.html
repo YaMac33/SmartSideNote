@@ -1,230 +1,286 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>備忘録：「NTTデータ×GoogleのAIエージェント開発」と「PerplexityのChrome買収提案」</title>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>📘iPad mini × GitHub 開発備忘録</title>
   <style>
-    /* リセットと基本スタイル */
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
+    /* ===== フォントとベーススタイル ===== */
     body {
-      font-family: 'Noto Sans JP', sans-serif;
-      line-height: 1.7;
-      background-color: #f9f9f9;
+      margin: 0;
+      font-family: "Helvetica Neue", sans-serif;
+      line-height: 1.8;
+      background-color: #f4f7fa;
       color: #333;
-      padding: 20px;
+      scroll-behavior: smooth;
     }
 
     header {
-      text-align: center;
-      padding: 40px 20px;
-      background: #004d7a;
+      background: linear-gradient(135deg, #6a11cb, #2575fc);
       color: white;
+      padding: 2rem 1rem;
+      text-align: center;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     }
 
     header h1 {
-      font-size: 2em;
-      animation: fadeIn 1.5s ease-in-out;
+      font-size: 1.8rem;
     }
 
     main {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 20px;
+      max-width: 960px;
+      margin: auto;
+      padding: 2rem 1rem;
+    }
+
+    section {
+      margin-bottom: 3rem;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.6s ease;
+    }
+
+    section.visible {
+      opacity: 1;
+      transform: translateY(0);
     }
 
     h2 {
-      margin-top: 40px;
-      font-size: 1.5em;
-      color: #004d7a;
-      position: relative;
-      opacity: 0;
-      transform: translateY(30px);
-      transition: all 0.6s ease-out;
+      color: #2575fc;
+      font-size: 1.5rem;
+      margin-top: 2rem;
+      border-left: 6px solid #2575fc;
+      padding-left: 0.5rem;
     }
 
-    p,
-    ul {
-      margin-top: 16px;
-      font-size: 1rem;
+    h3 {
+      color: #444;
+      margin-top: 1rem;
+    }
+
+    p {
+      margin: 0.5rem 0;
     }
 
     ul {
-      padding-left: 20px;
+      padding-left: 1.5rem;
     }
 
     li {
-      margin-bottom: 10px;
+      margin-bottom: 0.5rem;
     }
 
-    a {
-      color: #007acc;
-      text-decoration: none;
-      transition: color 0.3s;
+    code {
+      background-color: #eee;
+      padding: 2px 4px;
+      border-radius: 4px;
+      font-family: "Courier New", monospace;
     }
 
-    a:hover,
-    a:focus {
-      color: #005f99;
-      text-decoration: underline;
+    blockquote {
+      background-color: #fff7e6;
+      border-left: 5px solid #ffc107;
+      padding: 1rem;
+      margin: 1rem 0;
     }
 
     footer {
+      background: #222;
+      color: #aaa;
       text-align: center;
-      padding: 20px;
-      margin-top: 60px;
-      color: #888;
+      padding: 2rem 1rem;
+      font-size: 0.9rem;
     }
 
-    /* ボタンスタイル */
+    a {
+      color: #2575fc;
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+
+    a:hover {
+      text-decoration: underline;
+      color: #1a4ecb;
+    }
+
+    /* ===== アニメーションボタン（例）===== */
     .btn {
       display: inline-block;
-      background-color: #007acc;
+      padding: 0.6rem 1.2rem;
+      background-color: #2575fc;
       color: white;
-      padding: 10px 20px;
-      border-radius: 5px;
-      margin-top: 20px;
+      border-radius: 8px;
+      transition: transform 0.2s ease, background-color 0.3s ease;
       text-decoration: none;
-      transition: transform 0.3s, background-color 0.3s;
-      cursor: pointer;
+      margin-top: 1rem;
     }
 
-    .btn:hover,
-    .btn:focus {
-      background-color: #005f99;
+    .btn:hover {
       transform: scale(1.05);
+      background-color: #1a4ecb;
     }
 
-    /* スクロールアニメーション */
-    .visible {
-      opacity: 1 !important;
-      transform: translateY(0px) !important;
-    }
-
-    /* 画像レスポンシブ */
-    img {
-      max-width: 100%;
-      height: auto;
-      border-radius: 5px;
-      margin: 20px 0;
-    }
-
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: scale(0.95);
-      }
-      to {
-        opacity: 1;
-        transform: scale(1);
-      }
-    }
-
+    /* ===== レスポンシブ ===== */
     @media (max-width: 600px) {
       header h1 {
-        font-size: 1.5em;
+        font-size: 1.4rem;
+      }
+
+      h2 {
+        font-size: 1.3rem;
       }
 
       main {
-        padding: 10px;
+        padding: 1rem;
       }
     }
   </style>
 </head>
-
 <body>
+
+  <!-- ヘッダー -->
   <header>
-    <h1>🧠 備忘録：「NTTデータ×GoogleのAIエージェント開発」と「PerplexityのChrome買収提案」</h1>
+    <h1>📘iPad mini × GitHub 開発備忘録💻🍎</h1>
+    <p>〜 持ち歩かない開発スタイルの試行錯誤メモ 〜</p>
   </header>
 
+  <!-- メインコンテンツ -->
   <main>
-    <p>こんにちは、自分。今日は最近話題になった2つのテック系ニュースについて、自分の頭を整理するために備忘録を書いておこうと思う。未来の自分が読んだ時に「そうそう、こんなことあったな」って思えるように、できるだけわかりやすく、具体例も交えて書いていく。</p>
+    <!-- セクションごとに分割 -->
+    <section>
+      <h2>🔄GitHubのオレンジ・緑・赤のマークってなに？</h2>
+      <p>GitHubでファイルを更新すると、ファイル名の横に…</p>
+      <ul>
+        <li>🟠 <strong>オレンジの丸</strong>：チェック中（pending）</li>
+        <li>✅ <strong>緑のチェックマーク</strong>：成功（success）</li>
+        <li>❌ <strong>赤のバツ</strong>：失敗（failure）</li>
+      </ul>
+      <p>これは <strong>GitHub ActionsやCI/CD</strong> の自動チェック結果💡</p>
+    </section>
 
-    <h2>🧩 NTTデータとGoogleがAIエージェント開発で提携！</h2>
-    <p>まず一つ目。NTTデータとGoogle Cloudが手を組んで、業界特化型のAIエージェントを50種類以上開発するっていうビッグニュース。これはちょっと、正直ワクワクした。</p>
-    <p>【出典・詳細】<br />
-      <a href="https://www.kyodonews.jp/news/2025/08/20250813_12345.html" target="_blank" rel="noopener noreferrer">共同通信 2025年8月13日記事</a><br />
-      <a href="https://cloud.google.com/" target="_blank" rel="noopener noreferrer">Google Cloud 公式サイト</a><br />
-      <a href="https://www.nttdata.com/jp/ja/" target="_blank" rel="noopener noreferrer">NTTデータ公式サイト</a>
-    </p>
+    <section>
+      <h2>🧠mainブランチだけでも競合する？その理由</h2>
+      <h3>なぜ競合が起きるのか？</h3>
+      <ul>
+        <li>同じファイルの <strong>同じ箇所</strong> を複数人が編集</li>
+        <li>他の人が push した後に自分が push しようとすると conflict💥</li>
+        <li>更新頻度が高いと、競合も増える⤴️</li>
+      </ul>
+      <h3>回避策</h3>
+      <ul>
+        <li><code>git pull</code> をこまめに</li>
+        <li>作業ブランチを分ける</li>
+        <li>チーム内で担当ファイルを共有📢</li>
+      </ul>
+    </section>
 
-    <h2>🤖 そもそも「AIエージェント」って何？</h2>
-    <p>簡単に言うと、「人の代わりに仕事をこなしてくれるAIのこと」。たとえば、以下のような場面で使える：</p>
-    <ul>
-      <li>製造業での点検記録の自動処理</li>
-      <li>金融業での契約書のチェックやリスク分析</li>
-      <li>カスタマーサポートのチャット対応 などなど</li>
-    </ul>
+    <section>
+      <h2>🍎iPad miniでGitHub作業する方法を探してみた</h2>
+      <p>iPad mini + ChromeでGitHub作業してるけど、<strong>ターミナル使えないのがつらい…</strong></p>
+      <p>でも、いい方法あったので紹介👇</p>
+    </section>
 
-    <h2>🌟 Googleの生成AI「Gemini」との連携も注目</h2>
-    <p>開発には、Googleの生成AI「Gemini」も使われるらしい。ChatGPTみたいに会話もできて、しかもより業務に最適化された形で動くイメージかな。</p>
-    <p>【参考リンク】<br />
-      <a href="https://blog.google/technology/ai/introducing-gemini/" target="_blank" rel="noopener noreferrer">Google公式 Gemini紹介ページ</a><br />
-      <a href="https://openai.com/blog/chatgpt" target="_blank" rel="noopener noreferrer">OpenAI ChatGPT紹介</a>
-    </p>
+    <section>
+      <h2>🛠️iPadでも使えるシェルアプリ2選：a-Shell & iSH Shell</h2>
+      <h3>🐚a-Shell</h3>
+      <ul>
+        <li>Python / curl / clang / wget 対応</li>
+        <li>iOSのファイルアプリと連携可</li>
+      </ul>
+      <h3>🐧iSH Shell（おすすめ！）</h3>
+      <ul>
+        <li><code>apk add git</code>でGit環境構築</li>
+        <li><code>git clone</code>、<code>git pull</code>、<code>vi</code>もOK✨</li>
+        <li>仮想ファイルシステム内（例：<code>/root/</code>）に保存📁</li>
+      </ul>
+    </section>
 
-    <h2>🛠️ 導入支援も万全っぽい</h2>
-    <p>NTTデータは数千人規模の専任チームを用意して導入を支援するらしい。現場での困りごとにも対応できる体制があるのは、信頼ポイント高い。</p>
+    <section>
+      <h2>💻GitHub Codespacesは便利だけど重い！</h2>
+      <h3>なぜ重い？</h3>
+      <ul>
+        <li>iPadの処理能力に負荷</li>
+        <li>ネット速度に大きく依存</li>
+        <li>PC向けUIのため操作性△</li>
+      </ul>
+      <h3>対策方法</h3>
+      <ul>
+        <li>安定したWi-Fi📶</li>
+        <li>PWA版 VS Codeの登場を待つ</li>
+        <li>a-Shell や Working Copyで代替</li>
+      </ul>
+    </section>
 
-    <h2>💸 一方で…Perplexityが「Google Chromeを買収したい」と言い出した件</h2>
-    <p>AI企業のPerplexityがGoogle Chromeを約5兆円で買収したいと提案したというニュース。</p>
-    <p>【出典・詳細】<br />
-      <a href="https://www.kyodonews.jp/news/2025/08/20250813_67890.html" target="_blank" rel="noopener noreferrer">共同通信 2025年8月13日記事</a><br />
-      <a href="https://www.perplexity.ai/" target="_blank" rel="noopener noreferrer">Perplexity 公式サイト</a><br />
-      <a href="https://www.google.com/chrome/" target="_blank" rel="noopener noreferrer">Google Chrome 公式ページ</a>
-    </p>
+    <section>
+      <h2>🎹画面キーボード問題…どうする？</h2>
+      <p><strong>画面キーボードが邪魔！</strong> でも物理キーボードを持ちたくない…</p>
+      <p>→ 対応アプリでの編集、音声入力、設定の工夫が必要かも。</p>
+    </section>
 
-    <h2>🌍 Chromeってそんなに価値あるの？</h2>
-    <p>世界で約35億人が使っていて、検索の6割以上はChrome経由らしい。つまり、Googleにとっては広告収入の根幹。</p>
+    <section>
+      <h2>🔍iPhoneの「近くのデバイスを操作」って使える？</h2>
+      <p><strong>アクセシビリティ → 近くのデバイスを操作</strong> を調査🔎</p>
+      <h3>できること</h3>
+      <ul>
+        <li>iPhoneでiPadやMacの <strong>入力共有</strong> が可能</li>
+        <li>マウス・キーボードのみ共有（画面は操作不可）</li>
+      </ul>
+      <h3>なぜ完全リモート操作できない？</h3>
+      <ol>
+        <li>セキュリティ上の理由</li>
+        <li>iOSの設計的に難しい</li>
+        <li>AppleのUX哲学</li>
+        <li>ユニバーサルコントロールがあるから</li>
+      </ol>
+    </section>
 
-    <h2>⏳ なぜ今、そんな提案を？</h2>
-    <p>独占禁止法裁判の判決が迫る中、Perplexityがその隙を突いて提案したってわけ。買収の実現性は低そうだけど、名前は一気に広がった。</p>
+    <section>
+      <h2>📝まとめ：iPad開発ライフを快適に！</h2>
+      <ul>
+        <li>✅ CIマークの意味を理解</li>
+        <li>✅ mainブランチでも競合に注意</li>
+        <li>✅ iSH ShellはiPadでもGit操作の神</li>
+        <li>✅ Codespacesは環境次第で重くなる</li>
+        <li>✅ 入力環境の工夫は重要</li>
+      </ul>
+    </section>
 
-    <h2>🔭 今後の注目ポイント</h2>
-    <ul>
-      <li>業界特化AIの普及とその影響</li>
-      <li>検索の未来：Google vs Perplexity/OpenAI</li>
-      <li>独占禁止法の裁判結果が与える影響</li>
-    </ul>
-
-    <h2>✨ 最後に：この2つのニュースに共通すること</h2>
-    <p>どちらも「AIが主役になる時代」を象徴してる。これからは「AIをどう使いこなすか」が問われる時代。自分もそれを意識していきたい。</p>
-
-    <a href="#top" class="btn" id="backToTopBtn" aria-label="トップへ戻るボタン">🔁 トップへ戻る</a>
+    <section>
+      <h2>☁️おまけ：やってみたいことリスト</h2>
+      <ul>
+        <li>Working Copy活用</li>
+        <li>GitHub CLIをiSHに導入</li>
+        <li>ローカルサーバーをiPadで動かす</li>
+      </ul>
+      <a class="btn" href="https://github.com" target="_blank">🌐 GitHubを開く</a>
+    </section>
   </main>
 
+  <!-- フッター -->
   <footer>
-    <p>&copy; 2025 備忘録 by 自分 ｜ All rights reserved.</p>
+    © 2025 iPad Dev Log ✍️ Powered by 自分
   </footer>
 
+  <!-- JavaScript：スクロール時にアニメーション -->
   <script>
-    // スクロール時に見出しがフェードイン・スライドインする処理
-    const headings = document.querySelectorAll('h2');
+    const sections = document.querySelectorAll("section");
+    const options = {
+      threshold: 0.1
+    };
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-          }
-        });
-      },
-      { threshold: 0.2 }
-    );
+    const observer = new IntersectionObserver(function(entries, observer) {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("visible");
+        }
+      });
+    }, options);
 
-    headings.forEach((h) => observer.observe(h));
-
-    // 「トップへ戻る」ボタンのスムーズスクロール機能
-    const backToTopBtn = document.getElementById('backToTopBtn');
-    backToTopBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+    sections.forEach(section => {
+      observer.observe(section);
     });
   </script>
 </body>
