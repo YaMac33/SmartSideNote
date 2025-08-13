@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>インタラクティブ日本映画興行収入ダッシュボード</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutrals with Subtle Accents -->
+    <!-- Application Structure Plan: A user-centric, non-linear dashboard structure was designed to facilitate exploration. The report's three-part linear narrative was transformed into thematic, interactive modules: 1. A 'Snapshot' for immediate key metrics. 2. An 'Ecosystem' section to visually explain the complex revenue flow. 3. A 'Success Formula' module to interactively explore blockbuster ingredients. 4. A 'Rankings Explorer' for dynamic data visualization of top films. 5. A 'Market Trends' section for historical context and future outlook. This structure allows users to dive into topics of interest in any order, promoting understanding over simple reading, which is more effective for data-rich content. -->
+    <!-- Visualization & Content Choices: Report Info -> Goal -> Viz/Presentation Method -> Interaction -> Justification -> Library/Method. 1. Market Share -> Compare -> Doughnut Chart -> Hover for details -> Quick visual comparison of domestic vs. foreign dominance -> Chart.js. 2. Revenue Flow -> Organize/Inform -> Interactive Diagram -> Click/Hover to reveal details -> Simplifies the complex stakeholder system (Exhibitor, Distributor, Committee) into an intuitive flow -> HTML/CSS/JS. 3. Success Factors -> Organize/Compare -> Filterable Content Cards -> Click filters (Anime, Franchise, etc.) to isolate relevant case studies -> Allows users to see patterns and compare strategies -> JS. 4. All-Time Rankings -> Compare/Organize -> Switchable Bar Charts -> Buttons to toggle between Domestic and Overseas rankings -> Provides a clear, direct comparison of top-performing films in different markets -> Chart.js. 5. Historical Share -> Change -> Line Chart -> Hover over years to see data -> Visualizes the major market shift from foreign to domestic-led over time -> Chart.js. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background-color: #FDFBF8;
+            color: #3a3a3a;
+        }
+        .tab-button {
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+        }
+        .tab-button.active {
+            border-bottom-color: #A855F7;
+            color: #3a3a3a;
+            font-weight: 700;
+        }
+        .content-section {
+            display: none;
+        }
+        .content-section.active {
+            display: block;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 400px;
+            max-height: 50vh;
+        }
+        @media (max-width: 768px) {
+            .chart-container {
+                height: 300px;
+                max-height: 60vh;
+            }
+        }
+        .kpi-card {
+            background-color: #FFFFFF;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .kpi-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+        .flow-step {
+            transition: background-color 0.3s ease;
+        }
+        .flow-step:hover {
+            background-color: #f3e8ff;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div class="container mx-auto px-4 py-8 md:py-12">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl md:text-5xl font-bold text-purple-800 mb-2">日本映画市場のインサイト</h1>
+            <p class="text-lg text-gray-600">興行収入の力学、成功の法則、そして未来への展望を探る</p>
+        </header>
+
+        <nav class="flex justify-center border-b border-gray-200 mb-8 flex-wrap">
+            <button data-tab="snapshot" class="tab-button active text-sm md:text-base py-4 px-3 md:px-6 text-gray-500 hover:text-purple-700">市場スナップショット</button>
+            <button data-tab="ecosystem" class="tab-button text-sm md:text-base py-4 px-3 md:px-6 text-gray-500 hover:text-purple-700">興行収入のエコシステム</button>
+            <button data-tab="formula" class="tab-button text-sm md:text-base py-4 px-3 md:px-6 text-gray-500 hover:text-purple-700">ヒットの法則</button>
+            <button data-tab="rankings" class="tab-button text-sm md:text-base py-4 px-3 md:px-6 text-gray-500 hover:text-purple-700">歴代ランキング</button>
+            <button data-tab="trends" class="tab-button text-sm md:text-base py-4 px-3 md:px-6 text-gray-500 hover:text-purple-700">市場トレンド</button>
+        </nav>
+
+        <main>
+            <section id="snapshot" class="content-section active">
+                <div class="text-center mb-8">
+                    <h2 class="text-2xl md:text-3xl font-bold mb-2">市場スナップショット：数字で見る現在地</h2>
+                    <p class="text-gray-600 max-w-3xl mx-auto">日本の映画市場の主要な指標を概観します。邦画の圧倒的なシェアと、メガヒットの基準となる興行収入の規模感を確認できます。</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+                    <div class="kpi-card text-center">
+                        <h3 class="text-lg font-semibold text-gray-500 mb-2">邦画シェア (2024年)</h3>
+                        <p class="text-5xl font-bold text-purple-600">75.3%</p>
+                        <p class="text-gray-500 mt-2">国内映画が市場を牽引</p>
+                    </div>
+                    <div class="kpi-card text-center">
+                        <h3 class="text-lg font-semibold text-gray-500 mb-2">「ヒット」の基準</h3>
+                        <p class="text-5xl font-bold text-purple-600">10<span class="text-3xl">億円</span></p>
+                        <p class="text-gray-500 mt-2">このラインを超えると成功とされる</p>
+                    </div>
+                    <div class="kpi-card text-center">
+                        <h3 class="text-lg font-semibold text-gray-500 mb-2">「メガヒット」の基準</h3>
+                        <p class="text-5xl font-bold text-purple-600">100<span class="text-3xl">億円</span></p>
+                        <p class="text-gray-500 mt-2">社会現象レベルの成功</p>
+                    </div>
+                </div>
+                <div class="bg-white p-4 sm:p-6 rounded-xl shadow-lg">
+                    <h3 class="text-xl font-bold text-center mb-4">邦画 vs 洋画 市場シェア (2024年)</h3>
+                    <div class="chart-container mx-auto" style="height:300px; max-height:40vh;">
+                        <canvas id="shareChart"></canvas>
+                    </div>
+                </div>
+            </section>
+
+            <section id="ecosystem" class="content-section">
+                <div class="text-center mb-8">
+                    <h2 class="text-2xl md:text-3xl font-bold mb-2">興行収入のエコシステム</h2>
+                    <p class="text-gray-600 max-w-3xl mx-auto">観客が支払ったチケット代は、どのように分配されるのでしょうか。この図は、劇場、配給会社、製作者（製作委員会）の間での収益の流れを可視化したものです。各ステップにカーソルを合わせると詳細が表示されます。</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-lg">
+                    <div class="flex flex-col md:flex-row items-center justify-around space-y-4 md:space-y-0 md:space-x-4">
+                        <div class="text-center">
+                            <div class="text-4xl mb-2">🎟️</div>
+                            <div class="font-bold">観客</div>
+                            <p class="text-sm text-gray-500">チケット購入 (2,000円)</p>
+                        </div>
+                        <div class="text-3xl text-purple-400 font-thin transform md:-rotate-0">→</div>
+                        <div id="flow-theater" class="flow-step text-center p-4 rounded-lg w-full md:w-1/4">
+                            <div class="text-4xl mb-2">🏛️</div>
+                            <div class="font-bold">劇場 (興行会社)</div>
+                            <p id="desc-theater" class="text-sm text-gray-500">興行収入の約50%を受け取る</p>
+                        </div>
+                        <div class="text-3xl text-purple-400 font-thin transform md:-rotate-0">→</div>
+                        <div id="flow-distributor" class="flow-step text-center p-4 rounded-lg w-full md:w-1/4">
+                            <div class="text-4xl mb-2">🚚</div>
+                            <div class="font-bold">配給会社</div>
+                            <p id="desc-distributor" class="text-sm text-gray-500">残りの50%から手数料を得る</p>
+                        </div>
+                        <div class="text-3xl text-purple-400 font-thin transform md:-rotate-0">→</div>
+                        <div id="flow-committee" class="flow-step text-center p-4 rounded-lg w-full md:w-1/4">
+                            <div class="text-4xl mb-2">🎬</div>
+                            <div class="font-bold">製作委員会</div>
+                            <p id="desc-committee" class="text-sm text-gray-500">最終的な利益を得る</p>
+                        </div>
+                    </div>
+                    <div id="flow-details" class="mt-6 p-4 bg-purple-50 rounded-lg text-center text-purple-800 hidden">
+                    </div>
+                </div>
+            </section>
+
+            <section id="formula" class="content-section">
+                <div class="text-center mb-8">
+                    <h2 class="text-2xl md:text-3xl font-bold mb-2">ヒットの法則：ブロックバスターの解剖学</h2>
+                    <p class="text-gray-600 max-w-3xl mx-auto">日本の映画市場でメガヒットを生み出す要因は複雑に絡み合っています。下のフィルターをクリックして、成功の鍵となる要素と、それを体現した作品のケーススタディをご覧ください。</p>
+                </div>
+                <div class="flex justify-center flex-wrap gap-2 mb-6">
+                    <button class="filter-btn bg-purple-200 text-purple-800 py-2 px-4 rounded-full text-sm" data-filter="all">すべて</button>
+                    <button class="filter-btn bg-gray-200 text-gray-800 py-2 px-4 rounded-full text-sm" data-filter="anime">アニメの力</button>
+                    <button class="filter-btn bg-gray-200 text-gray-800 py-2 px-4 rounded-full text-sm" data-filter="franchise">フランチャイズ</button>
+                    <button class="filter-btn bg-gray-200 text-gray-800 py-2 px-4 rounded-full text-sm" data-filter="marketing">革新的マーケティング</button>
+                </div>
+                <div id="case-studies" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                </div>
+            </section>
+
+            <section id="rankings" class="content-section">
+                <div class="text-center mb-8">
+                    <h2 class="text-2xl md:text-3xl font-bold mb-2">歴代興行収入ランキング</h2>
+                    <p class="text-gray-600 max-w-3xl mx-auto">日本の映画史に名を刻んだ作品たち。国内市場と海外市場、それぞれのトップ作品を切り替えて比較できます。チャートはアニメ作品の圧倒的な強さを示しています。</p>
+                </div>
+                <div class="flex justify-center gap-4 mb-6">
+                    <button id="show-domestic" class="bg-purple-600 text-white py-2 px-5 rounded-lg shadow">国内トップ20</button>
+                    <button id="show-overseas" class="bg-white text-purple-600 border border-purple-600 py-2 px-5 rounded-lg">海外トップ10</button>
+                </div>
+                <div class="bg-white p-4 sm:p-6 rounded-xl shadow-lg">
+                    <div id="domestic-chart-container" class="chart-container mx-auto" style="height:600px; max-height:70vh;">
+                        <canvas id="domesticRankingsChart"></canvas>
+                    </div>
+                    <div id="overseas-chart-container" class="chart-container mx-auto hidden" style="height:500px; max-height:60vh;">
+                        <canvas id="overseasRankingsChart"></canvas>
+                    </div>
+                </div>
+            </section>
+
+            <section id="trends" class="content-section">
+                <div class="text-center mb-8">
+                    <h2 class="text-2xl md:text-3xl font-bold mb-2">市場トレンドと未来予測</h2>
+                    <p class="text-gray-600 max-w-3xl mx-auto">市場は常に変化しています。邦画と洋画の力関係の歴史的変遷と、今後の市場を読み解く上での重要なキーワードを探ります。</p>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div class="bg-white p-4 sm:p-6 rounded-xl shadow-lg">
+                        <h3 class="text-xl font-bold text-center mb-4">邦画・洋画シェアの推移</h3>
+                        <div class="chart-container mx-auto" style="height:350px;">
+                            <canvas id="shareTrendChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="bg-white p-6 rounded-xl shadow-lg">
+                            <h4 class="font-bold text-lg mb-2 text-purple-700">📈 市場の二極化</h4>
+                            <p class="text-gray-600">パンデミック以降、「勝者総取り」の傾向が加速。収益は一部のメガヒット作に集中し、中規模作品の成功がより困難になっています。</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-xl shadow-lg">
+                            <h4 class="font-bold text-lg mb-2 text-purple-700">🌍 グローバル化の加速</h4>
+                            <p class="text-gray-600">国内市場が成熟する中、アニメを筆頭に海外市場が次の成長フロンティアに。国際的な成功が今後の業界の鍵を握ります。</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-xl shadow-lg">
+                            <h4 class="font-bold text-lg mb-2 text-purple-700">💻 ストリーミングとの共存</h4>
+                            <p class="text-gray-600">VODは競合であると同時に、IPを育てる強力な育成機関でもあります。ファンを創造し、劇場での「イベント」で収益化する共生関係が生まれています。</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        const data = {
+            share: {
+                labels: ['邦画', '洋画'],
+                data: [75.3, 24.7],
+            },
+            flowDetails: {
+                theater: '運営コスト（人件費、賃料、光熱費など）を賄います。',
+                distributor: 'マーケティング、宣伝、プリント配給費用を賄い、残りを製作委員会に渡します。',
+                committee: '映画の製作費を回収し、出資比率に応じて利益を分配します。リスク分散のための日本独自のシステムです。'
+            },
+            caseStudies: [
+                { title: 'ONE PIECE FILM RED', category: 'marketing', text: '音楽主導のマーケティングを展開。キャラクター「ウタ」を実在のアーティストとしてプロデュースし、映画を「コンサートイベント」へと昇華させ、音楽ファン層も取り込み大ヒット。', icon: '🎵' },
+                { title: 'THE FIRST SLAM DUNK', category: 'marketing', text: '情報を極端に制限する「Less is more」戦略。原作の絶大な人気を信頼し、口コミと期待感を最大化。30～40代の原作ファンに深く刺さり、長期的なヒットを記録。', icon: '🏀' },
+                { title: '君たちはどう生きるか', category: 'marketing', text: 'ポスター1枚以外の情報を出さない「ゼロ・プロモーション」。宮崎駿とジブリという絶大なブランド力を背景に、謎自体をマーケティングとし、社会的なイベント化に成功。', icon: '🕊️' },
+                { title: '鬼滅の刃 無限列車編', category: 'anime', text: 'テレビシリーズで築いた圧倒的なファンベースと、コロナ禍のコンテンツへの渇望が融合し、歴代記録を塗り替える歴史的な大ヒットとなった。', icon: '🔥' },
+                { title: '名探偵コナン シリーズ', category: 'franchise', text: '毎年公開される「イベント」映画。特定の人気キャラクターに焦点を当てる「キャラクタームービー」化で、ファン層を活性化させ、安定した高収益を生み出す。', icon: '🔍' },
+                { title: '君の名は。', category: 'anime', text: '非ジブリ、非フランチャイズのオリジナル作品として、圧倒的な映像美と現代的な物語で社会現象に。アニメの新たな可能性を示した。', icon: '☄️' }
+            ],
+            domesticRankings: {
+                labels: ['鬼滅の刃 無限列車編', '千と千尋の神隠し', '君の名は。', 'もののけ姫', 'ONE PIECE FILM RED', 'ハウルの動く城', '踊る大捜査線2', 'THE FIRST SLAM DUNK', 'コナン 100万ドルの五稜星', '崖の上のポニョ', 'すずめの戸締まり', '天気の子', 'コナン 黒鉄の魚影', '呪術廻戦 0', '風立ちぬ', 'ハイキュー!!', '南極物語', 'シン・エヴァ', '踊る大捜査線', '子猫物語'],
+                data: [404.3, 316.8, 251.7, 201.8, 197.0, 196.0, 173.5, 158.7, 158.0, 155.0, 144.8, 140.2, 138.8, 138.0, 120.2, 116.4, 110.0, 102.8, 101.0, 98.0],
+                isAnime: [true, true, true, true, true, true, false, true, true, true, true, true, true, true, true, true, false, true, false, false]
+            },
+            overseasRankings: {
+                labels: ['君たちはどう生きるか', 'すずめの戸締まり', '君の名は。', 'THE FIRST SLAM DUNK', '千と千尋の神隠し', 'STAND BY ME ドラえもん', 'ポケモン ミュウツーの逆襲', '鬼滅の刃 無限列車編', 'ドラゴンボール超 ブロリー', 'ドラゴンボール超 スーパーヒーロー'],
+                data: [220, 187, 150, 139, 117.6, 104.4, 95.5, 88.4, 81, 68]
+            },
+            shareTrend: {
+                years: ['2000', '2005', '2010', '2015', '2020', '2024'],
+                domestic: [31.9, 41.3, 54.9, 55.4, 76.3, 75.3],
+                foreign: [68.1, 58.7, 45.1, 44.6, 23.7, 24.7]
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const tabs = document.querySelectorAll('.tab-button');
+            const contents = document.querySelectorAll('.content-section');
+            let activeChart = null;
+
+            const switchTab = (tabName) => {
+                tabs.forEach(tab => {
+                    tab.classList.toggle('active', tab.dataset.tab === tabName);
+                });
+                contents.forEach(content => {
+                    content.classList.toggle('active', content.id === tabName);
+                });
+
+                if (activeChart && typeof activeChart.destroy === 'function') {
+                    activeChart.destroy();
+                }
+
+                switch (tabName) {
+                    case 'snapshot':
+                        renderShareChart();
+                        break;
+                    case 'rankings':
+                        renderDomesticRankingsChart();
+                        break;
+                    case 'trends':
+                        renderShareTrendChart();
+                        break;
+                }
+            };
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    switchTab(tab.dataset.tab);
+                });
+            });
+
+            const renderShareChart = () => {
+                const ctx = document.getElementById('shareChart').getContext('2d');
+                activeChart = new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: data.share.labels,
+                        datasets: [{
+                            data: data.share.data,
+                            backgroundColor: ['#8B5CF6', '#A78BFA'],
+                            borderColor: '#FDFBF8',
+                            borderWidth: 4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    font: { size: 14 }
+                                }
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return `${context.label}: ${context.raw}%`;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            };
+
+            const flowSteps = document.querySelectorAll('.flow-step');
+            const flowDetailsContainer = document.getElementById('flow-details');
+            flowSteps.forEach(step => {
+                step.addEventListener('mouseenter', () => {
+                    const detailKey = step.id.split('-')[1];
+                    flowDetailsContainer.textContent = data.flowDetails[detailKey];
+                    flowDetailsContainer.classList.remove('hidden');
+                });
+                step.addEventListener('mouseleave', () => {
+                    flowDetailsContainer.classList.add('hidden');
+                });
+            });
+
+            const caseStudiesContainer = document.getElementById('case-studies');
+            const filterBtns = document.querySelectorAll('.filter-btn');
+
+            const renderCaseStudies = (filter = 'all') => {
+                caseStudiesContainer.innerHTML = '';
+                const filteredCases = filter === 'all' ? data.caseStudies : data.caseStudies.filter(c => c.category === filter);
+                filteredCases.forEach(study => {
+                    const card = document.createElement('div');
+                    card.className = 'bg-white p-6 rounded-xl shadow-lg transform hover:-translate-y-1 transition-transform duration-300';
+                    card.innerHTML = `
+                        <div class="flex items-center mb-3">
+                            <span class="text-3xl mr-4">${study.icon}</span>
+                            <h4 class="font-bold text-lg text-purple-800">${study.title}</h4>
+                        </div>
+                        <p class="text-gray-600">${study.text}</p>
+                    `;
+                    caseStudiesContainer.appendChild(card);
+                });
+            };
+
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    filterBtns.forEach(b => b.classList.replace('bg-purple-200', 'bg-gray-200'));
+                    btn.classList.replace('bg-gray-200', 'bg-purple-200');
+                    renderCaseStudies(btn.dataset.filter);
+                });
+            });
+            
+            const domesticContainer = document.getElementById('domestic-chart-container');
+            const overseasContainer = document.getElementById('overseas-chart-container');
+            const showDomesticBtn = document.getElementById('show-domestic');
+            const showOverseasBtn = document.getElementById('show-overseas');
+
+            const renderDomesticRankingsChart = () => {
+                if (activeChart && typeof activeChart.destroy === 'function') activeChart.destroy();
+                const ctx = document.getElementById('domesticRankingsChart').getContext('2d');
+                activeChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: data.domesticRankings.labels,
+                        datasets: [{
+                            label: '興行収入 (億円)',
+                            data: data.domesticRankings.data,
+                            backgroundColor: data.domesticRankings.isAnime.map(isAnime => isAnime ? '#8B5CF6' : '#C4B5FD'),
+                            borderColor: data.domesticRankings.isAnime.map(isAnime => isAnime ? '#6D28D9' : '#A78BFA'),
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        indexAxis: 'y',
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                callbacks: {
+                                    label: (c) => `${c.raw.toFixed(1)} 億円`
+                                }
+                            },
+                            title: {
+                                display: true,
+                                text: '国内歴代興行収入トップ20 (紫: アニメ)',
+                                font: { size: 16 }
+                            }
+                        },
+                        scales: {
+                            x: {
+                                beginAtZero: true,
+                                title: { display: true, text: '興行収入 (億円)' }
+                            },
+                            y: {
+                                ticks: {
+                                    font: { size: 10 }
+                                }
+                            }
+                        }
+                    }
+                });
+            };
+            
+            const renderOverseasRankingsChart = () => {
+                if (activeChart && typeof activeChart.destroy === 'function') activeChart.destroy();
+                const ctx = document.getElementById('overseasRankingsChart').getContext('2d');
+                activeChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: data.overseasRankings.labels,
+                        datasets: [{
+                            label: '海外興行収入 (百万ドル)',
+                            data: data.overseasRankings.data,
+                            backgroundColor: '#6EE7B7',
+                            borderColor: '#10B981',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        indexAxis: 'y',
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                callbacks: {
+                                    label: (c) => `${c.raw.toFixed(1)} 百万ドル`
+                                }
+                            },
+                            title: {
+                                display: true,
+                                text: '日本映画の海外興行収入トップ10',
+                                font: { size: 16 }
+                            }
+                        },
+                        scales: {
+                            x: {
+                                beginAtZero: true,
+                                title: { display: true, text: '海外興行収入 (百万ドル)' }
+                            },
+                             y: {
+                                ticks: {
+                                    font: { size: 10 }
+                                }
+                            }
+                        }
+                    }
+                });
+            };
+
+            showDomesticBtn.addEventListener('click', () => {
+                domesticContainer.classList.remove('hidden');
+                overseasContainer.classList.add('hidden');
+                showDomesticBtn.classList.replace('bg-white', 'bg-purple-600');
+                showDomesticBtn.classList.add('text-white');
+                showOverseasBtn.classList.replace('bg-purple-600', 'bg-white');
+                showOverseasBtn.classList.remove('text-white');
+                renderDomesticRankingsChart();
+            });
+
+            showOverseasBtn.addEventListener('click', () => {
+                overseasContainer.classList.remove('hidden');
+                domesticContainer.classList.add('hidden');
+                showOverseasBtn.classList.replace('bg-white', 'bg-purple-600');
+                showOverseasBtn.classList.add('text-white');
+                showDomesticBtn.classList.replace('bg-purple-600', 'bg-white');
+                showDomesticBtn.classList.remove('text-white');
+                renderOverseasRankingsChart();
+            });
+
+            const renderShareTrendChart = () => {
+                const ctx = document.getElementById('shareTrendChart').getContext('2d');
+                activeChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: data.shareTrend.years,
+                        datasets: [
+                            {
+                                label: '邦画シェア (%)',
+                                data: data.shareTrend.domestic,
+                                borderColor: '#8B5CF6',
+                                backgroundColor: 'rgba(139, 92, 246, 0.1)',
+                                fill: true,
+                                tension: 0.1
+                            },
+                            {
+                                label: '洋画シェア (%)',
+                                data: data.shareTrend.foreign,
+                                borderColor: '#FBBF24',
+                                backgroundColor: 'rgba(251, 191, 36, 0.1)',
+                                fill: true,
+                                tension: 0.1
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { position: 'top' },
+                            tooltip: { mode: 'index', intersect: false }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                max: 100,
+                                title: { display: true, text: '市場シェア (%)' }
+                            }
+                        }
+                    }
+                });
+            };
+
+            switchTab('snapshot');
+            renderCaseStudies();
+        });
+    </script>
+</body>
+</html>
