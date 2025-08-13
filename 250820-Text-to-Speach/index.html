@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AI文字起こし＆音声合成サービスまとめと使い方【備忘録】</title>
+  <style>
+    /* Reset & base */
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: "Yu Gothic", "Hiragino Kaku Gothic Pro", Meiryo, sans-serif;
+      background-color: #f9fafb;
+      color: #333;
+      line-height: 1.6;
+      scroll-behavior: smooth;
+      min-height: 100vh;
+    }
+    a {
+      color: #0066cc;
+      text-decoration: none;
+      transition: color 0.3s ease, transform 0.2s ease;
+      cursor: pointer;
+    }
+    a:hover, a:focus {
+      color: #004999;
+      outline: none;
+      transform: scale(1.05);
+    }
+    /* Container */
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px 15px 60px;
+    }
+    /* Heading styles */
+    h1, h2, h3 {
+      font-weight: 700;
+      color: #222;
+      margin-top: 2.5em;
+      margin-bottom: 0.5em;
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    h1.visible, h2.visible, h3.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    h1 {
+      font-size: 2.5rem;
+      border-bottom: 3px solid #2a7ae2; /* アクセントカラー */
+      padding-bottom: 0.3em;
+    }
+    h2 {
+      font-size: 1.8rem;
+      border-left: 6px solid #2a7ae2;
+      padding-left: 12px;
+      background-color: #e8f0fe;
+      border-radius: 4px;
+    }
+    h3 {
+      font-size: 1.4rem;
+      color: #444;
+      margin-top: 1.8em;
+    }
+    /* Paragraph */
+    p {
+      margin-bottom: 1em;
+      font-size: 1.1rem;
+    }
+    /* Lists */
+    ul {
+      margin-left: 1.4em;
+      margin-bottom: 1.2em;
+      color: #444;
+    }
+    li {
+      margin-bottom: 0.4em;
+      font-size: 1.05rem;
+    }
+    strong {
+      color: #2a7ae2;
+    }
+    /* Separator */
+    hr {
+      border: none;
+      height: 1px;
+      background: #ddd;
+      margin: 3em 0 2em;
+    }
+    /* Button style for modal triggers */
+    .btn {
+      display: inline-block;
+      background-color: #2a7ae2;
+      color: white;
+      padding: 0.5em 1.3em;
+      border-radius: 4px;
+      font-weight: 600;
+      user-select: none;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+      margin-top: 0.5em;
+      cursor: pointer;
+      border: none;
+    }
+    .btn:hover, .btn:focus {
+      background-color: #174ea6;
+      transform: scale(1.05);
+      outline: none;
+    }
+    /* Responsive image */
+    img.responsive {
+      max-width: 100%;
+      height: auto;
+      border-radius: 6px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      margin: 1em 0;
+    }
+    /* Footer */
+    footer {
+      text-align: center;
+      margin-top: 4em;
+      font-size: 0.9rem;
+      color: #666;
+      user-select: none;
+      padding-bottom: 30px;
+    }
+    /* Modal styles */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.5);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      padding: 20px;
+    }
+    .modal-overlay.active {
+      display: flex;
+    }
+    .modal {
+      background: white;
+      border-radius: 8px;
+      max-width: 500px;
+      width: 100%;
+      padding: 20px 30px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+      position: relative;
+      transform: translateY(-30px);
+      opacity: 0;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+    .modal.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .modal-close {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: transparent;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #999;
+      transition: color 0.3s ease;
+    }
+    .modal-close:hover {
+      color: #333;
+    }
+    /* Scroll-to-top button */
+    #scrollTopBtn {
+      position: fixed;
+      right: 20px;
+      bottom: 40px;
+      background: #2a7ae2;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 44px;
+      height: 44px;
+      font-size: 24px;
+      cursor: pointer;
+      box-shadow: 0 3px 8px rgba(42,122,226,0.5);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+      z-index: 1100;
+      user-select: none;
+    }
+    #scrollTopBtn.show {
+      opacity: 1;
+      visibility: visible;
+    }
+    #scrollTopBtn:hover {
+      background: #174ea6;
+      transform: scale(1.1);
+    }
+    /* Responsive typography */
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 2rem;
+      }
+      h2 {
+        font-size: 1.4rem;
+      }
+      p, li {
+        font-size: 1rem;
+      }
+      .container {
+        padding: 15px 10px 50px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>🤖 AI文字起こし＆音声合成サービスまとめと使い方【備忘録】</h1>
+    <p>「会議録作成の効率化」「AIによるテキスト読み上げ」「GoogleのText-to-Speech APIの使い方」など、これまでのやりとりを備忘録としてまとめてみます。<br>
+    自分用のメモも兼ねて、わかりやすく具体例を交えながら書いてみました。もしあなたも同じようなことを考えているなら、ぜひ参考にしてみてくださいね。</p>
+    <hr />
+
+    <h2>人気の文字起こしツールってどんなのがある？ 🔍</h2>
+    <p>まず、会議録や打ち合わせの文字起こしを効率的にしたいときに人気のツールを教えてほしいと聞かれました。今話題の代表的なものは</p>
+    <ul>
+      <li><strong>LINE Works AI Note</strong></li>
+      <li><strong>Ami Voice Scribe Assist</strong></li>
+      <li><strong>GoogleのSpeech-to-Text</strong></li>
+      <li><strong>Otter.aiやScribieなど海外のサービス</strong></li>
+    </ul>
+    <p>などがあります。</p>
+    <p>特に<strong>Ami Voice Scribe Assist</strong>は日本語対応が強く、医療現場や企業の会議録作成で評判が良いです。<br>
+    またGoogleの<strong>Speech-to-Text</strong>は多言語対応で高精度ですが、使うにはAPIの設定など少し技術が必要になることもあります。</p>
+    <hr />
+
+    <h2>Googleの文字起こし・読み上げサービスまとめ 🛠️</h2>
+    <p>Googleが提供しているサービスは幅広いです。文字起こし（Speech-to-Text）はもちろん、読み上げ（Text-to-Speech）もあります。</p>
+
+    <h3>文字起こしサービス</h3>
+    <ul>
+      <li><strong>Google Cloud Speech-to-Text</strong><br>多言語対応でリアルタイム文字起こしも可能。API経由で使えるため、自分のシステムに組み込みやすい。</li>
+    </ul>
+
+    <h3>読み上げサービス</h3>
+    <ul>
+      <li><strong>Google Cloud Text-to-Speech</strong><br>テキストを自然な音声に変換し、MP3やWAVファイルとして保存できる。WaveNetやNeural2など最新技術を活用し、高品質な音声を生成します。</li>
+    </ul>
+    <hr />
+
+    <h2>プレゼン資料の読み上げをAIにやらせたいなら？ 🎤</h2>
+    <p>「プレゼン用のスライド資料があって、そこに読み上げ原稿もある。AIに読み上げさせて音声ファイル（MP3など）で欲しい」というニーズもありました。</p>
+    <p>対応できるサービスとしては、Google Cloud Text-to-Speechのほか、</p>
+    <ul>
+      <li><strong>Amazon Polly</strong></li>
+      <li><strong>Microsoft Azure Speech Service</strong></li>
+      <li><strong>CeVIO AI Talk</strong>（買い切り型で感情表現豊か）</li>
+      <li><strong>NaturalReaderやPlay.ht</strong>（オンラインで簡単操作）</li>
+    </ul>
+    <p>などがあります。</p>
+    <p>たとえばGoogle Cloud Text-to-Speechなら、テキストを入力して、音声速度やピッチを調整し、MP3ファイルとして出力可能です。<br>
+    初心者ならウェブUIから簡単に使えるので、iPadなどのブラウザでも操作できますよ。</p>
+    <hr />
+
+    <h2>Google AI StudioでのText-to-Speech活用法 🧑‍💻</h2>
+    <p>Google AI Studioには、Google Cloud Text-to-Speechの機能が統合されていて、GUIから簡単にテキスト→音声変換ができます。</p>
+
+    <h3>利用の流れ</h3>
+    <ol>
+      <li>Google Cloudアカウントでログイン。</li>
+      <li>プロジェクトを作成し、「Text-to-Speech API」を有効化。</li>
+      <li>AI Studioのテキスト読み上げ画面でテキスト入力。</li>
+      <li>音声モデル（WaveNetなど）を選び、速度やピッチも調整。</li>
+      <li>プレビュー再生し、問題なければMP3でダウンロード。</li>
+    </ol>
+
+    <h3>料金は？</h3>
+    <p>WaveNet音声の場合、月500,000文字までは無料。超過分は約$16／100万文字の従量課金です。<br>
+    プレゼン原稿程度なら無料枠内で十分利用可能なケースが多いです。</p>
+    <hr />
+
+    <h2>Google Cloud SDKって何？iPadで使える？ 💻📱</h2>
+    <p>Google Cloud SDKは、Google Cloudサービスをコマンドラインから操作するツールセットです。<br>
+    ただしこれはPC向けで、<strong>iPadのブラウザでは使えません。</strong></p>
+    <p>でも、<strong>Google AI StudioのウェブUIはiPadのブラウザでも使える</strong>ので、SDKを使わなくてもテキスト読み上げからMP3出力まで可能です。</p>
+    <hr />
+
+    <h2>APIキーをHTMLに直接埋め込んで使える？ ⚠️</h2>
+    <p>結論：<br>
+    <strong>絶対におすすめしません。危険です。</strong></p>
+    <p>APIキーは外部に漏れると悪用され、大量課金やサービス停止のリスクがあるため、必ず<strong>サーバー側でAPIを呼び出す仕組みを作りましょう。</strong></p>
+    <hr />
+
+    <h2>サーバー側で組み込めば、ホームページで読み上げもMP3作成もできる！ 🎧</h2>
+    <p>具体的には、</p>
+    <ul>
+      <li>ブラウザ側でテキストを送信。</li>
+      <li>サーバーがGoogleのText-to-Speech APIを呼んで音声ファイルを作成。</li>
+      <li>生成したMP3ファイルを返してブラウザで再生やダウンロード可能にする。</li>
+    </ul>
+    <p>これが安全で実用的な構成です。</p>
+    <hr />
+
+    <h2>まとめ 📝</h2>
+    <ul>
+      <li>会議の文字起こしには日本語特化の「Ami Voice Scribe Assist」やGoogle Speech-to-Textがおすすめ。</li>
+      <li>プレゼンの読み上げ音声はGoogle Cloud Text-to-SpeechやAmazon PollyなどのAI音声合成が便利。</li>
+      <li>Google AI StudioのウェブUIならiPadでも気軽に使える。</li>
+      <li>APIキーは絶対にクライアント側に直接置かず、サーバー経由で安全に使うのが鉄則。</li>
+    </ul>
+    <p>これまでのやりとりをざっとまとめてみましたが、何か疑問やさらに深掘りしたい点があればまた教えてくださいね！<br>
+    AI文字起こしや音声合成はこれからも進化が早いので、備忘録を時々アップデートしていくといいですよ。</p>
+    <p>では、また！👋</p>
+  </div>
+
+  <!-- Scroll to Top Button -->
+  <button id="scrollTopBtn" aria-label="トップに戻る">⬆️</button>
+
+  <!-- Modal Example (can be triggered by buttons if needed) -->
+  <div id="modalOverlay" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle" tabindex="-1">
+    <div class="modal" role="document">
+      <button class="modal-close" aria-label="閉じる">&times;</button>
+      <h2 id="modalTitle">モーダルタイトル</h2>
+      <p>ここにモーダルの内容を入れます。必要に応じてカスタマイズしてください。</p>
+    </div>
+  </div>
+
+  <script>
+    // Fade and slide in animation for headings on scroll
+    document.addEventListener('DOMContentLoaded', () => {
+      const fadeElems = document.querySelectorAll('h1, h2, h3');
+
+      // Check if element is in viewport
+      function isInViewport(el) {
+        const rect = el.getBoundingClientRect();
+        return (
+          rect.top <= (window.innerHeight || document.documentElement.clientHeight) - 100
+          && rect.bottom >= 0
+        );
+      }
+
+      function showOnScroll() {
+        fadeElems.forEach(el => {
+          if (isInViewport(el)) {
+            el.classList.add('visible');
+          }
+        });
+      }
+
+      // Initial check and on scroll
+      showOnScroll();
+      window.addEventListener('scroll', showOnScroll);
+
+      // Scroll-to-top button functionality
+      const scrollBtn = document.getElementById('scrollTopBtn');
+      window.addEventListener('scroll', () => {
+        if (window.scrollY > 300) {
+          scrollBtn.classList.add('show');
+        } else {
+          scrollBtn.classList.remove('show');
+        }
+      });
+      scrollBtn.addEventListener('click', () => {
+        window.scrollTo({top: 0, behavior: 'smooth'});
+      });
+
+      // Modal handling (example, not used directly in current content)
+      const modalOverlay = document.getElementById('modalOverlay');
+      const modalCloseBtn = modalOverlay.querySelector('.modal-close');
+
+      // Function to open modal with content (can be extended)
+      function openModal(title, content) {
+        modalOverlay.querySelector('#modalTitle').textContent = title;
+        modalOverlay.querySelector('p').textContent = content;
+        modalOverlay.classList.add('active');
+        modalOverlay.querySelector('.modal').classList.add('active');
+        modalOverlay.focus();
+      }
+
+      function closeModal() {
+        modalOverlay.classList.remove('active');
+        modalOverlay.querySelector('.modal').classList.remove('active');
+      }
+
+      modalCloseBtn.addEventListener('click', closeModal);
+      modalOverlay.addEventListener('click', (e) => {
+        if (e.target === modalOverlay) closeModal();
+      });
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modalOverlay.classList.contains('active')) {
+          closeModal();
+        }
+      });
+
+      // Example: You can add event listeners to buttons to open modal if needed
+      // document.querySelector('.btn.some-trigger').addEventListener('click', () => {
+      //   openModal('タイトル', 'モーダルの内容');
+      // });
+    });
+  </script>
+</body>
+</html>
