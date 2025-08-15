@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <!-- ページタイトル：記事の主旨（iPadで始めるWeb→AI学習）を短く魅力的に -->
+  <title>iPadで始めるWeb開発→AIへの道：ステップ別プロジェクトガイド</title>
+
+  <!-- サイト共通スタイル（1回だけ読み込み） -->
+  <link rel="stylesheet" href="/ai-comparison-test-site/style.css" />
+
+  <!-- 最低限のインラインCSS（20行以内）: トップボタンとフェードアニメ用、ヘッダー重なり対策変数 -->
+  <style>
+    /* fade-in アニメーション用の初期/表示スタイル */
+    .fade-in{opacity:0;transform:translateY(12px);transition:opacity .6s ease,transform .6s ease}
+    .fade-in.in-view{opacity:1;transform:none}
+    /* トップへ戻るボタンの基本表示 */
+    #toTop{position:fixed;right:18px;bottom:22px;padding:.6rem .8rem;border-radius:8px;border:none;box-shadow:0 6px 18px rgba(0,0,0,.12);opacity:0;pointer-events:none;transition:opacity .25s}
+    #toTop.show{opacity:1;pointer-events:auto}
+    /* 記事トップがヘッダーに隠れないように -- JSで実測値を設定する */
+    main{padding-top:var(--header-offset,80px)}
+  </style>
+</head>
+<body>
+  <!-- ヘッダー挿入ポイント（fetchで外部 header.html を読み込む） -->
+  <div id="header-mount" aria-hidden="false"></div>
+
+  <main role="main" class="container" aria-label="記事本文">
+    <!-- 記事の主見出し -->
+    <article class="post">
+      <header class="post-header">
+        <h1 class="fade-in">iPad主体で学ぶ：Web開発からAIへステップで進む方法 🚀</h1>
+        <!-- 目次はJSでここに生成される -->
+        <nav id="auto-toc" aria-label="目次" class="fade-in" role="navigation"></nav>
+      </header>
+
+      <!-- 記事本文をセマンティックに構成 -->
+      <section class="post-body">
+        <p class="fade-in">Pythonを学ぶときは「作りながら学ぶ」ことが知識定着に最も効果的です。特にWebアプリ開発は、プログラミングの基礎からデータベース、サーバーの知識まで幅広くカバーでき、AIへ進むための強固な土台になります。ここでは <strong>ステップ1〜3</strong> に分けて、iPadでも進められる学習プランと具体的なプロジェクト案を紹介します。</p>
+
+        <!-- ステップ1 -->
+        <section class="observe fade-in" aria-labelledby="step1">
+          <h2 id="step1">ステップ1：基本を固める「Webの仕組みを学ぶ」プロジェクト 🛠️</h2>
+          <p>まずはFlaskのような軽量フレームワークに触れ、Webアプリの動き方を学びます。以下は初心者に最適な3つのプロジェクト例です。</p>
+
+          <h3>自己紹介・ポートフォリオサイト ✨</h3>
+          <ul>
+            <li>作るもの: 自分のプロフィールや作品を掲載するシンプルサイト</li>
+            <li>学べること: HTML/CSS、Flaskでのルーティング（URLと表示の紐付け）</li>
+            <li>ポイント: まずは「Hello, World!」をPythonで表示することから始めましょう。</li>
+          </ul>
+
+          <h3>ブログアプリ ✍️</h3>
+          <ul>
+            <li>作るもの: 投稿・一覧・詳細・編集・削除ができるブログシステム</li>
+            <li>学べること: データベース（CRUD）操作とフォーム処理</li>
+          </ul>
+
+          <h3>ToDoリストアプリ ✅</h3>
+          <ul>
+            <li>作るもの: タスクの追加・完了・削除ができるアプリ</li>
+            <li>学べること: データの状態管理（完了/未完了）を扱う練習</li>
+          </ul>
+        </section>
+
+        <!-- ステップ2 -->
+        <section class="observe fade-in" aria-labelledby="step2">
+          <h2 id="step2">ステップ2：外部との連携「データを扱う」プロジェクト 🌐</h2>
+          <p>AIはデータが命です。外部APIやスクレイピング、データ可視化に挑戦してデータを扱う力を養いましょう。</p>
+
+          <h3>天気予報アプリ ☁️</h3>
+          <ul>
+            <li>作るもの: 都市名を入力して現在の天気を取得・表示</li>
+            <li>学べること: 外部API（例: OpenWeatherMap）の利用</li>
+            <li>参考URL: OpenWeatherMap — https://openweathermap.org/</li>
+          </ul>
+
+          <h3>スクレイピング結果表示サイト 🕸️</h3>
+          <ul>
+            <li>作るもの: Beautiful SoupやScrapyで収集した情報を整理して表示</li>
+            <li>学べること: 非構造化データの抽出と整形</li>
+          </ul>
+
+          <h3>データ可視化ダッシュボード 📊</h3>
+          <ul>
+            <li>作るもの: CSVや公開統計を読み込みグラフで表示</li>
+            <li>学べること: Pandasで処理し、MatplotlibやPlotlyで可視化</li>
+          </ul>
+        </section>
+
+        <!-- ステップ3 -->
+        <section class="observe fade-in" aria-labelledby="step3">
+          <h2 id="step3">ステップ3：AIへ繋がる「モデルを組み込む」プロジェクト 🤖</h2>
+          <p>学習済みモデルを利用して、実用的なAI機能をWebアプリに組み込みます。下記は入門に適した例です。</p>
+
+          <h3>画像判定アプリ 🖼️</h3>
+          <ul>
+            <li>作るもの: 画像アップロードで分類（犬/猫/車など）</li>
+            <li>学べること: TensorFlow/PyTorchの学習済みモデルをAPI経由で利用</li>
+          </ul>
+
+          <h3>テキスト感情分析アプリ 🧾</h3>
+          <ul>
+            <li>作るもの: テキストを入力してポジティブ/ネガティブ/ニュートラル判定</li>
+            <li>学べること: 基本的なNLPの適用とAPI連携</li>
+          </ul>
+
+          <h3>簡単な推薦システム 🎯</h3>
+          <ul>
+            <li>作るもの: 評価に基づいて他の作品を推薦するシステム</li>
+            <li>学べること: 協調フィルタリングなどの入門アルゴリズム</li>
+          </ul>
+        </section>
+
+        <!-- iPad向け学習アドバイス -->
+        <section class="observe fade-in" aria-labelledby="ipad">
+          <h2 id="ipad">iPad中心で学ぶための具体的アドバイス 💡</h2>
+          <p>iPadでの開発はクラウド環境を活用するのが近道です。ここでは実務的かつ初心者向けの手順をまとめます。</p>
+
+          <h3>基本戦略</h3>
+          <blockquote class="fade-in" aria-label="戦略">iPadはローカルでサーバーを動かしづらいので、ブラウザ上で動くクラウドIDE（Replitなど）を使いましょう。</blockquote>
+
+          <h3>おすすめクラウド開発環境</h3>
+          <ul>
+            <li>Replit — 設定不要で手軽、Flaskテンプレートあり。</li>
+            <li>GitHub Codespaces — 本格的なVS Code体験（慣れたら移行を検討）。</li>
+          </ul>
+
+          <h3>学習ステップ（実践）</h3>
+          <ol>
+            <li>物理キーボードを用意する（効率化の必須アイテム）</li>
+            <li>ReplitでFlaskの雛形を作り、まずは「Hello, World!」を表示</li>
+            <li>実際に「写経」してコードの意味を理解する</li>
+            <li>必要に応じてPCでGit/GitHubの使い方を学ぶ</li>
+          </ol>
+
+          <p>まずは小さなプロジェクトを1つ動かしてみること。動く喜びが次の学習へとつながります。がんばってください！</p>
+        </section>
+
+        <!-- 著者情報など -->
+        <footer class="post-footer fade-in" role="contentinfo">
+          <p>この記事は、Web開発からAIへ段階的に進みたい方向けのガイドです。参考にしたいサービスがあれば、各項目の外部リンクを参照してください。</p>
+        </footer>
+      </section>
+    </article>
+  </main>
+
+  <!-- トップへ戻るボタン（アクセシビリティのためariaラベルを付与） -->
+  <button id="toTop" aria-label="トップへ戻る" title="トップへ戻る">↑ トップ</button>
+
+  <!-- 実装の要点をコメントで記述：ヘッダーfetch・目次生成・IntersectionObserver・トップボタン -->
+  <script>
+    // ヘッダーを外部ファイルから fetch -> DOMParser を用いて #header-mount に挿入する
+    (function loadHeader(){
+      fetch('/ai-comparison-test-site/header.html',{cache:'no-store'}).then(resp=>{
+        if(!resp.ok) throw new Error('header fetch failed');
+        return resp.text();
+      }).then(html=>{
+        // DOMParserで文字列をパースして body 内の内容だけ取り出す
+        const doc = new DOMParser().parseFromString(html,'text/html');
+        const content = doc.body.innerHTML || html;
+        const mount = document.getElementById('header-mount');
+        mount.innerHTML = content;
+        // ヘッダー高さを実測して main の padding-top に反映（重なり対策）
+        const headerEl = mount.querySelector('header') || mount.firstElementChild || mount;
+        const h = headerEl ? headerEl.getBoundingClientRect().height : 80;
+        document.documentElement.style.setProperty('--header-offset', (h + 12) + 'px');
+      }).catch(err=>{
+        console.warn('ヘッダー読み込みエラー:', err);
+      });
+    })();
+
+    // ページ内の h2/h3 から目次を自動生成する（slug化してユニークidを付与）
+    document.addEventListener('DOMContentLoaded', function(){
+      const tocContainer = document.getElementById('auto-toc');
+      const article = document.querySelector('article.post');
+      if(!tocContainer || !article) return;
+
+      // collect headings
+      const headings = article.querySelectorAll('h2,h3');
+      if(headings.length === 0) return;
+
+      // helper: slugify + ensure unique
+      const used = new Map();
+      function slugify(text){
+        const base = text.toLowerCase().trim().replace(/[^\w\- ]+/g,'').replace(/\s+/g,'-').slice(0,60);
+        let id = base || 'heading';
+        let i=1;
+        while(used.has(id)){ id = base + '-' + i; i++; }
+        used.set(id, true);
+        return id;
+      }
+
+      // build list
+      const ul = document.createElement('ul');
+      ul.className = 'toc-list';
+      // add small heading for TOC
+      const tocTitle = document.createElement('p');
+      tocTitle.textContent = '目次 📚';
+      tocTitle.setAttribute('aria-hidden','false');
+      tocContainer.appendChild(tocTitle);
+
+      headings.forEach(h => {
+        // ensure id
+        if(!h.id) h.id = slugify(h.textContent);
+        // create list item
+        const li = document.createElement('li');
+        // indent h3
+        if(h.tagName.toLowerCase() === 'h3'){ li.style.marginLeft = '1.05rem'; }
+        const a = document.createElement('a');
+        a.href = '#'+h.id;
+        a.textContent = (h.tagName.toLowerCase() === 'h2' ? '・ ' : '— ') + h.textContent;
+        a.setAttribute('aria-label','見出しへ移動: ' + h.textContent);
+        li.appendChild(a);
+        ul.appendChild(li);
+      });
+
+      tocContainer.appendChild(ul);
+    });
+
+    // IntersectionObserver を使って .observe や .fade-in 要素をふわっと表示する
+    (function setupObserver(){
+      const obsElems = document.querySelectorAll('.observe, .fade-in');
+      const io = new IntersectionObserver((entries)=>{
+        entries.forEach(entry=>{
+          if(entry.isIntersecting){
+            entry.target.classList.add('in-view');
+            // 一度可視化したらオブザーバーから外す（パフォーマンス向上）
+            io.unobserve(entry.target);
+          }
+        });
+      },{threshold: 0.12});
+      obsElems.forEach(el => io.observe(el));
+    })();
+
+    // 「トップへ戻る」ボタンの表示切替とスムーズスクロール処理（キーボード対応）
+    (function setupToTop(){
+      const btn = document.getElementById('toTop');
+      if(!btn) return;
+      // show when scrolled more than one viewport height
+      function checkScroll(){
+        if(window.scrollY > window.innerHeight) btn.classList.add('show');
+        else btn.classList.remove('show');
+      }
+      window.addEventListener('scroll', checkScroll, {passive:true});
+      window.addEventListener('resize', checkScroll);
+      // click / key activation
+      btn.addEventListener('click', ()=> window.scrollTo({top:0,behavior:'smooth'}));
+      btn.addEventListener('keydown', (e)=>{ if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); window.scrollTo({top:0,behavior:'smooth'}); } });
+      // initial check
+      checkScroll();
+    })();
+  </script>
+</body>
+</html>

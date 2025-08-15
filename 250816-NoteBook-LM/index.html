@@ -1,0 +1,296 @@
+
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <!-- ページタイトル：記事内容に合わせた日本語タイトル -->
+  <title>25.8.16 📓NoteBookLMレビュー — 使い方・比較・実例まとめ 📝</title>
+  <!-- サイト共通スタイル（1回だけ読み込み） -->
+  <link rel="stylesheet" href="/ai-comparison-test-site/style.css">
+  <!-- 最低限のインラインCSS（20行以内）：
+       - ヘッダー重なり防止のための --header-height 変数
+       - フェードイン用の初期スタイル
+       - 「トップへ戻る」ボタンの基本スタイル -->
+  <style>
+    /* 1) コンテンツ上部はヘッダー高さ + 24px分の余白を確保 */
+    .content { padding-top: calc(var(--header-height, 80px) + 24px); }
+
+    /* 2) フェードインの初期状態と表示状態 */
+    .fade-section { opacity: 0; transform: translateY(12px); transition: opacity .6s ease, transform .6s ease; }
+    .fade-section.is-visible { opacity: 1; transform: none; }
+
+    /* 3) トップボタン */
+    #back-to-top { position: fixed; right: 20px; bottom: 28px; display: inline-flex; align-items:center; justify-content:center;
+                   width:48px; height:48px; border-radius:8px; box-shadow: 0 6px 18px rgba(0,0,0,.15);
+                   background:#fff; border:1px solid rgba(0,0,0,.08); opacity:0; visibility:hidden;
+                   transition: opacity .3s ease, transform .25s ease; cursor:pointer; z-index:1200; }
+    #back-to-top.show { opacity:1; visibility:visible; transform: translateY(0); }
+    #back-to-top:focus { outline:3px solid Highlight; }
+    /* 小さなアクセシビリティ補助 */
+    .toc-list a{ text-decoration: none; }
+  </style>
+</head>
+<body>
+  <!-- 1) ヘッダーを動的に読み込むためのマウントポイント -->
+  <div id="header-mount" aria-hidden="true"></div>
+  <!-- メインコンテンツ -->
+  <main id="main-content" class="content" role="main" tabindex="-1" aria-labelledby="article-title">
+    <!-- 記事の主見出し（h1） -->
+    <article class="post-article" aria-describedby="article-desc">
+      <header>
+        <h1 id="article-title">📓 NoteBookLMって実際どうなの？使ってみた感想とまとめ</h1>
+        <p id="article-desc">NoteBookLMの概要、ChatGPT/Geminiとの違い、実際の使い方例、代替案までをわかりやすく整理しました。</p>
+      </header>
+
+  <!-- 2) 目次（JSで自動生成） -->
+  <nav aria-label="目次" class="toc" id="auto-toc" style="margin:1rem 0;">
+    <!-- JSがここに<ul>を挿入 -->
+  </nav>
+
+  <!-- 記事本文：以下は与えられたブログ本文をセマンティックに変換 -->
+  <section>
+    <h2 class="fade-section">🔍 NoteBookLMってそもそも何？</h2>
+    <p>NoteBookLMは、Googleが提供しているAIノートツールです。GoogleドキュメントやPDFをアップロードすると、その内容をAIが読み取り、要約や解説、質問応答をしてくれます。</p>
+    <ul>
+      <li>📄 文書をAIが読み込んで要約</li>
+      <li>❓ 質問に回答（引用付き）</li>
+      <li>📊 プレゼン資料の構成を自動作成</li>
+      <li>🎤 ナレーション原稿まで自動生成</li>
+    </ul>
+
+    <h2 class="fade-section">🤔 ChatGPTやGeminiと何が違うの？</h2>
+    <p>どちらも要約ができるAIですが、仕組みや使い勝手に違いがあります。</p>
+
+    <figure class="fade-section" aria-hidden="true">
+      <!-- 記事に画像URLは無いためプレースホルダは入れていません。画像がある場合はここに挿入します。 -->
+    </figure>
+
+    <div class="table-responsive fade-section" role="table" aria-label="NoteBookLMとChatGPT/Geminiの比較">
+      <table>
+        <thead>
+          <tr><th>比較項目</th><th>NoteBookLM</th><th>ChatGPT / Gemini</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>情報の扱い方</td><td>アップロード文書全体を解析</td><td>貼り付けたテキストだけ処理</td></tr>
+          <tr><td>引用元</td><td>段落や出典を明示</td><td>根拠が不明な場合も</td></tr>
+          <tr><td>資料間の比較</td><td>複数ドキュメント横断可能</td><td>1件ずつ処理が基本</td></tr>
+          <tr><td>目的</td><td>学習・ノート用途特化</td><td>汎用チャットAI</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2 class="fade-section">🛠️ 使い方の具体例</h2>
+    <p>例えば、「法律の改正があったときに、内容を要約し、スライドと音声解説を作る」という用途にぴったり。</p>
+    <ul>
+      <li>📥 改正法や旧法の資料をアップロード</li>
+      <li>📝 改正前後を比較して要点を整理</li>
+      <li>📽 スライド構成をAIが作成</li>
+      <li>🎙 ナレーション原稿も自動生成</li>
+    </ul>
+
+    <h2 class="fade-section">🔐 Googleアカウントが必須</h2>
+    <p>NoteBookLMを利用するには、Googleアカウントでログインが必要です。アカウントがないと何も操作できません。</p>
+
+    <h2 class="fade-section">💡 Webページに埋め込める？</h2>
+    <p>残念ながら、NoteBookLMにはAPIや埋め込みウィジェットがないため、自分のWebサイトに直接組み込むことはできません。</p>
+
+    <h2 class="fade-section">✅ 代替案は？</h2>
+    <p>似たようなことをしたい場合は、以下の方法が考えられます：</p>
+    <ul>
+      <li>🤖 <a href="https://platform.openai.com" target="_blank" rel="noopener noreferrer">OpenAI API（ChatGPT） — https://platform.openai.com</a></li>
+      <li>📎 Claude / Gemini のAPI利用（各公式サイトを参照してください）</li>
+      <li>🧠 LangChainやLlamaIndexでQ&A構築</li>
+    </ul>
+
+    <h2 class="fade-section">🗒️ 最後に：自分用まとめ</h2>
+    <ul>
+      <li>NoteBookLMはGoogle製のAIノートツール</li>
+      <li>法改正、論文、講義ノートの要約に最適</li>
+      <li>スライド構成・ナレーション原稿も作成可能</li>
+      <li>Googleアカウントが必須</li>
+      <li>類似機能はOpenAI APIやLangChainでも再現可能</li>
+    </ul>
+
+    <p>📘 今後も使ってみたらレポートします！</p>
+  </section>
+</article>
+  </main>
+  <!-- 「トップへ戻る」ボタン -->
+  <button id="back-to-top" aria-label="トップへ戻る" title="トップへ戻る">
+    ⤴
+  </button>
+  <!-- スクリプト：ヘッダー読み込み、目次生成、IntersectionObserver、トップボタン等 -->
+  <script>
+    /* ============================
+       1) ヘッダーをfetchで読み込み、#header-mountに注入
+       ============================ */
+    (function loadHeader(){
+      const mount = document.getElementById('header-mount');
+      // 防御的にfetchエラーを処理
+      fetch('/ai-comparison-test-site/header.html', {cache: 'no-store'})
+        .then(resp => {
+          if(!resp.ok) throw new Error('header fetch failed');
+          return resp.text();
+        })
+        .then(html => {
+          // DOMParserでパースして、body内の内容を取り出す（外側html/headは除去）
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(html, 'text/html');
+          // 可能であれば .site-header 等、ヘッダーを構成する要素のみをマウント
+          const headerEl = doc.querySelector('.site-header') || doc.body;
+          // Insert as children to preserve semantics and avoid nested html/head
+          while(headerEl.firstChild){
+            mount.appendChild(headerEl.firstChild);
+          }
+          mount.setAttribute('aria-hidden','false');
+
+          // ヘッダー高さを計測してCSS変数に反映（ヘッダーの高さが変化しても対応）
+          requestAnimationFrame(()=> {
+            const h = mount.offsetHeight || 80;
+            document.documentElement.style.setProperty('--header-height', h + 'px');
+          });
+
+          // さらにウィンドウリサイズ時に再計測する
+          window.addEventListener('resize', () => {
+            const h = mount.offsetHeight || 80;
+            document.documentElement.style.setProperty('--header-height', h + 'px');
+          });
+        })
+        .catch(err => {
+          // 読み込み失敗時は視覚的に何か表示（アクセシブルな警告）
+          mount.innerHTML = '<div role="banner" style="padding:12px;background:#fff;border-bottom:1px solid #eee;">サイトヘッダーの読み込みに失敗しました。</div>';
+          console.error(err);
+        });
+    })();
+
+    /* ============================
+       2) 目次自動生成（h2/h3抽出）
+       - h2/h3にユニークIDを付与
+       - 目次はh1直後の#auto-tocに挿入
+       ============================ */
+    (function generateTOC(){
+      // Run after DOMContentLoaded to ensure headings present
+      document.addEventListener('DOMContentLoaded', () => {
+        const content = document.querySelector('#main-content');
+        if(!content) return;
+        const headings = content.querySelectorAll('h2, h3');
+        if(!headings.length) return;
+
+        // slugify helper（英数字・日本語混在を許容）
+        const slugify = (str) => {
+          return str.trim().toLowerCase()
+            .replace(/[\s　]+/g, '-')           // 空白をハイフンに
+            .replace(/[!?。、,\.\/\\#%<>:"'$begin:math:text$$end:math:text$$begin:math:display$$end:math:display$\{\}]+/g, '') // 記号除去
+            .replace(/-+/g, '-')                // 連続ハイフンを一つに
+            .replace(/^-|-$/g, '');
+        };
+
+        // 作成するtocのul
+        const tocContainer = document.getElementById('auto-toc');
+        const ul = document.createElement('ul');
+        ul.className = 'toc-list';
+        // カウントで重複IDを回避
+        const used = Object.create(null);
+
+        headings.forEach(h => {
+          const text = h.textContent || h.innerText;
+          let id = h.id || slugify(text) || 'heading';
+          if(used[id]) { used[id]++; id = id + '-' + used[id]; }
+          else used[id] = 1;
+          h.id = id;
+
+          // create list item with anchor
+          const li = document.createElement('li');
+          li.style.listStyle = 'none';
+          const a = document.createElement('a');
+          a.href = '#' + id;
+          a.textContent = (h.tagName.toLowerCase() === 'h2' ? '🔹 ' : '▫︎ ') + ' ' + text;
+          a.setAttribute('aria-label', '見出しへ移動: ' + text);
+          a.addEventListener('click', (e)=> {
+            // スムーズスクロールはブラウザのネイティブに任せる
+            // 且つフォーカスを当ててキーボードユーザへ配慮
+            e.preventDefault();
+            const target = document.getElementById(id);
+            if(target) {
+              target.scrollIntoView({behavior:'smooth', block:'start'});
+              target.focus({preventScroll:true});
+            }
+            history.replaceState(null, '', '#' + id);
+          });
+          li.appendChild(a);
+          ul.appendChild(li);
+        });
+
+        // 補助テキストとともに目次を挿入
+        const tocHeading = document.createElement('h2');
+        tocHeading.textContent = '📚 この記事の目次';
+        tocHeading.className = 'fade-section';
+        tocContainer.appendChild(tocHeading);
+        tocContainer.appendChild(ul);
+      });
+    })();
+
+    /* ============================
+       3) IntersectionObserverによるスクロールアニメーション（フェードイン）
+       - .fade-section を監視し、ビューポートに入ったら .is-visible を付与
+       ============================ */
+    (function setupIntersectionFade(){
+      document.addEventListener('DOMContentLoaded', () => {
+        const opts = { root: null, rootMargin: '0px 0px -8% 0px', threshold: 0.08 };
+        const observer = new IntersectionObserver((entries, obs) => {
+          entries.forEach(entry => {
+            if(entry.isIntersecting){
+              entry.target.classList.add('is-visible');
+              // 一度表示したら監視を外す（パフォーマンス向上）
+              obs.unobserve(entry.target);
+            }
+          });
+        }, opts);
+
+        // 監視対象：見出しやセクションのクラス
+        const targets = document.querySelectorAll('.fade-section');
+        targets.forEach(t => {
+          observer.observe(t);
+        });
+      });
+    })();
+
+    /* ============================
+       4) 「トップへ戻る」ボタン表示・動作
+       - スクロール量が1画面分を超えたら表示
+       - キーボード操作（Enter/Space）に対応
+       ============================ */
+    (function backToTop(){
+      const btn = document.getElementById('back-to-top');
+      if(!btn) return;
+
+      const check = () => {
+        if(window.scrollY > window.innerHeight) btn.classList.add('show');
+        else btn.classList.remove('show');
+      };
+      window.addEventListener('scroll', check, {passive:true});
+      window.addEventListener('resize', check);
+      // 初回チェック
+      check();
+
+      // クリックでスムーズスクロール
+      btn.addEventListener('click', () => {
+        window.scrollTo({top: 0, behavior: 'smooth'});
+        // フォーカスをメインに移す（アクセシビリティ）
+        const main = document.getElementById('main-content');
+        if(main) main.focus();
+      });
+
+      // キーボード操作サポート（Enter/Spaceでクリック）
+      btn.addEventListener('keydown', (e) => {
+        if(e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          btn.click();
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
